@@ -10,8 +10,14 @@ kotlin {
         val desktopMain by getting
 
         desktopMain.dependencies {
+            implementation(projects.shared.designsystem)
+            implementation(projects.feature.inventory)
+
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+
+            implementation(compose.foundation)
+            implementation(compose.material3)
         }
     }
 }
