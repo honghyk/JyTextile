@@ -8,7 +8,8 @@ import org.gradle.kotlin.dsl.configure
 
 fun Project.configureJava() {
     java {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
     }
 }
