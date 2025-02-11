@@ -25,7 +25,7 @@ class AndroidComposeConventionPlugin : Plugin<Project> {
                 implementation(libs.findLibrary("compose-ui-tooling-preview"))
                 implementation(libs.findLibrary("androidx-lifecycle-runtime-compose"))
                 implementation(libs.findLibrary("androidx-activity-compose"))
-                testImplementation(libs.findLibrary("junit"))
+                testImplementation(libs.findLibrary("kotlin.test"))
                 testImplementation(libs.findLibrary("compose-ui-test-junit4"))
                 testImplementation(libs.findLibrary("androidx-espresso-core"))
                 debugImplementation(libs.findLibrary("compose-ui-tooling"))

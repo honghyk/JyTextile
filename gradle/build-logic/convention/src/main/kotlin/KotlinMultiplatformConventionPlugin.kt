@@ -1,13 +1,16 @@
 import com.erp.jytextile.convention.configureKotlin
+import com.erp.jytextile.convention.kotlin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
 
 class KotlinMultiplatformConventionPlugin : Plugin<Project> {
@@ -24,10 +27,22 @@ class KotlinMultiplatformConventionPlugin : Plugin<Project> {
                 androidTarget()
             }
 
-            // We don't need to build an iOS x64 framework
-            // iosX64()
             iosArm64()
             iosSimulatorArm64()
+
+            targets.withType<KotlinNativeTarget>().configureEach {
+                compilations.configureEach {
+                    compileTaskProvider.configure {
+                        compilerOptions {
+                            // Various opt-ins
+                            freeCompilerArgs.addAll(
+                                "-opt-in=kotlinx.cinterop.ExperimentalForeignApi",
+                                "-opt-in=kotlinx.cinterop.BetaInteropApi",
+                            )
+                        }
+                    }
+                }
+            }
 
             targets.configureEach {
                 compilations.configureEach {

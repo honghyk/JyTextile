@@ -33,5 +33,6 @@ dependencyResolutionManagement {
 include(":android-app")
 include(":desktop-app")
 include(":shared:data")
+include(":shared:database")
 include(":shared:designsystem")
 include(":feature:inventory")
