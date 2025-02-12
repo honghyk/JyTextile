@@ -1,9 +1,9 @@
 package com.erp.jytextile
 
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.erp.jytextile.shared.designsystem.theme.JyTheme
 import com.erp.jytextile.shared.inject.DesktopApplicationComponent
 import com.erp.jytextile.shared.inject.WindowComponent
 import com.erp.jytextile.shared.inject.create
@@ -22,8 +22,8 @@ fun main() = application {
         val component = remember(applicationComponent) {
             WindowComponent.create(applicationComponent)
         }
-        JyTheme {
-
-        }
+        component.appContent.Content(
+            modifier = Modifier,
+        )
     }
 }

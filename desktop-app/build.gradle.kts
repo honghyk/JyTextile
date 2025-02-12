@@ -12,7 +12,7 @@ kotlin {
         desktopMain.dependencies {
             implementation(projects.shared.inject)
             implementation(projects.shared.designsystem)
-            implementation(projects.feature.inventory)
+            implementation(projects.feature.root)
 
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)

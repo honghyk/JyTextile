@@ -15,6 +15,7 @@ kotlin {
             api(projects.shared.domain)
             api(projects.shared.data)
             api(projects.shared.database)
+            api(projects.feature.root)
             api(projects.feature.inventory)
 
             implementation(libs.kotlininject.runtime)

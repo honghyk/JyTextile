@@ -16,10 +16,12 @@ kotlin-inject = "0.7.2"
 kotlinx-coroutines = "1.10.1"
 kotlinStdlib = "2.1.0"
 kotlinxDatetime = "0.6.2"
+kotlinx-serialization-json = "1.8.0"
 ksp = "2.1.0-1.0.29"
 androidx-room = "2.7.0-alpha13"
 androidx-test-runner = "1.6.2"
 jetbrainsKotlinJvm = "2.1.0"
+navigation-compose = "2.8.0-alpha10"
 sqlite-bundled = "2.5.0-alpha13"
 
 [libraries]
@@ -40,6 +42,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
 # Dependency inject
 kotlininject-compiler = { module = "me.tatarka.inject:kotlin-inject-compiler-ksp", version.ref = "kotlin-inject" }
@@ -54,6 +57,7 @@ compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 
 # Test
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -80,9 +84,11 @@ jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 jytextile-erp-kotlin-multiplatform = { id = "app.jytextile.erp.kotlin.multiplatform" }
 jytextile-erp-kotlin-multiplatform-compose = { id = "app.jytextile.erp.kotlin.multiplatform.compose" }
+jytextile-erp-kotlin-multiplatform-feature = { id = "app.jytextile.erp.kotlin.multiplatform.feature" }
 jytextile-erp-kotlin-android = { id = "app.jytextile.erp.kotlin.android" }
 jytextile-erp-android-application = { id = "app.jytextile.erp.android.application" }
 jytextile-erp-android-library = { id = "app.jytextile.erp.android.library" }

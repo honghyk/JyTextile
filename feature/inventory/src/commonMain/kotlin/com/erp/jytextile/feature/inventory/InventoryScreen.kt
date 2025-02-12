@@ -13,9 +13,18 @@ import androidx.compose.ui.unit.dp
 import com.erp.jytextile.feature.inventory.component.InventoryOverallPanel
 import com.erp.jytextile.feature.inventory.component.InventoryTablePanel
 import com.erp.jytextile.shared.designsystem.theme.JyTheme
+import kotlinx.serialization.Serializable
 
 @Composable
 fun InventoryScreen(
+    viewModel: InventoryViewModel,
+    modifier: Modifier = Modifier,
+) {
+    InventoryScreen()
+}
+
+@Composable
+private fun InventoryScreen(
     modifier: Modifier = Modifier
 ) {
     Surface(

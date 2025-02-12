@@ -46,5 +46,10 @@ gradlePlugin {
             id = "app.jytextile.erp.kotlin.multiplatform.compose"
             implementationClass = "KmpComposeConventionPlugin"
         }
+
+        register("kmpFeature") {
+            id = "app.jytextile.erp.kotlin.multiplatform.feature"
+            implementationClass = "KmpFeatureConventionPlugin"
+        }
     }
 }

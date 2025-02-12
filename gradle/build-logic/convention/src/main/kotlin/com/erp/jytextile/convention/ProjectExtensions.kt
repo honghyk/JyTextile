@@ -8,6 +8,8 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.get
+import org.jetbrains.compose.ComposeExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import java.util.Optional
 
@@ -41,3 +43,6 @@ fun Project.kotlin(action: KotlinMultiplatformExtension.() -> Unit) {
 
 fun Project.java(action: JavaPluginExtension.() -> Unit) =
     extensions.configure<JavaPluginExtension>(action)
+
+val Project.compose: ComposeExtension
+    get() = extensions["compose"] as ComposeExtension
