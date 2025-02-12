@@ -1,6 +1,6 @@
 package com.erp.jytextile.feature.root
 
-import com.erp.jytextile.shared.base.inject.ActivityScope
+import com.erp.jytextile.core.base.inject.ActivityScope
 import me.tatarka.inject.annotations.Provides
 
 interface RootComponent {

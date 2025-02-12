@@ -19,9 +19,9 @@ class KmpFeatureConventionPlugin : Plugin<Project> {
             kotlin {
                 with(sourceSets) {
                     commonMain.dependencies {
-                        implementation(project(":shared:base"))
-                        implementation(project(":shared:designsystem"))
-                        implementation(project(":shared:domain"))
+                        implementation(project(":core:base"))
+                        implementation(project(":core:designsystem"))
+                        implementation(project(":core:domain"))
 
                         implementation(compose.dependencies.foundation)
                         implementation(compose.dependencies.material3)

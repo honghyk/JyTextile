@@ -12,8 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.feature.inventory.component.InventoryOverallPanel
 import com.erp.jytextile.feature.inventory.component.InventoryTablePanel
-import com.erp.jytextile.shared.designsystem.theme.JyTheme
-import kotlinx.serialization.Serializable
+import com.erp.jytextile.core.designsystem.theme.JyTheme
 
 @Composable
 fun InventoryScreen(

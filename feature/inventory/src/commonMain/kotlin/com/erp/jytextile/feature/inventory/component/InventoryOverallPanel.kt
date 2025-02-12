@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.erp.jytextile.shared.designsystem.component.PanelSurface
-import com.erp.jytextile.shared.designsystem.theme.JyTheme
+import com.erp.jytextile.core.designsystem.component.PanelSurface
+import com.erp.jytextile.core.designsystem.theme.JyTheme
 
 @Composable
 internal fun InventoryOverallPanel(

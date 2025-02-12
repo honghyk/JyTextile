@@ -2,8 +2,8 @@ package com.erp.jytextile.feature.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.erp.jytextile.shared.base.route.AppRouteFactory
-import com.erp.jytextile.shared.designsystem.theme.JyTheme
+import com.erp.jytextile.core.base.route.AppRouteFactory
+import com.erp.jytextile.core.designsystem.theme.JyTheme
 import me.tatarka.inject.annotations.Inject
 
 interface AppContent {

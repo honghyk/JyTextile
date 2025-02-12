@@ -4,9 +4,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.erp.jytextile.shared.inject.DesktopApplicationComponent
-import com.erp.jytextile.shared.inject.WindowComponent
-import com.erp.jytextile.shared.inject.create
+import com.erp.jytextile.shared.DesktopApplicationComponent
+import com.erp.jytextile.shared.WindowComponent
+import com.erp.jytextile.shared.create
 import java.awt.Dimension
 
 fun main() = application {

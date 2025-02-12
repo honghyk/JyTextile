@@ -8,9 +8,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.erp.jytextile.feature.inventory.navigation.InventoryRoute
-import com.erp.jytextile.shared.base.route.AppRouteFactory
-import com.erp.jytextile.shared.base.route.create
-import com.erp.jytextile.shared.designsystem.theme.JyTheme
+import com.erp.jytextile.core.base.route.AppRouteFactory
+import com.erp.jytextile.core.base.route.create
+import com.erp.jytextile.core.designsystem.theme.JyTheme
 
 @Composable
 fun JyApp(

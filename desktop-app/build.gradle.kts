@@ -10,8 +10,8 @@ kotlin {
         val desktopMain by getting
 
         desktopMain.dependencies {
-            implementation(projects.shared.inject)
-            implementation(projects.shared.designsystem)
+            implementation(projects.shared)
+            implementation(projects.core.designsystem)
             implementation(projects.feature.root)
 
             implementation(compose.desktop.currentOs)

@@ -12,11 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.erp.jytextile.shared.designsystem.component.JyButton
-import com.erp.jytextile.shared.designsystem.component.JyOutlinedButton
-import com.erp.jytextile.shared.designsystem.component.PanelSurface
-import com.erp.jytextile.shared.designsystem.component.Table
-import com.erp.jytextile.shared.designsystem.theme.JyTheme
+import com.erp.jytextile.core.designsystem.component.JyButton
+import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
+import com.erp.jytextile.core.designsystem.component.PanelSurface
+import com.erp.jytextile.core.designsystem.component.Table
+import com.erp.jytextile.core.designsystem.theme.JyTheme
 
 
 @Composable

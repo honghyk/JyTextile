@@ -6,7 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.erp.jytextile.feature.inventory.InventoryScreen
 import com.erp.jytextile.feature.inventory.InventoryViewModel
-import com.erp.jytextile.shared.base.route.AppRouteFactory
+import com.erp.jytextile.core.base.route.AppRouteFactory
 import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Inject
 
