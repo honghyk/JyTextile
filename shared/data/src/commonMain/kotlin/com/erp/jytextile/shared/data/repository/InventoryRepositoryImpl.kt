@@ -1,15 +1,28 @@
 package com.erp.jytextile.shared.data.repository
 
+import com.erp.jytextile.shared.database.dao.InventoryDao
+import com.erp.jytextile.shared.database.model.FabricRollEntity
+import com.erp.jytextile.shared.database.model.SectionEntity
+import com.erp.jytextile.shared.database.model.toDomain
+import com.erp.jytextile.shared.database.model.toEntity
 import com.erp.jytextile.shared.domain.model.FabricRoll
 import com.erp.jytextile.shared.domain.model.Section
 import com.erp.jytextile.shared.domain.repository.InventoryRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Instant
+import me.tatarka.inject.annotations.Inject
 
-internal class InventoryRepositoryImpl : InventoryRepository {
+@Inject
+class InventoryRepositoryImpl(
+    private val inventoryDao: InventoryDao,
+) : InventoryRepository {
 
     override fun getSections(): Flow<List<Section>> {
-        TODO("Not yet implemented")
+        return inventoryDao.getSections()
+            .map { sections ->
+                sections.map(SectionEntity::toDomain)
+            }
     }
 
     override fun getFabricRolls(
@@ -17,18 +30,25 @@ internal class InventoryRepositoryImpl : InventoryRepository {
         page: Int,
         filterHasRemaining: Boolean
     ): Flow<List<FabricRoll>> {
-        TODO("Not yet implemented")
+        return inventoryDao.getFabricRolls(
+            sectionId = sectionId,
+            limit = PAGE_SIZE,
+            offset = page * PAGE_SIZE,
+            filterHasRemaining = filterHasRemaining
+        ).map { rolls ->
+            rolls.map(FabricRollEntity::toDomain)
+        }
     }
 
-    override fun addFabricRoll(fabricRoll: FabricRoll) {
-        TODO("Not yet implemented")
+    override suspend fun addFabricRoll(fabricRoll: FabricRoll) {
+        inventoryDao.insertFabricRoll(fabricRoll.toEntity())
     }
 
-    override fun removeFabricRoll(rollId: Long) {
-        TODO("Not yet implemented")
+    override suspend fun removeFabricRoll(rollId: Long) {
+        inventoryDao.deleteFabricRoll(rollId)
     }
 
-    override fun releaseFabricRoll(
+    override suspend fun releaseFabricRoll(
         rollId: Long,
         quantity: Double,
         destination: String,
@@ -37,3 +57,5 @@ internal class InventoryRepositoryImpl : InventoryRepository {
         TODO("Not yet implemented")
     }
 }
+
+private const val PAGE_SIZE = 20

@@ -10,6 +10,7 @@ kotlin {
         val desktopMain by getting
 
         desktopMain.dependencies {
+            implementation(projects.shared.inject)
             implementation(projects.shared.designsystem)
             implementation(projects.feature.inventory)
 
@@ -18,6 +19,8 @@ kotlin {
 
             implementation(compose.foundation)
             implementation(compose.material3)
+
+            implementation(libs.kotlininject.runtime)
         }
     }
 }

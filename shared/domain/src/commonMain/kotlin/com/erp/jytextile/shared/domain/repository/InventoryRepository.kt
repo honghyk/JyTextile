@@ -16,11 +16,11 @@ interface InventoryRepository {
         filterHasRemaining: Boolean
     ): Flow<List<FabricRoll>>
 
-    fun addFabricRoll(fabricRoll: FabricRoll)
+    suspend fun addFabricRoll(fabricRoll: FabricRoll)
 
-    fun removeFabricRoll(rollId: Long)
+    suspend fun removeFabricRoll(rollId: Long)
 
-    fun releaseFabricRoll(
+    suspend fun releaseFabricRoll(
         rollId: Long,
         quantity: Double,
         destination: String,

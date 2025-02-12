@@ -34,3 +34,12 @@ fun FabricRollEntity.toDomain() = FabricRoll(
     remainingLength = remainingLength,
     originalLength = originalLength,
 )
+
+fun FabricRoll.toEntity() = FabricRollEntity(
+    id = id,
+    sectionId = sectionId,
+    code = code,
+    color = color,
+    remainingLength = remainingLength,
+    originalLength = originalLength,
+)

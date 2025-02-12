@@ -13,8 +13,11 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.domain)
+            implementation(projects.shared.base)
 
             implementation(libs.kotlinx.datetime)
+
+            implementation(libs.kotlininject.runtime)
 
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.androidx.room.runtime)
@@ -34,9 +37,4 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
-dependencies {
-    kspAndroid(libs.androidx.room.compiler)
-    kspDesktop(libs.androidx.room.compiler)
-    kspIosArm64(libs.androidx.room.compiler)
-    kspIosSimulatorArm64(libs.androidx.room.compiler)
-}
+addKspDependencyForAllTargets(libs.androidx.room.compiler)
