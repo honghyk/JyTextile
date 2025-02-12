@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.erp.jytextile.shared.domain.model.ReleaseHistory
 import kotlinx.datetime.Instant
 
 @Entity(
@@ -23,4 +24,12 @@ data class ReleaseHistoryEntity(
     val quantity: Double,
     @ColumnInfo("release_date") val releaseDate: Instant,
     val destination: String,
+)
+
+fun ReleaseHistoryEntity.toDomain() = ReleaseHistory(
+    id = id,
+    rollId = rollId,
+    quantity = quantity,
+    releaseDate = releaseDate,
+    destination = destination,
 )
