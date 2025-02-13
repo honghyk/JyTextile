@@ -3,6 +3,7 @@ package com.erp.jytextile.feature.inventory.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,44 +13,59 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.component.Table
 import com.erp.jytextile.core.designsystem.theme.JyTheme
+import com.erp.jytextile.feature.inventory.model.Table
+import com.erp.jytextile.feature.inventory.model.TableItem
 
 
 @Composable
 internal fun InventoryTablePanel(
-    modifier: Modifier = Modifier
+    title: String,
+    table: Table,
+    currentPage: Int,
+    totalPage: Int,
+    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    headerButtonContent: @Composable RowScope.() -> Unit,
 ) {
     PanelSurface(
         modifier = modifier,
     ) {
-        Column {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+        ) {
             InventoryTableHeader(
                 modifier = Modifier.fillMaxWidth(),
-                onAddProductClick = { /* TODO */ }
+                title = title,
+                headerButtonContent = headerButtonContent,
             )
             InventoryTable(
                 modifier = Modifier.weight(1f),
-                items = listOf("Product1", "Product2")
+                headers = table.headers,
+                items = table.items,
             )
-            InventoryTableFooter(
-                modifier = Modifier.fillMaxWidth(),
-                currentPage = 1,
-                totalPage = 10,
-                onPreviousClick = { /* TODO */ },
-                onNextClick = { /* TODO */ }
-            )
+            if (totalPage > 0) {
+                InventoryTableFooter(
+                    modifier = Modifier.fillMaxWidth(),
+                    currentPage = currentPage,
+                    totalPage = totalPage,
+                    onPreviousClick = onPreviousClick,
+                    onNextClick = onNextClick
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun InventoryTableHeader(
-    onAddProductClick: () -> Unit,
+    title: String,
     modifier: Modifier = Modifier,
+    headerButtonContent: @Composable RowScope.() -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -64,33 +80,34 @@ private fun InventoryTableHeader(
         Text(
             style = JyTheme.typography.textXLarge,
             color = JyTheme.color.heading,
-            text = "Products"
+            maxLines = 1,
+            text = title,
         )
         Spacer(modifier = Modifier.weight(1f))
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            JyButton(
-                onClick = onAddProductClick,
-            ) {
-                Text(text = "Add Product")
-            }
-        }
+            content = headerButtonContent,
+        )
     }
 }
 
 @Composable
-private fun InventoryTable(
-    items: List<String>,
+private fun <T : TableItem> InventoryTable(
+    headers: List<String>,
+    items: List<T>,
     modifier: Modifier = Modifier,
 ) {
     Table(
         modifier = modifier,
-        headers = listOf("Product", "Quantity"),
+        headers = headers,
         items = items,
-    ) {
-        Text(text = it)
-        Text(text = "10")
+    ) { item ->
+        item.tableRow.forEach {
+            TableCell(
+                modifier = Modifier,
+                value = it
+            )
+        }
     }
 }
 
@@ -113,16 +130,23 @@ private fun InventoryTableFooter(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         JyOutlinedButton(onClick = onPreviousClick) {
-            Text("Previous")
+            Text(
+                maxLines = 1,
+                text = "Previous"
+            )
         }
         Text(
             modifier = Modifier.weight(1f),
             textAlign = TextAlign.Center,
             style = JyTheme.typography.textSmall,
+            maxLines = 1,
             text = "Page $currentPage of $totalPage"
         )
         JyOutlinedButton(onClick = onNextClick) {
-            Text("Next")
+            Text(
+                maxLines = 1,
+                text = "Next"
+            )
         }
     }
 }

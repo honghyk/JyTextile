@@ -18,6 +18,7 @@ import com.erp.jytextile.core.designsystem.theme.JyTheme
 
 @Composable
 internal fun InventoryOverallPanel(
+    title: String,
     total: Int,
     modifier: Modifier = Modifier
 ) {
@@ -36,7 +37,7 @@ internal fun InventoryOverallPanel(
             Text(
                 style = JyTheme.typography.textXLarge,
                 color = JyTheme.color.heading,
-                text = "Overall Inventory"
+                text = title,
             )
             Spacer(modifier = Modifier.height(22.dp))
             Row(
