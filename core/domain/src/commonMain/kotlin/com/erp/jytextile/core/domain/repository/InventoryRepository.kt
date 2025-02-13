@@ -8,7 +8,15 @@ import kotlinx.datetime.Instant
 
 interface InventoryRepository {
 
-    fun getSections(): Flow<List<Section>>
+    suspend fun addSection(name: String)
+
+    fun getSections(
+        page: Int,
+    ): Flow<List<Section>>
+
+    fun getSectionsCount(): Flow<Int>
+
+    fun getSectionPages(): Flow<Int>
 
     fun getFabricRolls(
         sectionId: Long,

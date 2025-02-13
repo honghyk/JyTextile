@@ -42,12 +42,44 @@ class InventoryDaoTest {
             inventoryDao.insertSection(section)
         }
 
-        val result = inventoryDao.getSections().first()
+        val result = inventoryDao.getSections(10, 0).first()
 
         assertEquals(
             listOf("a1", "a2", "c1", "d1"),
-            result.map { it.name },
+            result.map { it.section.name },
         )
+    }
+
+    @Test
+    fun get_sections_count() = runTest {
+        val sections = listOf(
+            testSection("a1"),
+            testSection("a2"),
+        )
+        sections.forEach { section ->
+            inventoryDao.insertSection(section)
+        }
+
+        val result = inventoryDao.getSectionsCount().first()
+
+        assertEquals(2, result)
+    }
+
+    @Test
+    fun get_sections_with_roll_count() = runTest {
+        val section1 = inventoryDao.insertSection(testSection("a1"))
+        val rolls = listOf(
+            testFabricRoll(section1, "a1"),
+            testFabricRoll(section1, "j3"),
+            testFabricRoll(section1, "c1"),
+        )
+        rolls.forEach { roll ->
+            inventoryDao.insertFabricRoll(roll)
+        }
+
+        val result = inventoryDao.getSections(10, 0).first()
+
+        assertEquals(3, result.first().rollCount)
     }
 
     @Test

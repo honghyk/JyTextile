@@ -1,5 +1,6 @@
 package com.erp.jytextile.core.database.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.erp.jytextile.core.domain.model.Section
@@ -10,7 +11,13 @@ data class SectionEntity(
     val name: String,
 )
 
-fun SectionEntity.toDomain() = Section(
-    id = id,
-    name = name,
+data class SectionWithRollCountEntity(
+    @Embedded val section: SectionEntity,
+    val rollCount: Int,
+)
+
+fun SectionWithRollCountEntity.toDomain() = Section(
+    id = section.id,
+    name = section.name,
+    rollCount = rollCount,
 )

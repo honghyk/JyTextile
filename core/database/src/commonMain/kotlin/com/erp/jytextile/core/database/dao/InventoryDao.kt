@@ -7,19 +7,40 @@ import androidx.room.Query
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
 import com.erp.jytextile.core.database.model.SectionEntity
+import com.erp.jytextile.core.database.model.SectionWithRollCountEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface InventoryDao {
 
-    @Query("SELECT * FROM sections ORDER BY name ASC")
-    fun getSections(): Flow<List<SectionEntity>>
+    @Query(
+        value = """
+                SELECT sections.*, COUNT(fabric_rolls.id) AS rollCount
+                FROM sections
+                LEFT JOIN fabric_rolls ON sections.id = fabric_rolls.section_id
+                GROUP BY sections.id
+                ORDER BY sections.name ASC
+                LIMIT :limit
+                OFFSET :offset
+            """
+    )
+    fun getSections(
+        limit: Int,
+        offset: Int,
+    ): Flow<List<SectionWithRollCountEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSection(section: SectionEntity): Long
 
     @Query("DELETE FROM sections WHERE id = :sectionId")
     suspend fun deleteSection(sectionId: Long)
+
+    @Query(
+        value = """
+            SELECT COUNT(*) FROM sections
+            """
+    )
+    fun getSectionsCount(): Flow<Int>
 
     @Query(
         value = """

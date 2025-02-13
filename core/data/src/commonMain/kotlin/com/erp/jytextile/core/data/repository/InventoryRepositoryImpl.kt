@@ -3,6 +3,7 @@ package com.erp.jytextile.core.data.repository
 import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.SectionEntity
+import com.erp.jytextile.core.database.model.SectionWithRollCountEntity
 import com.erp.jytextile.core.database.model.toDomain
 import com.erp.jytextile.core.database.model.toEntity
 import com.erp.jytextile.core.domain.model.FabricRoll
@@ -18,11 +19,27 @@ class InventoryRepositoryImpl(
     private val inventoryDao: InventoryDao,
 ) : InventoryRepository {
 
-    override fun getSections(): Flow<List<Section>> {
-        return inventoryDao.getSections()
-            .map { sections ->
-                sections.map(SectionEntity::toDomain)
-            }
+    override suspend fun addSection(name: String) {
+        inventoryDao.insertSection(SectionEntity(name = name))
+    }
+
+    override fun getSections(page: Int): Flow<List<Section>> {
+        return inventoryDao.getSections(
+            limit = PAGE_SIZE,
+            offset = page * PAGE_SIZE,
+        ).map { sections ->
+            sections.map(SectionWithRollCountEntity::toDomain)
+        }
+    }
+
+    override fun getSectionsCount(): Flow<Int> {
+        return inventoryDao.getSectionsCount()
+    }
+
+    override fun getSectionPages(): Flow<Int> {
+        return inventoryDao.getSectionsCount().map { count ->
+            (count + PAGE_SIZE - 1) / PAGE_SIZE
+        }
     }
 
     override fun getFabricRolls(
