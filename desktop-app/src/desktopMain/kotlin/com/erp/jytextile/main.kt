@@ -18,7 +18,7 @@ fun main() = application {
         title = "TextileERP",
         onCloseRequest = ::exitApplication,
     ) {
-        window.minimumSize = Dimension(800, 600)
+        window.minimumSize = Dimension(600, 0)
         val component = remember(applicationComponent) {
             WindowComponent.create(applicationComponent)
         }

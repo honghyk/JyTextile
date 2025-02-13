@@ -4,9 +4,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.erp.jytextile.feature.inventory.InventoryScreen
-import com.erp.jytextile.feature.inventory.InventoryViewModel
 import com.erp.jytextile.core.base.route.AppRouteFactory
+import com.erp.jytextile.feature.inventory.SectionInventoryScreen
+import com.erp.jytextile.feature.inventory.SectionInventoryViewModel
 import kotlinx.serialization.Serializable
 import me.tatarka.inject.annotations.Inject
 
@@ -18,13 +18,13 @@ fun NavController.navigateToInventory(navOptions: NavOptions? = null) =
 
 @Inject
 class InventoryRouteFactory(
-    private val viewModel: () -> InventoryViewModel,
+    private val viewModel: () -> SectionInventoryViewModel,
 ) : AppRouteFactory {
     override fun NavGraphBuilder.create(
         navController: NavController
     ) {
         composable<InventoryRoute> {
-            InventoryScreen(
+            SectionInventoryScreen(
                 viewModel = viewModel(),
             )
         }
