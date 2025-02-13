@@ -11,7 +11,6 @@ kotlin {
 
         desktopMain.dependencies {
             implementation(projects.shared)
-            implementation(projects.core.designsystem)
             implementation(projects.feature.root)
 
             implementation(compose.desktop.currentOs)

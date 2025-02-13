@@ -23,9 +23,12 @@ class DefaultAppContent(
     override fun Content(
         modifier: Modifier
     ) {
+        val appState = rememberAppState()
+
         JyTheme {
-            JyApp(
+            App(
                 modifier = modifier,
+                appState = appState,
                 routeFactories = routeFactories,
             )
         }

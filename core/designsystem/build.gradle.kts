@@ -15,6 +15,10 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.foundation)
             implementation(compose.material3)
+            implementation(compose.material3AdaptiveNavigationSuite)
+            implementation(compose.components.resources)
+
+            implementation(libs.material3.adaptive)
         }
     }
 }

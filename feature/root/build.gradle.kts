@@ -10,6 +10,9 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.feature.inventory)
+
+            implementation(compose.components.resources)
+            implementation(libs.material3.adaptive)
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 
 object Palette {
     val grey500 = Color(0xFF667085)
+    val grey600 = Color(0xFF5D6679)
     val grey700 = Color(0xFF48505E)
 }
 
@@ -29,7 +30,7 @@ val colorPalette = JyColor(
     onPrimary = Color(0xFFFFFFFF),
     body = Color(0xFF858D9D),
     heading = Color(0xFF383E49),
-    subHeading = Color(0xFF5D6679),
+    subHeading = Palette.grey600,
     totalReturned = Color(0xFF845EBC),
     totalProducts = Color(0xFFDBA362),
     inStock = Color(0xFF12B76A),
