@@ -6,12 +6,7 @@ import com.slack.circuit.runtime.ui.Ui
 import me.tatarka.inject.annotations.IntoSet
 import me.tatarka.inject.annotations.Provides
 
-interface InventoryComponent {
-
-//    @Provides
-//    @ActivityScope
-//    @IntoSet
-//    fun bindInventoryRouteFactory(factory: InventoryRouteFactory): AppRouteFactory = factory
+interface SectionInventoryComponent {
 
     @Provides
     @ActivityScope

@@ -21,7 +21,6 @@ kotlin {
 
             implementation(libs.circuit.foundation)
             implementation(libs.kotlininject.runtime)
-            implementation(libs.navigation.compose)
         }
     }
 }

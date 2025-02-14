@@ -4,14 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.Section
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import com.erp.jytextile.feature.inventory.model.SectionTable
-import com.erp.jytextile.feature.inventory.model.SectionTableItem
 import com.erp.jytextile.feature.inventory.model.toTableItem
-import com.erp.jytextile.feature.inventory.navigation.InventoryScreen
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext
@@ -20,17 +17,13 @@ import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
+import com.slack.circuit.runtime.screen.StaticScreen
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
+
+@Parcelize
+data object SectionInventoryScreen : StaticScreen
 
 @Inject
 class SectionInventoryPresenterFactory(
@@ -42,7 +35,7 @@ class SectionInventoryPresenterFactory(
         context: CircuitContext
     ): Presenter<*>? {
         return when (screen) {
-            InventoryScreen -> presenterFactory(navigator)
+            SectionInventoryScreen -> presenterFactory(navigator)
             else -> null
         }
     }
@@ -95,56 +88,6 @@ class SectionInventoryPresenter(
     }
 }
 
-sealed interface SectionInventoryEvent : CircuitUiEvent {
-    data object AddSection : SectionInventoryEvent
-    data object PreviousPage : SectionInventoryEvent
-    data object NextPage : SectionInventoryEvent
-}
-
-//@OptIn(ExperimentalCoroutinesApi::class)
-//@Inject
-//class SectionInventoryViewModel(
-//    private val inventoryRepository: InventoryRepository,
-//) : ViewModel() {
-//
-//    private val currentPage: MutableStateFlow<Int> = MutableStateFlow(0)
-//
-//    val uiState: StateFlow<SectionInventoryUiState> = combine(
-//        currentPage,
-//        inventoryRepository.getSectionPages(),
-//        inventoryRepository.getSectionsCount(),
-//        currentPage.flatMapLatest { page -> inventoryRepository.getSections(page) },
-//    ) { currentPage, totalPage, sectionsCount, sections ->
-//        SectionInventoryUiState.Sections(
-//            sectionTable = SectionTable(
-//                items = sections.map(Section::toTableItem)
-//            ),
-//            sectionsCount = sectionsCount,
-//            currentPage = currentPage + 1,
-//            totalPage = totalPage
-//        )
-//    }.stateIn(
-//        viewModelScope,
-//        SharingStarted.WhileSubscribed(5000L),
-//        SectionInventoryUiState.Loading,
-//    )
-//
-//    fun addSection() {
-//        viewModelScope.launch {
-//            inventoryRepository.addSection("Section")
-//        }
-//    }
-//
-//    fun fetchPreviousPage() {
-//        currentPage.value = (currentPage.value - 1).coerceAtLeast(0)
-//    }
-//
-//    fun fetchNextPage() {
-//        val totalPage = (uiState.value as? SectionInventoryUiState.Sections)?.totalPage ?: return
-//        currentPage.value = (currentPage.value + 1).coerceAtMost(totalPage - 1)
-//    }
-//}
-
 sealed interface SectionInventoryUiState : CircuitUiState {
 
     data object Loading : SectionInventoryUiState
@@ -156,4 +99,10 @@ sealed interface SectionInventoryUiState : CircuitUiState {
         val totalPage: Int,
         val eventSink: (SectionInventoryEvent) -> Unit = {},
     ) : SectionInventoryUiState
+}
+
+sealed interface SectionInventoryEvent : CircuitUiEvent {
+    data object AddSection : SectionInventoryEvent
+    data object PreviousPage : SectionInventoryEvent
+    data object NextPage : SectionInventoryEvent
 }

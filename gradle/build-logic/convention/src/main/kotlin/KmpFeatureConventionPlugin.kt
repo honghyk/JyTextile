@@ -15,9 +15,6 @@ class KmpFeatureConventionPlugin : Plugin<Project> {
                 apply("app.jytextile.erp.kotlin.multiplatform")
                 apply("app.jytextile.erp.kotlin.multiplatform.compose")
                 apply("org.jetbrains.kotlin.plugin.parcelize")
-
-                // TODO: Remove
-                apply("org.jetbrains.kotlin.plugin.serialization")
             }
 
             kotlin {
@@ -35,8 +32,6 @@ class KmpFeatureConventionPlugin : Plugin<Project> {
                         implementation(libs.library("kotlininject-runtime"))
 
                         implementation(libs.library("circuit-foundation"))
-                        // TODO: Remove
-                        implementation(libs.library("navigation-compose"))
                     }
                 }
 

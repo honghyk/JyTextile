@@ -23,7 +23,6 @@ ksp = "2.1.0-1.0.29"
 androidx-room = "2.7.0-alpha13"
 androidx-test-runner = "1.6.2"
 jetbrainsKotlinJvm = "2.1.0"
-navigation-compose = "2.8.0-alpha10"
 sqlite-bundled = "2.5.0-alpha13"
 
 [libraries]
@@ -59,7 +58,6 @@ compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 
 # Navigation
@@ -90,7 +88,6 @@ jetbrainsKotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 
 jytextile-erp-kotlin-multiplatform = { id = "app.jytextile.erp.kotlin.multiplatform" }

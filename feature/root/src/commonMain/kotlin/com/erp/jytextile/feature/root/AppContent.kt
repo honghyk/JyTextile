@@ -2,7 +2,6 @@ package com.erp.jytextile.feature.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.erp.jytextile.core.base.route.AppRouteFactory
 import com.erp.jytextile.core.designsystem.theme.JyTheme
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals
@@ -20,7 +19,6 @@ interface AppContent {
 @Inject
 class DefaultAppContent(
     private val circuit: Circuit,
-//    private val routeFactories: Set<AppRouteFactory>,
 ) : AppContent {
 
     @Composable
@@ -33,7 +31,6 @@ class DefaultAppContent(
                 App(
                     modifier = modifier,
                     appState = appState,
-//                    routeFactories = routeFactories,
                 )
             }
         }
