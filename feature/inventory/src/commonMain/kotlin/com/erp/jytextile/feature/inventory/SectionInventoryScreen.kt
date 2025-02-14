@@ -17,21 +17,72 @@ import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.feature.inventory.component.InventoryOverallPanel
 import com.erp.jytextile.feature.inventory.component.InventoryTablePanel
 import com.erp.jytextile.feature.inventory.model.SectionTable
+import com.erp.jytextile.feature.inventory.navigation.InventoryScreen
+import com.slack.circuit.runtime.CircuitContext
+import com.slack.circuit.runtime.screen.Screen
+import com.slack.circuit.runtime.ui.Ui
+import com.slack.circuit.runtime.ui.ui
+import me.tatarka.inject.annotations.Inject
+
+@Inject
+class SectionInventoryUiFactory : Ui.Factory {
+    override fun create(screen: Screen, context: CircuitContext): Ui<*>? = when (screen) {
+        is InventoryScreen -> {
+            ui<SectionInventoryUiState> { state, modifier ->
+                SectionInventoryUi(state, modifier)
+            }
+        }
+
+        else -> null
+    }
+}
+
 
 @Composable
-fun SectionInventoryScreen(
-    viewModel: SectionInventoryViewModel,
+fun SectionInventoryUi(
+    state: SectionInventoryUiState,
     modifier: Modifier = Modifier,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    SectionInventoryScreen(
-        uiState = uiState,
-        onAddSectionClick = viewModel::addSection,
-        onPreviousClick = viewModel::fetchPreviousPage,
-        onNextClick = viewModel::fetchNextPage,
-        modifier = modifier,
-    )
+    Box(
+        modifier = modifier
+            .padding(
+                horizontal = 32.dp,
+                vertical = 22.dp,
+            ),
+    ) {
+        when (state) {
+            SectionInventoryUiState.Loading -> { /* TODO */
+            }
+
+            is SectionInventoryUiState.Sections -> {
+                SectionInventory(
+                    table = state.sectionTable,
+                    sectionsCount = state.sectionsCount,
+                    currentPage = state.currentPage,
+                    totalPage = state.totalPage,
+                    onAddSectionClick = { state.eventSink(SectionInventoryEvent.AddSection) },
+                    onPreviousClick = { state.eventSink(SectionInventoryEvent.PreviousPage) },
+                    onNextClick = { state.eventSink(SectionInventoryEvent.NextPage) },
+                )
+            }
+        }
+    }
 }
+
+//@Composable
+//fun SectionInventoryScreen(
+//    viewModel: SectionInventoryViewModel,
+//    modifier: Modifier = Modifier,
+//) {
+//    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+//    SectionInventoryScreen(
+//        uiState = uiState,
+//        onAddSectionClick = viewModel::addSection,
+//        onPreviousClick = viewModel::fetchPreviousPage,
+//        onNextClick = viewModel::fetchNextPage,
+//        modifier = modifier,
+//    )
+//}
 
 @Composable
 private fun SectionInventoryScreen(

@@ -21,6 +21,7 @@ kotlin {
             api(projects.feature.inventory)
 
             implementation(libs.kotlininject.runtime)
+            implementation(libs.circuit.foundation)
         }
     }
 

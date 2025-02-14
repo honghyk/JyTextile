@@ -12,6 +12,7 @@ androidx-test-core = "1.6.1"
 androidx-test-junit = "1.2.1"
 compose = "2025.01.01"
 compose-multiplatform = "1.7.0"
+circuit = "0.26.0"
 kotlin = "2.1.0"
 kotlin-inject = "0.7.2"
 kotlinx-coroutines = "1.10.1"
@@ -61,6 +62,9 @@ compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
 material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 
+# Navigation
+circuit-foundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }
+
 # Test
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
@@ -87,6 +91,7 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 
 jytextile-erp-kotlin-multiplatform = { id = "app.jytextile.erp.kotlin.multiplatform" }
 jytextile-erp-kotlin-multiplatform-compose = { id = "app.jytextile.erp.kotlin.multiplatform.compose" }

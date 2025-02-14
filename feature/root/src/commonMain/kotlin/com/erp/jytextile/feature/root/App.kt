@@ -7,33 +7,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.NavHost
 import com.erp.jytextile.core.base.route.AppRouteFactory
-import com.erp.jytextile.core.base.route.create
 import com.erp.jytextile.core.designsystem.component.JyNavigationSuiteScaffold
 import com.erp.jytextile.core.designsystem.theme.JyTheme
-import com.erp.jytextile.feature.inventory.navigation.InventoryRoute
+import com.slack.circuit.foundation.NavigableCircuitContent
 import org.jetbrains.compose.resources.vectorResource
-import kotlin.reflect.KClass
 
 @Composable
 fun App(
     appState: AppState,
-    routeFactories: Set<AppRouteFactory>,
+//    routeFactories: Set<AppRouteFactory>,
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    val currentDestination = appState.currentDestination
+//    val currentDestination = appState.currentDestination
+    val currentScreen by appState.rememberCurrentScreen()
 
     JyNavigationSuiteScaffold(
         modifier = modifier,
         navigationSuiteItems = {
             appState.topLevelDestinations.forEach { destination ->
-                val selected = currentDestination.isRouteInHierarchy(destination.baseRoute)
+                val selected = currentScreen == destination.screen
+//                val selected = currentDestination.isRouteInHierarchy(destination.baseRoute)
                 item(
                     selected = selected,
                     onClick = { appState.navigateToTopLevelDestination(destination) },
@@ -56,32 +53,37 @@ fun App(
         Scaffold(
             containerColor = JyTheme.color.surfaceDim,
         ) { padding ->
-            NavHost(
+            NavigableCircuitContent(
                 modifier = Modifier.padding(padding),
-                routeFactories = routeFactories,
-                appState = appState
+                navigator = appState.navigator,
+                backStack = appState.backStack
             )
+//            NavHost(
+//                modifier = Modifier.padding(padding),
+//                routeFactories = routeFactories,
+//                appState = appState
+//            )
         }
     }
 }
 
-@Composable
-fun NavHost(
-    appState: AppState,
-    routeFactories: Set<AppRouteFactory>,
-    modifier: Modifier = Modifier
-) {
-    val navController = appState.navController
-    NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = InventoryRoute,
-    ) {
-        routeFactories.forEach { factory -> factory.create(this, navController) }
-    }
-}
-
-private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
-    this?.hierarchy?.any {
-        it.hasRoute(route)
-    } ?: false
+//@Composable
+//fun NavHost(
+//    appState: AppState,
+//    routeFactories: Set<AppRouteFactory>,
+//    modifier: Modifier = Modifier
+//) {
+//    val navController = appState.navController
+//    NavHost(
+//        modifier = modifier,
+//        navController = navController,
+//        startDestination = InventoryRoute,
+//    ) {
+//        routeFactories.forEach { factory -> factory.create(this, navController) }
+//    }
+//}
+//
+//private fun NavDestination?.isRouteInHierarchy(route: KClass<*>) =
+//    this?.hierarchy?.any {
+//        it.hasRoute(route)
+//    } ?: false

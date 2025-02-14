@@ -4,6 +4,7 @@ import com.erp.jytextile.convention.library
 import com.erp.jytextile.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 class KmpFeatureConventionPlugin : Plugin<Project> {
 
@@ -13,6 +14,9 @@ class KmpFeatureConventionPlugin : Plugin<Project> {
                 apply("app.jytextile.erp.android.library")
                 apply("app.jytextile.erp.kotlin.multiplatform")
                 apply("app.jytextile.erp.kotlin.multiplatform.compose")
+                apply("org.jetbrains.kotlin.plugin.parcelize")
+
+                // TODO: Remove
                 apply("org.jetbrains.kotlin.plugin.serialization")
             }
 
@@ -27,9 +31,27 @@ class KmpFeatureConventionPlugin : Plugin<Project> {
                         implementation(compose.dependencies.material3)
 
                         implementation(libs.library("androidx-lifecycle-viewmodel-compose"))
-                        implementation(libs.library("navigation-compose"))
                         implementation(libs.library("kotlinx-serialization-json"))
                         implementation(libs.library("kotlininject-runtime"))
+
+                        implementation(libs.library("circuit-foundation"))
+                        // TODO: Remove
+                        implementation(libs.library("navigation-compose"))
+                    }
+                }
+
+                targets.configureEach {
+                    if (platformType == KotlinPlatformType.androidJvm) {
+                        compilations.configureEach {
+                            compileTaskProvider.configure {
+                                compilerOptions {
+                                    freeCompilerArgs.addAll(
+                                        "-P",
+                                        "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.erp.jytextile.core.base.parcel.Parcelize"
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }

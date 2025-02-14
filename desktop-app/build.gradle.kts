@@ -19,7 +19,9 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
 
+            implementation(libs.circuit.foundation)
             implementation(libs.kotlininject.runtime)
+            implementation(libs.navigation.compose)
         }
     }
 }
