@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory
+package com.erp.jytextile.feature.inventory.section
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
-import com.erp.jytextile.feature.inventory.component.InventoryOverallPanel
-import com.erp.jytextile.feature.inventory.component.InventoryTablePanel
-import com.erp.jytextile.feature.inventory.model.SectionTable
+import com.erp.jytextile.feature.inventory.common.ui.InventoryOverallPanel
+import com.erp.jytextile.feature.inventory.common.ui.InventoryTablePanel
+import com.erp.jytextile.feature.inventory.common.model.SectionTable
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui

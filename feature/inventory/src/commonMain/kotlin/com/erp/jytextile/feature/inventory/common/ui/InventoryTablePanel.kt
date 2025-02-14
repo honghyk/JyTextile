@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.component
+package com.erp.jytextile.feature.inventory.common.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,8 +17,8 @@ import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.component.Table
 import com.erp.jytextile.core.designsystem.theme.JyTheme
-import com.erp.jytextile.feature.inventory.model.Table
-import com.erp.jytextile.feature.inventory.model.TableItem
+import com.erp.jytextile.feature.inventory.common.model.Table
+import com.erp.jytextile.feature.inventory.common.model.TableItem
 
 
 @Composable

@@ -2,7 +2,7 @@ package com.erp.jytextile.feature.root
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.ComposeUIViewController
-import com.erp.jytextile.feature.inventory.SectionInventoryScreen
+import com.erp.jytextile.feature.inventory.section.SectionInventoryScreen
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import me.tatarka.inject.annotations.Inject
 import platform.UIKit.UIViewController

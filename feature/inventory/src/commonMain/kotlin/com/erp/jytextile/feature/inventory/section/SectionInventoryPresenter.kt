@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory
+package com.erp.jytextile.feature.inventory.section
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -7,8 +7,8 @@ import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.Section
 import com.erp.jytextile.core.domain.repository.InventoryRepository
-import com.erp.jytextile.feature.inventory.model.SectionTable
-import com.erp.jytextile.feature.inventory.model.toTableItem
+import com.erp.jytextile.feature.inventory.common.model.SectionTable
+import com.erp.jytextile.feature.inventory.common.model.toTableItem
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext

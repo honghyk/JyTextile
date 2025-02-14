@@ -1,6 +1,6 @@
 package com.erp.jytextile.shared
 
-import com.erp.jytextile.feature.inventory.SectionInventoryComponent
+import com.erp.jytextile.feature.inventory.section.SectionInventoryComponent
 import com.erp.jytextile.feature.root.AppContent
 import com.erp.jytextile.feature.root.RootComponent
 import com.slack.circuit.foundation.Circuit

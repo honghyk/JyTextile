@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.model
+package com.erp.jytextile.feature.inventory.common.model
 
 import com.erp.jytextile.core.domain.model.Section
 

@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.component
+package com.erp.jytextile.feature.inventory.common.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

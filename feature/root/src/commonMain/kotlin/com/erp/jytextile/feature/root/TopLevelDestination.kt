@@ -1,7 +1,7 @@
 package com.erp.jytextile.feature.root
 
 import com.erp.jytextile.core.designsystem.icon.JyIcons
-import com.erp.jytextile.feature.inventory.SectionInventoryScreen
+import com.erp.jytextile.feature.inventory.section.SectionInventoryScreen
 import com.slack.circuit.runtime.screen.Screen
 import org.jetbrains.compose.resources.DrawableResource
 

@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.model
+package com.erp.jytextile.feature.inventory.common.model
 
 interface Table {
     val headers: List<String>
