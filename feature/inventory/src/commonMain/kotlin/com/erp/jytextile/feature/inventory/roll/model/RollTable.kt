@@ -1,5 +1,6 @@
 package com.erp.jytextile.feature.inventory.roll.model
 
+import com.erp.jytextile.core.base.extension.meterToYard
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.feature.inventory.common.model.Table
 import com.erp.jytextile.feature.inventory.common.model.TableItem
@@ -10,8 +11,8 @@ data class RollTable(
         "ITEM NO",
         "COLOR",
         "FACTORY",
-        "QTY",
-        "TOTAL",
+        "QTY(M)",
+        "QTY(Y)",
         "REMARK",
     ),
     override val items: List<RollTableItem> = emptyList(),
@@ -22,7 +23,8 @@ data class RollTableItem(
     val itemNo: String,
     val color: String,
     val factory: String,
-    val qty: String,
+    val qtyInMeter: String,
+    val qtyInYard: String,
     val total: String,
     val remark: String,
     override val tableRow: List<String> = listOf(
@@ -30,8 +32,8 @@ data class RollTableItem(
         itemNo,
         color,
         factory,
-        qty,
-        total,
+        qtyInMeter,
+        qtyInYard,
         remark,
     )
 ) : TableItem
@@ -41,7 +43,8 @@ fun FabricRoll.toTableItem() = RollTableItem(
     itemNo = code,
     color = color,
     factory = factory,
-    qty = remainingLength.toString(),
+    qtyInMeter = remainingLength.toString(),
+    qtyInYard = meterToYard(remainingLength).toString(),
     total = originalLength.toString(),
     remark = remark ?: "",
 )
