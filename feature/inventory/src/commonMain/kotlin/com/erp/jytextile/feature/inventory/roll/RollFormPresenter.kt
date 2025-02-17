@@ -78,7 +78,9 @@ class RollFormPresenter(
                 is RollFormEvent.UpdateItemNo -> itemNo = event.itemNo
                 is RollFormEvent.UpdateColor -> color = event.color
                 is RollFormEvent.UpdateFactory -> factory = event.factory
-                is RollFormEvent.UpdateQuantity -> quantity = event.quantity
+                is RollFormEvent.UpdateQuantity -> {
+                    quantity = event.quantity.filter { it.isDigit() }
+                }
                 is RollFormEvent.UpdateRemark -> remark = event.remark
                 is RollFormEvent.UpdateLengthUnit -> lengthUnit = event.lengthUnit
             }
