@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -28,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
@@ -47,7 +47,15 @@ fun JyDrawerSheet(
         modifier =
             modifier
                 .widthIn(max = 240.dp)
-                .fillMaxHeight(),
+                .fillMaxHeight()
+                .clip(
+                    RoundedCornerShape(
+                        topStart = 8.dp,
+                        topEnd = 0.dp,
+                        bottomEnd = 8.dp,
+                        bottomStart = 0.dp
+                    )
+                ),
         color = drawerContainerColor,
         contentColor = drawerContentColor,
     ) {

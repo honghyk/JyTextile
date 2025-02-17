@@ -64,43 +64,52 @@ class RollInventoryPresenter(
             }
         }.collectAsRetainedState(null)
 
+        val eventSink: (RollInventoryEvent) -> Unit = { event ->
+            when (event) {
+                RollInventoryEvent.Back -> navigator.pop()
+
+                RollInventoryEvent.NextPage -> {
+                    currentPage = (currentPage + 1).coerceAtMost(totalPage - 1)
+                }
+
+                RollInventoryEvent.PreviousPage -> {
+                    currentPage = (currentPage - 1).coerceAtLeast(0)
+                }
+            }
+        }
+
         return when {
-            rollTable == null -> RollInventoryUiState.Loading
+            rollTable == null -> RollInventoryUiState.Loading(eventSink)
 
             else -> RollInventoryUiState.Rolls(
                 rollTable = rollTable!!,
                 rollCount = rollCount,
                 currentPage = currentPage + 1,
-                totalPage = totalPage
-            ) { event ->
-                when (event) {
-                    RollInventoryEvent.NextPage -> {
-                        currentPage = (currentPage + 1).coerceAtMost(totalPage - 1)
-                    }
-
-                    RollInventoryEvent.PreviousPage -> {
-                        currentPage = (currentPage - 1).coerceAtLeast(0)
-                    }
-                }
-            }
+                totalPage = totalPage,
+                eventSink = eventSink,
+            )
         }
     }
 }
 
 sealed interface RollInventoryUiState : CircuitUiState {
+    val eventSink: (RollInventoryEvent) -> Unit
 
-    data object Loading : RollInventoryUiState
+    data class Loading(
+        override val eventSink: (RollInventoryEvent) -> Unit = {},
+    ) : RollInventoryUiState
 
     data class Rolls(
         val rollTable: RollTable,
         val rollCount: Int,
         val currentPage: Int,
         val totalPage: Int,
-        val eventSink: (RollInventoryEvent) -> Unit = {},
+        override val eventSink: (RollInventoryEvent) -> Unit = {},
     ) : RollInventoryUiState
 }
 
 sealed interface RollInventoryEvent : CircuitUiEvent {
+    data object Back : RollInventoryEvent
     data object PreviousPage : RollInventoryEvent
     data object NextPage : RollInventoryEvent
 }
