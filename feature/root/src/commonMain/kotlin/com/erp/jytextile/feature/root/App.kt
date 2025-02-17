@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import com.erp.jytextile.core.designsystem.component.JyNavigationSuiteScaffold
 import com.erp.jytextile.core.designsystem.theme.JyTheme
 import com.slack.circuit.foundation.NavigableCircuitContent
+import com.slack.circuit.overlay.ContentWithOverlays
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -49,11 +50,14 @@ fun App(
         Scaffold(
             containerColor = JyTheme.color.surfaceDim,
         ) { padding ->
-            NavigableCircuitContent(
-                modifier = Modifier.padding(padding),
-                navigator = appState.navigator,
-                backStack = appState.backStack
-            )
+            ContentWithOverlays(
+                modifier = modifier.padding(padding),
+            ) {
+                NavigableCircuitContent(
+                    navigator = appState.navigator,
+                    backStack = appState.backStack
+                )
+            }
         }
     }
 }

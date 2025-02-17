@@ -5,3 +5,11 @@ plugins {
 android {
     namespace = "com.erp.jytextile.feature.inventory"
 }
+
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.circuit.overlay)
+        }
+    }
+}
