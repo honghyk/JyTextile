@@ -52,6 +52,7 @@ interface InventoryRepository {
 
     suspend fun releaseFabricRoll(
         rollId: Long,
+        orderNo: String,
         quantity: Double,
         lengthUnit: LengthUnit,
         buyer: String,

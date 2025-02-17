@@ -136,7 +136,7 @@ private fun InventoryTableFooter(
         JyOutlinedButton(onClick = onPreviousClick) {
             Text(
                 maxLines = 1,
-                text = "Previous"
+                text = "이전"
             )
         }
         Text(
@@ -144,12 +144,12 @@ private fun InventoryTableFooter(
             textAlign = TextAlign.Center,
             style = JyTheme.typography.textSmall,
             maxLines = 1,
-            text = "Page $currentPage of $totalPage"
+            text = "페이지 $currentPage of $totalPage"
         )
         JyOutlinedButton(onClick = onNextClick) {
             Text(
                 maxLines = 1,
-                text = "Next"
+                text = "다음"
             )
         }
     }

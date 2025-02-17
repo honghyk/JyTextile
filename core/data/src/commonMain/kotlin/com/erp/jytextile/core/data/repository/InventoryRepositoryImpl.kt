@@ -125,6 +125,7 @@ class InventoryRepositoryImpl(
 
     override suspend fun releaseFabricRoll(
         rollId: Long,
+        orderNo: String,
         quantity: Double,
         lengthUnit: LengthUnit,
         buyer: String,
@@ -142,6 +143,7 @@ class InventoryRepositoryImpl(
         inventoryDao.releaseFabricRollTransaction(
             releaseHistory = ReleaseHistoryEntity(
                 rollId = rollId,
+                orderNo = orderNo,
                 quantity = quantity,
                 destination = buyer,
                 releaseDate = date,
