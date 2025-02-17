@@ -1,15 +1,11 @@
 package com.erp.jytextile.feature.inventory.common.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,44 +36,21 @@ fun FormField(
     modifier: Modifier = Modifier,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
-    BoxWithConstraints {
-        val isPhone = maxWidth <= 480.dp
-        if (isPhone) {
-            Column(
-                modifier = modifier,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                FormLabel(
-                    style = JyTheme.typography.textSmall,
-                    label = label,
-                )
-                FormTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = value,
-                    onValueChange = onValueChange,
-                    placeholder = { Text(text = hint) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-                )
-            }
-        } else {
-            Row(
-                modifier = modifier,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                FormLabel(
-                    modifier = Modifier.width(200.dp),
-                    style = JyTheme.typography.textMedium,
-                    label = label
-                )
-                FormTextField(
-                    modifier = Modifier.weight(1f),
-                    value = value,
-                    onValueChange = onValueChange,
-                    placeholder = { Text(text = hint) },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-                )
-            }
-        }
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        FormLabel(
+            style = JyTheme.typography.textSmall,
+            label = label,
+        )
+        FormTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = { Text(text = hint) },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+        )
     }
 }
 

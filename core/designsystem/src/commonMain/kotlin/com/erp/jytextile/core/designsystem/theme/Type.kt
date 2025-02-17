@@ -32,11 +32,11 @@ val jyTypography = JyTypography(
         lineHeight = 28.sp,
     ),
     textMedium = TextStyle(
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-    ),
-    textSmall = TextStyle(
         fontSize = 14.sp,
         lineHeight = 20.sp,
+    ),
+    textSmall = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 18.sp,
     )
 )
