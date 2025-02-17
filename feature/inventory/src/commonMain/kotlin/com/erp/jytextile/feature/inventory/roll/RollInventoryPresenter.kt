@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.InventoryRepository
@@ -17,7 +18,10 @@ import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
@@ -64,9 +68,20 @@ class RollInventoryPresenter(
             }
         }.collectAsRetainedState(null)
 
-        val eventSink: (RollInventoryEvent) -> Unit = { event ->
+        var selectedRollId: Long? by rememberRetained(rollTable) { mutableStateOf(rollTable?.items?.firstOrNull()?.id) }
+        val selectedRoll by rememberRetained(selectedRollId) {
+            if (selectedRollId == null) {
+                flowOf(null)
+            } else {
+                inventoryRepository.getRoll(selectedRollId!!)
+            }
+        }.collectAsRetainedState(null)
+
+        val eventSink: CoroutineScope.(RollInventoryEvent) -> Unit = { event ->
             when (event) {
                 RollInventoryEvent.Back -> navigator.pop()
+
+                is RollInventoryEvent.RollSelected -> selectedRollId = event.rollId
 
                 RollInventoryEvent.NextPage -> {
                     currentPage = (currentPage + 1).coerceAtMost(totalPage - 1)
@@ -75,18 +90,29 @@ class RollInventoryPresenter(
                 RollInventoryEvent.PreviousPage -> {
                     currentPage = (currentPage - 1).coerceAtLeast(0)
                 }
+
+                RollInventoryEvent.Remove -> {
+                    launch {
+                        selectedRollId?.let { rollId ->
+                            inventoryRepository.removeFabricRoll(rollId)
+                        }
+                    }
+                }
+
+                RollInventoryEvent.Release -> { /* TODO */ }
             }
         }
 
         return when {
-            rollTable == null -> RollInventoryUiState.Loading(eventSink)
+            rollTable == null -> RollInventoryUiState.Loading(wrapEventSink(eventSink))
 
             else -> RollInventoryUiState.Rolls(
                 rollTable = rollTable!!,
                 rollCount = rollCount,
                 currentPage = currentPage + 1,
                 totalPage = totalPage,
-                eventSink = eventSink,
+                selectedRoll = selectedRoll,
+                eventSink = wrapEventSink(eventSink),
             )
         }
     }
@@ -104,12 +130,16 @@ sealed interface RollInventoryUiState : CircuitUiState {
         val rollCount: Int,
         val currentPage: Int,
         val totalPage: Int,
+        val selectedRoll: FabricRoll?,
         override val eventSink: (RollInventoryEvent) -> Unit = {},
     ) : RollInventoryUiState
 }
 
 sealed interface RollInventoryEvent : CircuitUiEvent {
     data object Back : RollInventoryEvent
+    data class RollSelected(val rollId: Long) : RollInventoryEvent
     data object PreviousPage : RollInventoryEvent
     data object NextPage : RollInventoryEvent
+    data object Remove : RollInventoryEvent
+    data object Release : RollInventoryEvent
 }

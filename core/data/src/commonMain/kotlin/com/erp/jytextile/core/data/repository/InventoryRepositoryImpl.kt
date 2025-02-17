@@ -2,6 +2,7 @@ package com.erp.jytextile.core.data.repository
 
 import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.model.FabricRollEntity
+import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import com.erp.jytextile.core.database.model.ZoneEntity
 import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import com.erp.jytextile.core.database.model.toDomain
@@ -10,6 +11,7 @@ import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Instant
 import me.tatarka.inject.annotations.Inject
@@ -123,6 +125,12 @@ class InventoryRepositoryImpl(
         releaseDate: Instant
     ) {
         TODO("Not yet implemented")
+    }
+
+    override fun getRoll(rollId: Long): Flow<FabricRoll> {
+        return inventoryDao.getFabricRollWithZone(rollId)
+            .filterNotNull()
+            .map(FabricRollWithZoneEntity::toDomain)
     }
 
     private fun yardToMeter(yard: Int): Int {

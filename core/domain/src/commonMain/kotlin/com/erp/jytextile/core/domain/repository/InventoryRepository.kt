@@ -57,4 +57,6 @@ interface InventoryRepository {
         destination: String,
         releaseDate: Instant = Clock.System.now(),
     )
+
+    fun getRoll(rollId: Long): Flow<FabricRoll>
 }

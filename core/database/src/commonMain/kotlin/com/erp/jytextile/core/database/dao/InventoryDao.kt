@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.erp.jytextile.core.database.model.FabricRollEntity
+import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
 import com.erp.jytextile.core.database.model.ZoneEntity
 import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
@@ -61,6 +62,18 @@ interface InventoryDao {
         offset: Int,
         filterHasRemaining: Boolean,
     ): Flow<List<FabricRollEntity>>
+
+
+    @Query(
+        """
+        SELECT fabric_rolls.*, zones.name AS zone_name
+        FROM fabric_rolls
+        INNER JOIN zones ON fabric_rolls.zone_id = zones.id
+        WHERE fabric_rolls.id = :rollId
+        LIMIT 1
+        """
+    )
+    fun getFabricRollWithZone(rollId: Long): Flow<FabricRollWithZoneEntity?>
 
     @Query(
         value = """

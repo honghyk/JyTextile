@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.erp.jytextile.core.domain.model.FabricRoll
+import com.erp.jytextile.core.domain.model.Zone
 
 @Entity(
     tableName = "fabric_rolls",
@@ -30,7 +31,7 @@ data class FabricRollEntity(
 
 fun FabricRollEntity.toDomain() = FabricRoll(
     id = id,
-    zoneId = zoneId,
+    zone = Zone(id = id),
     code = code,
     color = color,
     factory = factory,
@@ -41,7 +42,7 @@ fun FabricRollEntity.toDomain() = FabricRoll(
 
 fun FabricRoll.toEntity() = FabricRollEntity(
     id = id,
-    zoneId = zoneId,
+    zoneId = zone.id,
     code = code,
     color = color,
     factory = factory,
