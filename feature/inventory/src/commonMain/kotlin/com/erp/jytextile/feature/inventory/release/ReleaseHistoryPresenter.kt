@@ -89,7 +89,7 @@ class ReleaseHistoryPresenter(
             )
 
             else -> ReleaseHistoryUiState.ReleaseHistories(
-                title = "No.$rollId $rollItemNo",
+                title = "($rollId) $rollItemNo",
                 releaseHistoryTable = releaseHistoryTable!!,
                 currentPage = currentPage + 1,
                 totalPage = totalPage,
