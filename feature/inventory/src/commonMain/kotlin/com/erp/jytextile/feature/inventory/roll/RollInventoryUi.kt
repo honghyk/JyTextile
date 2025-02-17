@@ -188,7 +188,7 @@ private fun RollDetailPanel(
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             Text(text = "Factory: ${roll.factory}")
-                            Text(text = "Qty: ${roll.remainingLength}")
+                            Text(text = "Qty(M): ${roll.remainingLength}/${roll.originalLength}")
                             Text(text = "Remark: ${roll.remark}")
                         }
                     }
