@@ -6,5 +6,6 @@ interface Table {
 }
 
 interface TableItem {
+    val id: Long
     val tableRow: List<String>
 }

@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.zone
+package com.erp.jytextile.feature.inventory.roll
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.feature.inventory.common.ui.InventoryOverallPanel
 import com.erp.jytextile.feature.inventory.common.ui.InventoryTablePanel
-import com.erp.jytextile.feature.inventory.zone.model.ZoneTable
+import com.erp.jytextile.feature.inventory.roll.model.RollTable
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
@@ -22,11 +22,11 @@ import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class ZoneInventoryUiFactory : Ui.Factory {
+class RollInventoryUiFactory : Ui.Factory {
     override fun create(screen: Screen, context: CircuitContext): Ui<*>? = when (screen) {
-        is ZoneInventoryScreen -> {
-            ui<ZoneInventoryUiState> { state, modifier ->
-                ZoneInventoryUi(state, modifier)
+        is RollInventoryScreen -> {
+            ui<RollInventoryUiState> { state, modifier ->
+                RollInventoryUi(state, modifier)
             }
         }
 
@@ -36,8 +36,8 @@ class ZoneInventoryUiFactory : Ui.Factory {
 
 
 @Composable
-fun ZoneInventoryUi(
-    state: ZoneInventoryUiState,
+fun RollInventoryUi(
+    state: RollInventoryUiState,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -48,19 +48,18 @@ fun ZoneInventoryUi(
             ),
     ) {
         when (state) {
-            ZoneInventoryUiState.Loading -> { /* TODO */
+            RollInventoryUiState.Loading -> { /* TODO */
             }
 
-            is ZoneInventoryUiState.Zones -> {
-                ZoneInventory(
-                    table = state.zoneTable,
-                    zonesCount = state.zonesCount,
+            is RollInventoryUiState.Rolls -> {
+                RollInventory(
+                    table = state.rollTable,
+                    rollsCount = state.rollCount,
                     currentPage = state.currentPage,
                     totalPage = state.totalPage,
-                    onZoneClick = { state.eventSink(ZoneInventoryEvent.ToRolls(it)) },
-                    onAddZoneClick = { state.eventSink(ZoneInventoryEvent.AddZone) },
-                    onPreviousClick = { state.eventSink(ZoneInventoryEvent.PreviousPage) },
-                    onNextClick = { state.eventSink(ZoneInventoryEvent.NextPage) },
+                    onAddZoneClick = { state.eventSink(RollInventoryEvent.AddRoll) },
+                    onPreviousClick = { state.eventSink(RollInventoryEvent.PreviousPage) },
+                    onNextClick = { state.eventSink(RollInventoryEvent.NextPage) },
                 )
             }
         }
@@ -68,12 +67,11 @@ fun ZoneInventoryUi(
 }
 
 @Composable
-private fun ZoneInventory(
-    table: ZoneTable,
-    zonesCount: Int,
+private fun RollInventory(
+    table: RollTable,
+    rollsCount: Int,
     currentPage: Int,
     totalPage: Int,
-    onZoneClick: (Long) -> Unit,
     onAddZoneClick: () -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -86,28 +84,28 @@ private fun ZoneInventory(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            total = zonesCount,
-            title = "Zones",
+            total = rollsCount,
+            title = "Rolls",
         )
         Spacer(modifier = Modifier.height(22.dp))
         InventoryTablePanel(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            title = "Zones",
+            title = "Rolls",
             table = table,
             currentPage = currentPage,
             totalPage = totalPage,
+            onItemClick = { /* TODO */ },
             onPreviousClick = onPreviousClick,
             onNextClick = onNextClick,
-            onItemClick = { onZoneClick(it.id) },
         ) {
             JyButton(
                 onClick = onAddZoneClick,
             ) {
                 Text(
                     maxLines = 1,
-                    text = "Zone 추가"
+                    text = "Roll 추가"
                 )
             }
         }

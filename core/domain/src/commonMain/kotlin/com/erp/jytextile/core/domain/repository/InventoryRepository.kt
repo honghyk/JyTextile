@@ -28,6 +28,10 @@ interface InventoryRepository {
 
     suspend fun removeFabricRoll(rollId: Long)
 
+    fun getFabricRollsCount(zoneId: Long): Flow<Int>
+
+    fun getFabricRollsPage(zoneId: Long): Flow<Int>
+
     suspend fun releaseFabricRoll(
         rollId: Long,
         quantity: Double,

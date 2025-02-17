@@ -1,14 +1,11 @@
 package com.erp.jytextile.core.designsystem.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -30,6 +26,7 @@ import com.erp.jytextile.core.designsystem.theme.Palette
 fun <T> Table(
     headers: List<String>,
     items: List<T>,
+    onRowClick: (T) -> Unit,
     modifier: Modifier = Modifier,
     tableRowContent: @Composable TableRowScope.(T) -> Unit,
 ) {
@@ -40,7 +37,9 @@ fun <T> Table(
         LazyColumn {
             items(items) { item ->
                 HorizontalDivider(color = JyTheme.color.border)
-                TableRow {
+                TableRow(
+                    onRowClick = { onRowClick(item) }
+                ) {
                     tableRowContent(item)
                 }
             }
@@ -77,6 +76,7 @@ private fun TableHeader(
 
 @Composable
 private fun TableRow(
+    onRowClick: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable TableRowScope.() -> Unit,
 ) {
@@ -85,6 +85,7 @@ private fun TableRow(
         modifier = modifier
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState())
+            .clickable(onClick = onRowClick)
             .padding(
                 horizontal = 16.dp,
                 vertical = 14.dp,

@@ -59,6 +59,14 @@ interface InventoryDao {
         filterHasRemaining: Boolean,
     ): Flow<List<FabricRollEntity>>
 
+    @Query(
+        value = """
+            SELECT COUNT(*) FROM fabric_rolls
+            WHERE zone_id = :zoneId
+            """
+    )
+    fun getFabricRollsCount(zoneId: Long): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertFabricRoll(fabricRoll: FabricRollEntity): Long
 

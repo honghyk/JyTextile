@@ -13,6 +13,7 @@ data class ZoneTable(
 ) : Table
 
 data class ZoneTableItem(
+    override val id: Long,
     val name: String,
     val rollCount: Int,
     override val tableRow: List<String> = listOf(
@@ -22,6 +23,7 @@ data class ZoneTableItem(
 ) : TableItem
 
 fun Zone.toTableItem() = ZoneTableItem(
+    id = id,
     name = name,
     rollCount = rollCount,
 )

@@ -65,6 +65,16 @@ class InventoryRepositoryImpl(
         inventoryDao.deleteFabricRoll(rollId)
     }
 
+    override fun getFabricRollsPage(zoneId: Long): Flow<Int> {
+        return inventoryDao.getFabricRollsCount(zoneId).map { count ->
+            (count + PAGE_SIZE - 1) / PAGE_SIZE
+        }
+    }
+
+    override fun getFabricRollsCount(zoneId: Long): Flow<Int> {
+        return inventoryDao.getFabricRollsCount(zoneId)
+    }
+
     override suspend fun releaseFabricRoll(
         rollId: Long,
         quantity: Double,

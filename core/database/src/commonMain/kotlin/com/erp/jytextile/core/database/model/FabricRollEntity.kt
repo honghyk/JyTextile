@@ -22,8 +22,10 @@ data class FabricRollEntity(
     @ColumnInfo("zone_id") val zoneId: Long,
     val code: String,
     val color: String,
+    val factory: String,
     @ColumnInfo("remaining_length") val remainingLength: Int,
     @ColumnInfo("original_length") val originalLength: Int,
+    val remark: String?,
 )
 
 fun FabricRollEntity.toDomain() = FabricRoll(
@@ -31,8 +33,10 @@ fun FabricRollEntity.toDomain() = FabricRoll(
     zoneId = zoneId,
     code = code,
     color = color,
+    factory = factory,
     remainingLength = remainingLength,
     originalLength = originalLength,
+    remark = remark,
 )
 
 fun FabricRoll.toEntity() = FabricRollEntity(
@@ -40,6 +44,8 @@ fun FabricRoll.toEntity() = FabricRollEntity(
     zoneId = zoneId,
     code = code,
     color = color,
+    factory = factory,
     remainingLength = remainingLength,
     originalLength = originalLength,
+    remark = remark,
 )

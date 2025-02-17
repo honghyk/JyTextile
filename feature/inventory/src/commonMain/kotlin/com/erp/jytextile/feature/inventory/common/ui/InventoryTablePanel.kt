@@ -27,6 +27,7 @@ internal fun InventoryTablePanel(
     table: Table,
     currentPage: Int,
     totalPage: Int,
+    onItemClick: (TableItem) -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -47,6 +48,7 @@ internal fun InventoryTablePanel(
                 modifier = Modifier.weight(1f),
                 headers = table.headers,
                 items = table.items,
+                onRowClick = onItemClick,
             )
             if (totalPage > 0) {
                 InventoryTableFooter(
@@ -95,12 +97,14 @@ private fun InventoryTableHeader(
 private fun <T : TableItem> InventoryTable(
     headers: List<String>,
     items: List<T>,
+    onRowClick: (T) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Table(
         modifier = modifier,
         headers = headers,
         items = items,
+        onRowClick = onRowClick
     ) { item ->
         item.tableRow.forEach {
             TableCell(
