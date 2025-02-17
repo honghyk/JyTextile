@@ -1,5 +1,6 @@
 package com.erp.jytextile.shared
 
+import com.erp.jytextile.feature.inventory.section.SectionFormComponent
 import com.erp.jytextile.feature.inventory.section.SectionInventoryComponent
 import com.erp.jytextile.feature.root.AppContent
 import com.erp.jytextile.feature.root.RootComponent
@@ -10,6 +11,7 @@ import me.tatarka.inject.annotations.Provides
 
 interface UiComponent
     : SectionInventoryComponent,
+    SectionFormComponent,
     RootComponent {
 
     val appContent: AppContent

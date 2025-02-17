@@ -4,9 +4,11 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
 object Palette {
+    val grey400 = Color(0xFF858D9D)
     val grey500 = Color(0xFF667085)
     val grey600 = Color(0xFF5D6679)
     val grey700 = Color(0xFF48505E)
+    val grey800 = Color(0xFF383E49)
 }
 
 @Immutable
@@ -28,8 +30,8 @@ data class JyColor(
 val colorPalette = JyColor(
     primary = Color(0xFF1570EF),
     onPrimary = Color(0xFFFFFFFF),
-    body = Color(0xFF858D9D),
-    heading = Color(0xFF383E49),
+    body = Palette.grey400,
+    heading = Palette.grey800,
     subHeading = Palette.grey600,
     totalReturned = Color(0xFF845EBC),
     totalProducts = Color(0xFFDBA362),
