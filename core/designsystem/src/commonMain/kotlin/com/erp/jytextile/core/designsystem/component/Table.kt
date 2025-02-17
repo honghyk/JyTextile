@@ -5,6 +5,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
@@ -80,7 +81,6 @@ private fun TableRow(
     modifier: Modifier = Modifier,
     content: @Composable TableRowScope.() -> Unit,
 ) {
-    val tableRowScope = remember { TableRowScopeImpl() }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -92,6 +92,7 @@ private fun TableRow(
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
+        val tableRowScope = remember { TableRowScopeImpl(this) }
         CompositionLocalProvider(
             LocalTextStyle provides JyTheme.typography.textSmall.copy(
                 color = Palette.grey700,
@@ -102,7 +103,7 @@ private fun TableRow(
     }
 }
 
-interface TableRowScope {
+interface TableRowScope : RowScope {
 
     @Composable
     fun TableCell(
@@ -111,7 +112,7 @@ interface TableRowScope {
     )
 }
 
-private class TableRowScopeImpl : TableRowScope {
+private class TableRowScopeImpl(rowScope: RowScope) : TableRowScope, RowScope by rowScope {
 
     @Composable
     override fun TableCell(
@@ -119,7 +120,9 @@ private class TableRowScopeImpl : TableRowScope {
         modifier: Modifier,
     ) {
         Text(
-            modifier = modifier.widthIn(min = MinimumCellWidth),
+            modifier = modifier
+                .widthIn(min = MinimumCellWidth)
+                .alignByBaseline(),
             maxLines = 1,
             text = value,
         )
