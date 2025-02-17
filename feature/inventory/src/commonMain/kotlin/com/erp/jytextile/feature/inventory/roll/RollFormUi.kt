@@ -29,9 +29,7 @@ import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
 
 @Parcelize
-data class RollFormScreen(
-    val zoneId: Long
-) : StaticScreen
+data object RollFormScreen : StaticScreen
 
 @Inject
 class RollFormUiFactory : Ui.Factory {
@@ -69,34 +67,35 @@ fun RollFormUi(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 FormField(
+                    label = "ZONE",
+                    value = state.zoneName,
+                    onValueChange = { state.eventSink(RollFormEvent.UpdateZoneName(it)) },
+                )
+                FormField(
                     label = "ITEM NO",
                     value = state.itemNo,
-                    hint = "Ex) JY-7117A",
                     onValueChange = { state.eventSink(RollFormEvent.UpdateItemNo(it)) },
                 )
                 FormField(
                     label = "COLOR",
                     value = state.color,
-                    hint = "",
                     onValueChange = { state.eventSink(RollFormEvent.UpdateColor(it)) },
                 )
                 FormField(
                     label = "FACTORY",
                     value = state.factory,
-                    hint = "",
                     onValueChange = { state.eventSink(RollFormEvent.UpdateFactory(it)) },
                 )
                 FormField(
                     label = "QUANTITY",
                     value = state.quantity,
-                    hint = "",
                     onValueChange = { state.eventSink(RollFormEvent.UpdateQuantity(it)) },
                     keyboardType = KeyboardType.Number,
                 )
                 FormField(
                     label = "REMARK",
                     value = state.remark,
-                    hint = "",
+                    singleLine = false,
                     onValueChange = { state.eventSink(RollFormEvent.UpdateRemark(it)) },
                 )
             }

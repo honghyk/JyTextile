@@ -7,11 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.feature.inventory.common.ui.InventoryOverallPanel
 import com.erp.jytextile.feature.inventory.common.ui.InventoryTablePanel
 import com.erp.jytextile.feature.inventory.roll.model.RollTable
@@ -57,7 +55,6 @@ fun RollInventoryUi(
                     rollsCount = state.rollCount,
                     currentPage = state.currentPage,
                     totalPage = state.totalPage,
-                    onAddZoneClick = { state.eventSink(RollInventoryEvent.AddRoll) },
                     onPreviousClick = { state.eventSink(RollInventoryEvent.PreviousPage) },
                     onNextClick = { state.eventSink(RollInventoryEvent.NextPage) },
                 )
@@ -72,7 +69,6 @@ private fun RollInventory(
     rollsCount: Int,
     currentPage: Int,
     totalPage: Int,
-    onAddZoneClick: () -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -99,15 +95,7 @@ private fun RollInventory(
             onItemClick = { /* TODO */ },
             onPreviousClick = onPreviousClick,
             onNextClick = onNextClick,
-        ) {
-            JyButton(
-                onClick = onAddZoneClick,
-            ) {
-                Text(
-                    maxLines = 1,
-                    text = "Roll 추가"
-                )
-            }
-        }
+            headerButtonContent = { },
+        )
     }
 }

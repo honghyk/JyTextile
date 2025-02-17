@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
+import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.feature.inventory.common.ui.InventoryOverallPanel
 import com.erp.jytextile.feature.inventory.common.ui.InventoryTablePanel
 import com.erp.jytextile.feature.inventory.zone.model.ZoneTable
@@ -58,6 +59,7 @@ fun ZoneInventoryUi(
                     currentPage = state.currentPage,
                     totalPage = state.totalPage,
                     onZoneClick = { state.eventSink(ZoneInventoryEvent.ToRolls(it)) },
+                    onAddRollClick = { state.eventSink(ZoneInventoryEvent.AddRoll) },
                     onAddZoneClick = { state.eventSink(ZoneInventoryEvent.AddZone) },
                     onPreviousClick = { state.eventSink(ZoneInventoryEvent.PreviousPage) },
                     onNextClick = { state.eventSink(ZoneInventoryEvent.NextPage) },
@@ -74,6 +76,7 @@ private fun ZoneInventory(
     currentPage: Int,
     totalPage: Int,
     onZoneClick: (Long) -> Unit,
+    onAddRollClick: () -> Unit,
     onAddZoneClick: () -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -102,12 +105,16 @@ private fun ZoneInventory(
             onNextClick = onNextClick,
             onItemClick = { onZoneClick(it.id) },
         ) {
-            JyButton(
-                onClick = onAddZoneClick,
-            ) {
+            JyOutlinedButton(onClick = onAddZoneClick) {
                 Text(
                     maxLines = 1,
                     text = "Zone 추가"
+                )
+            }
+            JyButton(onClick = onAddRollClick) {
+                Text(
+                    maxLines = 1,
+                    text = "Roll 입고"
                 )
             }
         }

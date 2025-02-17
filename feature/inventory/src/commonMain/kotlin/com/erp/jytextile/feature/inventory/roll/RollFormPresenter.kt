@@ -21,7 +21,7 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class RollFormPresenterFactory(
-    private val presenterFactory: (Navigator, Long) -> RollFormPresenter,
+    private val presenterFactory: (Navigator) -> RollFormPresenter,
 ) : Presenter.Factory {
 
     override fun create(
@@ -30,7 +30,7 @@ class RollFormPresenterFactory(
         context: CircuitContext
     ): Presenter<*>? {
         return when (screen) {
-            is RollFormScreen -> presenterFactory(navigator, screen.zoneId)
+            is RollFormScreen -> presenterFactory(navigator)
             else -> return null
         }
     }
@@ -39,12 +39,12 @@ class RollFormPresenterFactory(
 @Inject
 class RollFormPresenter(
     @Assisted private val navigator: Navigator,
-    @Assisted private val zoneId: Long,
     private val inventoryRepository: InventoryRepository,
 ) : Presenter<RollFormUiState> {
 
     @Composable
     override fun present(): RollFormUiState {
+        var zoneName by rememberRetained { mutableStateOf("") }
         var itemNo by rememberRetained { mutableStateOf("") }
         var color by rememberRetained { mutableStateOf("") }
         var factory by rememberRetained { mutableStateOf("") }
@@ -59,7 +59,7 @@ class RollFormPresenter(
                     launch {
                         try {
                             inventoryRepository.addFabricRoll(
-                                zoneId = zoneId,
+                                zoneName = zoneName,
                                 itemNo = itemNo,
                                 color = color,
                                 factory = factory,
@@ -74,6 +74,7 @@ class RollFormPresenter(
                     }
                 }
 
+                is RollFormEvent.UpdateZoneName -> zoneName = event.zoneName
                 is RollFormEvent.UpdateItemNo -> itemNo = event.itemNo
                 is RollFormEvent.UpdateColor -> color = event.color
                 is RollFormEvent.UpdateFactory -> factory = event.factory
@@ -84,6 +85,7 @@ class RollFormPresenter(
         }
 
         return RollFormUiState(
+            zoneName = zoneName,
             itemNo = itemNo,
             color = color,
             factory = factory,
@@ -96,6 +98,7 @@ class RollFormPresenter(
 }
 
 data class RollFormUiState(
+    val zoneName: String,
     val itemNo: String,
     val color: String,
     val factory: String,
@@ -105,13 +108,15 @@ data class RollFormUiState(
     val eventSink: (RollFormEvent) -> Unit
 ) : CircuitUiState {
     val canSubmit: Boolean
-        get() = itemNo.isNotEmpty() &&
+        get() = zoneName.isNotEmpty() &&
+                itemNo.isNotEmpty() &&
                 color.isNotEmpty() &&
                 factory.isNotEmpty() &&
                 quantity.isNotEmpty()
 }
 
 sealed interface RollFormEvent : CircuitUiEvent {
+    data class UpdateZoneName(val zoneName: String) : RollFormEvent
     data class UpdateItemNo(val itemNo: String) : RollFormEvent
     data class UpdateColor(val color: String) : RollFormEvent
     data class UpdateFactory(val factory: String) : RollFormEvent

@@ -35,6 +35,16 @@ interface InventoryRepository {
         lengthUnit: LengthUnit,
     )
 
+    suspend fun addFabricRoll(
+        zoneName: String,
+        itemNo: String,
+        color: String,
+        factory: String,
+        quantity: Int,
+        remark: String,
+        lengthUnit: LengthUnit,
+    )
+
     suspend fun removeFabricRoll(rollId: Long)
 
     fun getFabricRollsCount(zoneId: Long): Flow<Int>

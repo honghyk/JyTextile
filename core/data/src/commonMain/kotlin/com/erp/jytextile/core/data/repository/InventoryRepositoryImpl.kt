@@ -79,6 +79,29 @@ class InventoryRepositoryImpl(
         inventoryDao.insertFabricRoll(roll)
     }
 
+    override suspend fun addFabricRoll(
+        zoneName: String,
+        itemNo: String,
+        color: String,
+        factory: String,
+        quantity: Int,
+        remark: String,
+        lengthUnit: LengthUnit
+    ) {
+        val zone = inventoryDao.findZoneByName(zoneName)
+        val zoneId = zone?.id ?: inventoryDao.insertZone(ZoneEntity(name = zoneName))
+
+        addFabricRoll(
+            zoneId = zoneId,
+            itemNo = itemNo,
+            color = color,
+            factory = factory,
+            quantity = quantity,
+            remark = remark,
+            lengthUnit = lengthUnit
+        )
+    }
+
     override suspend fun removeFabricRoll(rollId: Long) {
         inventoryDao.deleteFabricRoll(rollId)
     }

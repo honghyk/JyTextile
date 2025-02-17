@@ -9,6 +9,7 @@ import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.feature.inventory.roll.RollFormScreen
 import com.erp.jytextile.feature.inventory.roll.RollInventoryScreen
 import com.erp.jytextile.feature.inventory.zone.model.ZoneTable
 import com.erp.jytextile.feature.inventory.zone.model.toTableItem
@@ -85,10 +86,20 @@ class ZoneInventoryPresenter(
                             screen = RollInventoryScreen(event.zoneId)
                         )
                     }
+
                     ZoneInventoryEvent.AddZone -> {
                         scope.launch {
                             overlayHost.showInDialog(
                                 screen = AddZoneScreen,
+                                onGoToScreen = navigator::goTo
+                            )
+                        }
+                    }
+
+                    ZoneInventoryEvent.AddRoll -> {
+                        scope.launch {
+                            overlayHost.showInDialog(
+                                screen = RollFormScreen,
                                 onGoToScreen = navigator::goTo
                             )
                         }
@@ -123,6 +134,7 @@ sealed interface ZoneInventoryUiState : CircuitUiState {
 sealed interface ZoneInventoryEvent : CircuitUiEvent {
     data class ToRolls(val zoneId: Long) : ZoneInventoryEvent
     data object AddZone : ZoneInventoryEvent
+    data object AddRoll : ZoneInventoryEvent
     data object PreviousPage : ZoneInventoryEvent
     data object NextPage : ZoneInventoryEvent
 }

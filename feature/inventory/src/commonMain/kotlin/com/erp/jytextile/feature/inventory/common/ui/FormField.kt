@@ -31,9 +31,10 @@ fun FormHeader(
 fun FormField(
     label: String,
     value: String,
-    hint: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    hint: String = "",
+    singleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
     Column(
@@ -48,6 +49,7 @@ fun FormField(
             modifier = Modifier.fillMaxWidth(),
             value = value,
             onValueChange = onValueChange,
+            singleLine = singleLine,
             placeholder = { Text(text = hint) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
         )

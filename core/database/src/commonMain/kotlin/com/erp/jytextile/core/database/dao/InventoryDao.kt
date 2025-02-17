@@ -29,6 +29,9 @@ interface InventoryDao {
         offset: Int,
     ): Flow<List<ZoneWithRollCountEntity>>
 
+    @Query("SELECT * FROM zones WHERE name = :name LIMIT 1")
+    suspend fun findZoneByName(name: String): ZoneEntity?
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertZone(section: ZoneEntity): Long
 
