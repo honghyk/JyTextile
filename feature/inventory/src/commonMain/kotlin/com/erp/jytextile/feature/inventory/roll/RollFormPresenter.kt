@@ -1,0 +1,123 @@
+package com.erp.jytextile.feature.inventory.roll
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import com.erp.jytextile.core.base.circuit.wrapEventSink
+import com.erp.jytextile.core.domain.model.LengthUnit
+import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.slack.circuit.retained.rememberRetained
+import com.slack.circuit.runtime.CircuitContext
+import com.slack.circuit.runtime.CircuitUiEvent
+import com.slack.circuit.runtime.CircuitUiState
+import com.slack.circuit.runtime.Navigator
+import com.slack.circuit.runtime.presenter.Presenter
+import com.slack.circuit.runtime.screen.Screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Assisted
+import me.tatarka.inject.annotations.Inject
+
+@Inject
+class RollFormPresenterFactory(
+    private val presenterFactory: (Navigator, Long) -> RollFormPresenter,
+) : Presenter.Factory {
+
+    override fun create(
+        screen: Screen,
+        navigator: Navigator,
+        context: CircuitContext
+    ): Presenter<*>? {
+        return when (screen) {
+            is RollFormScreen -> presenterFactory(navigator, screen.zoneId)
+            else -> return null
+        }
+    }
+}
+
+@Inject
+class RollFormPresenter(
+    @Assisted private val navigator: Navigator,
+    @Assisted private val zoneId: Long,
+    private val inventoryRepository: InventoryRepository,
+) : Presenter<RollFormUiState> {
+
+    @Composable
+    override fun present(): RollFormUiState {
+        var itemNo by rememberRetained { mutableStateOf("") }
+        var color by rememberRetained { mutableStateOf("") }
+        var factory by rememberRetained { mutableStateOf("") }
+        var quantity by rememberRetained { mutableStateOf("") }
+        var remark by rememberRetained { mutableStateOf("") }
+        var lengthUnit by rememberRetained { mutableStateOf(LengthUnit.METER) }
+
+        val eventSink: CoroutineScope.(RollFormEvent) -> Unit = { event ->
+            when (event) {
+                RollFormEvent.Discard -> navigator.pop()
+                RollFormEvent.Submit -> {
+                    launch {
+                        try {
+                            inventoryRepository.addFabricRoll(
+                                zoneId = zoneId,
+                                itemNo = itemNo,
+                                color = color,
+                                factory = factory,
+                                quantity = quantity.toInt(),
+                                remark = remark,
+                                lengthUnit = lengthUnit,
+                            )
+                            navigator.pop()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+
+                is RollFormEvent.UpdateItemNo -> itemNo = event.itemNo
+                is RollFormEvent.UpdateColor -> color = event.color
+                is RollFormEvent.UpdateFactory -> factory = event.factory
+                is RollFormEvent.UpdateQuantity -> quantity = event.quantity
+                is RollFormEvent.UpdateRemark -> remark = event.remark
+                is RollFormEvent.UpdateLengthUnit -> lengthUnit = event.lengthUnit
+            }
+        }
+
+        return RollFormUiState(
+            itemNo = itemNo,
+            color = color,
+            factory = factory,
+            quantity = quantity,
+            lengthUnit = lengthUnit,
+            remark = remark,
+            eventSink = wrapEventSink(eventSink),
+        )
+    }
+}
+
+data class RollFormUiState(
+    val itemNo: String,
+    val color: String,
+    val factory: String,
+    val quantity: String,
+    val lengthUnit: LengthUnit,
+    val remark: String,
+    val eventSink: (RollFormEvent) -> Unit
+) : CircuitUiState {
+    val canSubmit: Boolean
+        get() = itemNo.isNotEmpty() &&
+                color.isNotEmpty() &&
+                factory.isNotEmpty() &&
+                quantity.isNotEmpty()
+}
+
+sealed interface RollFormEvent : CircuitUiEvent {
+    data class UpdateItemNo(val itemNo: String) : RollFormEvent
+    data class UpdateColor(val color: String) : RollFormEvent
+    data class UpdateFactory(val factory: String) : RollFormEvent
+    data class UpdateQuantity(val quantity: String) : RollFormEvent
+    data class UpdateRemark(val remark: String) : RollFormEvent
+    data class UpdateLengthUnit(val lengthUnit: LengthUnit) : RollFormEvent
+    data object Submit : RollFormEvent
+    data object Discard : RollFormEvent
+}

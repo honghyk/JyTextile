@@ -5,8 +5,8 @@ import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.ZoneEntity
 import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import com.erp.jytextile.core.database.model.toDomain
-import com.erp.jytextile.core.database.model.toEntity
 import com.erp.jytextile.core.domain.model.FabricRoll
+import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import kotlinx.coroutines.flow.Flow
@@ -57,8 +57,26 @@ class InventoryRepositoryImpl(
         }
     }
 
-    override suspend fun addFabricRoll(fabricRoll: FabricRoll) {
-        inventoryDao.insertFabricRoll(fabricRoll.toEntity())
+    override suspend fun addFabricRoll(
+        zoneId: Long,
+        itemNo: String,
+        color: String,
+        factory: String,
+        quantity: Int,
+        remark: String,
+        lengthUnit: LengthUnit
+    ) {
+        val length = if (lengthUnit == LengthUnit.METER) quantity else yardToMeter(quantity)
+        val roll = FabricRollEntity(
+            zoneId = zoneId,
+            code = itemNo,
+            color = color,
+            factory = factory,
+            remainingLength = length,
+            originalLength = length,
+            remark = remark,
+        )
+        inventoryDao.insertFabricRoll(roll)
     }
 
     override suspend fun removeFabricRoll(rollId: Long) {
@@ -82,6 +100,10 @@ class InventoryRepositoryImpl(
         releaseDate: Instant
     ) {
         TODO("Not yet implemented")
+    }
+
+    private fun yardToMeter(yard: Int): Int {
+        return (yard * 0.9144).toInt()
     }
 }
 

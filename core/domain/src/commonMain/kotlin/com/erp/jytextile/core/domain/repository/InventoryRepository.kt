@@ -1,6 +1,7 @@
 package com.erp.jytextile.core.domain.repository
 
 import com.erp.jytextile.core.domain.model.FabricRoll
+import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.model.Zone
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Clock
@@ -24,7 +25,15 @@ interface InventoryRepository {
         filterHasRemaining: Boolean
     ): Flow<List<FabricRoll>>
 
-    suspend fun addFabricRoll(fabricRoll: FabricRoll)
+    suspend fun addFabricRoll(
+        zoneId: Long,
+        itemNo: String,
+        color: String,
+        factory: String,
+        quantity: Int,
+        remark: String,
+        lengthUnit: LengthUnit,
+    )
 
     suspend fun removeFabricRoll(rollId: Long)
 

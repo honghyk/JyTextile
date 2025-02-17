@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.zone
+package com.erp.jytextile.feature.inventory.roll
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.designsystem.component.JyButton
@@ -28,13 +29,15 @@ import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
 
 @Parcelize
-data object AddZoneScreen : StaticScreen
+data class RollFormScreen(
+    val zoneId: Long
+) : StaticScreen
 
 @Inject
-class ZoneFormUiFactory : Ui.Factory {
+class RollFormUiFactory : Ui.Factory {
     override fun create(screen: Screen, context: CircuitContext): Ui<*>? = when (screen) {
-        is AddZoneScreen -> {
-            ui<ZoneFormUiState> { state, modifier -> AddZoneUi(state, modifier) }
+        is RollFormScreen -> {
+            ui<RollFormUiState> { state, modifier -> RollFormUi(state, modifier) }
         }
 
         else -> null
@@ -42,9 +45,9 @@ class ZoneFormUiFactory : Ui.Factory {
 }
 
 @Composable
-fun AddZoneUi(
-    state: ZoneFormUiState,
-    modifier: Modifier = Modifier
+fun RollFormUi(
+    state: RollFormUiState,
+    modifier: Modifier = Modifier,
 ) {
     PanelSurface(
         modifier = modifier.padding(top = 80.dp, bottom = 32.dp),
@@ -57,7 +60,7 @@ fun AddZoneUi(
                     vertical = 24.dp
                 ),
         ) {
-            FormHeader(text = "신규 Zone 추가")
+            FormHeader(text = "신규 ROLL 추가")
             Spacer(modifier = Modifier.height(24.dp))
             Column(
                 modifier = Modifier
@@ -66,10 +69,35 @@ fun AddZoneUi(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 FormField(
-                    label = "Zone 이름",
-                    value = state.name,
-                    hint = "Ex) A-1",
-                    onValueChange = { state.eventSink(ZoneFormEvent.UpdateName(it)) },
+                    label = "ITEM NO",
+                    value = state.itemNo,
+                    hint = "Ex) JY-7117A",
+                    onValueChange = { state.eventSink(RollFormEvent.UpdateItemNo(it)) },
+                )
+                FormField(
+                    label = "COLOR",
+                    value = state.color,
+                    hint = "",
+                    onValueChange = { state.eventSink(RollFormEvent.UpdateColor(it)) },
+                )
+                FormField(
+                    label = "FACTORY",
+                    value = state.factory,
+                    hint = "",
+                    onValueChange = { state.eventSink(RollFormEvent.UpdateFactory(it)) },
+                )
+                FormField(
+                    label = "QUANTITY",
+                    value = state.quantity,
+                    hint = "",
+                    onValueChange = { state.eventSink(RollFormEvent.UpdateQuantity(it)) },
+                    keyboardType = KeyboardType.Number,
+                )
+                FormField(
+                    label = "REMARK",
+                    value = state.remark,
+                    hint = "",
+                    onValueChange = { state.eventSink(RollFormEvent.UpdateRemark(it)) },
                 )
             }
             Spacer(modifier = Modifier.height(32.dp))
@@ -77,19 +105,19 @@ fun AddZoneUi(
                 modifier = Modifier.align(Alignment.End),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                JyOutlinedButton(onClick = { state.eventSink(ZoneFormEvent.Discard) }) {
+                JyOutlinedButton(onClick = { state.eventSink(RollFormEvent.Discard) }) {
                     Text(
                         maxLines = 1,
                         text = "취소"
                     )
                 }
                 JyButton(
-                    enabled = state.submittable,
-                    onClick = { state.eventSink(ZoneFormEvent.Submit) }
+                    enabled = state.canSubmit,
+                    onClick = { state.eventSink(RollFormEvent.Submit) }
                 ) {
                     Text(
                         maxLines = 1,
-                        text = "Zone 추가"
+                        text = "ROLL 추가"
                     )
                 }
             }

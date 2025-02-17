@@ -6,6 +6,7 @@ import com.erp.jytextile.feature.inventory.common.model.TableItem
 
 data class RollTable(
     override val headers: List<String> = listOf(
+        "NO",
         "ITEM NO",
         "COLOR",
         "FACTORY",
@@ -25,6 +26,7 @@ data class RollTableItem(
     val total: String,
     val remark: String,
     override val tableRow: List<String> = listOf(
+        id.toString(),
         itemNo,
         color,
         factory,

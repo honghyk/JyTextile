@@ -1,5 +1,6 @@
 package com.erp.jytextile.shared
 
+import com.erp.jytextile.feature.inventory.roll.RollFormComponent
 import com.erp.jytextile.feature.inventory.roll.RollInventoryComponent
 import com.erp.jytextile.feature.inventory.zone.ZoneFormComponent
 import com.erp.jytextile.feature.inventory.zone.ZoneInventoryComponent
@@ -14,6 +15,7 @@ interface UiComponent
     : ZoneInventoryComponent,
     ZoneFormComponent,
     RollInventoryComponent,
+    RollFormComponent,
     RootComponent {
 
     val appContent: AppContent
