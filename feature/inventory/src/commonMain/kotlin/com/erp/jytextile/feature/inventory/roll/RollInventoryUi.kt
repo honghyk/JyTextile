@@ -81,7 +81,8 @@ fun RollInventoryUi(
                         onPreviousClick = { state.eventSink(RollInventoryEvent.PreviousPage) },
                         onNextClick = { state.eventSink(RollInventoryEvent.NextPage) },
                         onRemoveClick = { state.eventSink(RollInventoryEvent.Remove) },
-                        onReleaseClick = { state.eventSink(RollInventoryEvent.Release) }
+                        onReleaseClick = { state.eventSink(RollInventoryEvent.Release) },
+                        onReleaseHistoryClick = { state.eventSink(RollInventoryEvent.ReleaseHistory) }
                     )
                 }
             }
@@ -100,6 +101,7 @@ private fun RollInventory(
     onNextClick: () -> Unit,
     onRemoveClick: () -> Unit,
     onReleaseClick: () -> Unit,
+    onReleaseHistoryClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -112,6 +114,7 @@ private fun RollInventory(
             roll = selectedRoll,
             onRemoveClick = onRemoveClick,
             onReleaseClick = onReleaseClick,
+            onReleaseHistoryClick = onReleaseHistoryClick
         )
         Spacer(modifier = Modifier.height(22.dp))
         InventoryTablePanel(
@@ -135,6 +138,7 @@ private fun RollDetailPanel(
     roll: FabricRoll?,
     onRemoveClick: () -> Unit,
     onReleaseClick: () -> Unit,
+    onReleaseHistoryClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     PanelSurface(
@@ -158,16 +162,22 @@ private fun RollDetailPanel(
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        JyOutlinedButton(onClick = onRemoveClick) {
-                            Text(
-                                maxLines = 1,
-                                text = "삭제"
-                            )
-                        }
                         JyButton(onClick = onReleaseClick) {
                             Text(
                                 maxLines = 1,
                                 text = "Roll 출고"
+                            )
+                        }
+                        JyOutlinedButton(onClick = onReleaseHistoryClick) {
+                            Text(
+                                maxLines = 1,
+                                text = "출고 이력"
+                            )
+                        }
+                        JyOutlinedButton(onClick = onRemoveClick) {
+                            Text(
+                                maxLines = 1,
+                                text = "삭제"
                             )
                         }
                     }

@@ -96,8 +96,28 @@ interface InventoryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertReleaseHistory(releaseHistory: ReleaseHistoryEntity): Long
 
-    @Query("SELECT * FROM release_history WHERE roll_id = :rollId ORDER BY release_date DESC")
-    fun getReleaseHistory(rollId: Long): Flow<List<ReleaseHistoryEntity>>
+    @Query(
+        value = """
+            SELECT * FROM release_history
+            WHERE roll_id = :rollId
+            ORDER BY release_date DESC
+            LIMIT :limit 
+            OFFSET :offset
+            """
+    )
+    fun getReleaseHistory(
+        rollId: Long,
+        limit: Int,
+        offset: Int,
+    ): Flow<List<ReleaseHistoryEntity>>
+
+    @Query(
+        value = """
+            SELECT COUNT(*) FROM release_history
+            WHERE roll_id = :rollId
+            """
+    )
+    fun getReleaseHistoryCount(rollId: Long): Flow<Int>
 
     @Query("DELETE FROM release_history WHERE id = :releaseHistoryId")
     suspend fun deleteReleaseHistory(releaseHistoryId: Long)

@@ -1,6 +1,7 @@
 package com.erp.jytextile.shared
 
 import com.erp.jytextile.feature.inventory.release.ReleaseFormComponent
+import com.erp.jytextile.feature.inventory.release.ReleaseHistoryComponent
 import com.erp.jytextile.feature.inventory.roll.RollFormComponent
 import com.erp.jytextile.feature.inventory.roll.RollInventoryComponent
 import com.erp.jytextile.feature.inventory.zone.ZoneFormComponent
@@ -18,6 +19,7 @@ interface UiComponent
     RollInventoryComponent,
     RollFormComponent,
     ReleaseFormComponent,
+    ReleaseHistoryComponent,
     RootComponent {
 
     val appContent: AppContent

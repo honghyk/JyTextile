@@ -2,6 +2,7 @@ package com.erp.jytextile.core.domain.repository
 
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.LengthUnit
+import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.model.Zone
 import kotlinx.coroutines.flow.Flow
 
@@ -58,4 +59,11 @@ interface InventoryRepository {
     )
 
     fun getRoll(rollId: Long): Flow<FabricRoll>
+
+    fun getReleaseHistories(
+        rollId: Long,
+        page: Int,
+    ): Flow<List<ReleaseHistory>>
+
+    fun getReleaseHistoriesPage(rollId: Long): Flow<Int>
 }

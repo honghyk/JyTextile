@@ -9,6 +9,7 @@ import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import com.erp.jytextile.core.database.model.toDomain
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.LengthUnit
+import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import kotlinx.coroutines.flow.Flow
@@ -154,6 +155,22 @@ class InventoryRepositoryImpl(
         return inventoryDao.getFabricRollWithZone(rollId)
             .filterNotNull()
             .map(FabricRollWithZoneEntity::toDomain)
+    }
+
+    override fun getReleaseHistories(rollId: Long, page: Int): Flow<List<ReleaseHistory>> {
+        return inventoryDao.getReleaseHistory(
+            rollId = rollId,
+            limit = PAGE_SIZE,
+            offset = page * PAGE_SIZE,
+        ).map { histories ->
+            histories.map(ReleaseHistoryEntity::toDomain)
+        }
+    }
+
+    override fun getReleaseHistoriesPage(rollId: Long): Flow<Int> {
+        return inventoryDao.getReleaseHistoryCount(rollId).map { count ->
+            (count + PAGE_SIZE - 1) / PAGE_SIZE
+        }
     }
 
     private fun yardToMeter(yard: Double): Double {

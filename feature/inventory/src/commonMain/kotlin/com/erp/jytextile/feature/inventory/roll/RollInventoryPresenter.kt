@@ -10,6 +10,7 @@ import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import com.erp.jytextile.feature.inventory.release.ReleaseFormScreen
+import com.erp.jytextile.feature.inventory.release.ReleaseHistoryScreen
 import com.erp.jytextile.feature.inventory.roll.model.RollTable
 import com.erp.jytextile.feature.inventory.roll.model.toTableItem
 import com.slack.circuit.overlay.LocalOverlayHost
@@ -114,6 +115,12 @@ class RollInventoryPresenter(
                         }
                     }
                 }
+
+                RollInventoryEvent.ReleaseHistory -> {
+                    selectedRoll?.let { roll ->
+                        navigator.goTo(ReleaseHistoryScreen(roll.id, roll.code))
+                    }
+                }
             }
         }
 
@@ -156,4 +163,5 @@ sealed interface RollInventoryEvent : CircuitUiEvent {
     data object NextPage : RollInventoryEvent
     data object Remove : RollInventoryEvent
     data object Release : RollInventoryEvent
+    data object ReleaseHistory : RollInventoryEvent
 }
