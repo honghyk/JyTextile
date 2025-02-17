@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.roll
+package com.erp.jytextile.feature.inventory.release
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.OffsetMapping
+import androidx.compose.ui.text.input.TransformedText
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.designsystem.component.JyButton
@@ -23,19 +27,21 @@ import com.erp.jytextile.feature.inventory.common.ui.FormHeader
 import com.erp.jytextile.feature.inventory.common.ui.QuantityFormField
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
-import com.slack.circuit.runtime.screen.StaticScreen
 import com.slack.circuit.runtime.ui.Ui
 import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
 
 @Parcelize
-data object RollFormScreen : StaticScreen
+data class ReleaseFormScreen(
+    val rollId: Long,
+    val rollItemNo: String
+) : Screen
 
 @Inject
-class RollFormUiFactory : Ui.Factory {
+class ReleaseFormUiFactory : Ui.Factory {
     override fun create(screen: Screen, context: CircuitContext): Ui<*>? = when (screen) {
-        is RollFormScreen -> {
-            ui<RollFormUiState> { state, modifier -> RollFormUi(state, modifier) }
+        is ReleaseFormScreen -> {
+            ui<ReleaseFormUiState> { state, modifier -> ReleaseFormUi(state, modifier) }
         }
 
         else -> null
@@ -43,8 +49,8 @@ class RollFormUiFactory : Ui.Factory {
 }
 
 @Composable
-fun RollFormUi(
-    state: RollFormUiState,
+fun ReleaseFormUi(
+    state: ReleaseFormUiState,
     modifier: Modifier = Modifier,
 ) {
     PanelSurface(
@@ -58,7 +64,7 @@ fun RollFormUi(
                     vertical = 24.dp
                 ),
         ) {
-            FormHeader(text = "신규 ROLL 추가")
+            FormHeader(text = "ROLL 출고")
             Spacer(modifier = Modifier.height(24.dp))
             Column(
                 modifier = Modifier
@@ -67,36 +73,34 @@ fun RollFormUi(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 FormField(
-                    label = "Zone",
-                    value = state.zoneName,
-                    onValueChange = { state.eventSink(RollFormEvent.UpdateZoneName(it)) },
+                    label = "Roll Id",
+                    value = state.rollId,
+                    enabled = false,
+                    onValueChange = {},
                 )
                 FormField(
-                    label = "Item No",
-                    value = state.itemNo,
-                    onValueChange = { state.eventSink(RollFormEvent.UpdateItemNo(it)) },
+                    label = "Roll Item No",
+                    value = state.rollItemNo,
+                    enabled = false,
+                    onValueChange = {},
                 )
                 FormField(
-                    label = "Color",
-                    value = state.color,
-                    onValueChange = { state.eventSink(RollFormEvent.UpdateColor(it)) },
-                )
-                FormField(
-                    label = "Factory",
-                    value = state.factory,
-                    onValueChange = { state.eventSink(RollFormEvent.UpdateFactory(it)) },
+                    label = "Buyer",
+                    value = state.buyer,
+                    onValueChange = { state.eventSink(ReleaseFormEvent.UpdateBuyer(it)) },
                 )
                 QuantityFormField(
                     quantity = state.quantity,
                     lengthUnit = state.lengthUnit,
-                    onQuantityChange = { state.eventSink(RollFormEvent.UpdateQuantity(it)) },
-                    onLengthUnitChange = { state.eventSink(RollFormEvent.UpdateLengthUnit(it)) },
+                    onQuantityChange = { state.eventSink(ReleaseFormEvent.UpdateQuantity(it)) },
+                    onLengthUnitChange = { state.eventSink(ReleaseFormEvent.UpdateLengthUnit(it)) },
                 )
                 FormField(
-                    label = "Remark",
-                    value = state.remark,
-                    singleLine = false,
-                    onValueChange = { state.eventSink(RollFormEvent.UpdateRemark(it)) },
+                    label = "Out date",
+                    value = state.releaseDate,
+                    hint = "2025-01-01",
+                    visualTransformation = DateVisualTransformation,
+                    onValueChange = { state.eventSink(ReleaseFormEvent.UpdateReleaseDate(it)) },
                 )
             }
             Spacer(modifier = Modifier.height(32.dp))
@@ -104,7 +108,7 @@ fun RollFormUi(
                 modifier = Modifier.align(Alignment.End),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                JyOutlinedButton(onClick = { state.eventSink(RollFormEvent.Discard) }) {
+                JyOutlinedButton(onClick = { state.eventSink(ReleaseFormEvent.Discard) }) {
                     Text(
                         maxLines = 1,
                         text = "취소"
@@ -112,14 +116,35 @@ fun RollFormUi(
                 }
                 JyButton(
                     enabled = state.canSubmit,
-                    onClick = { state.eventSink(RollFormEvent.Submit) }
+                    onClick = { state.eventSink(ReleaseFormEvent.Submit) }
                 ) {
                     Text(
                         maxLines = 1,
-                        text = "ROLL 추가"
+                        text = "ROLL 출고"
                     )
                 }
             }
         }
     }
+}
+
+private val DateVisualTransformation = VisualTransformation { text ->
+    var out = ""
+    for (i in text.indices) {
+        out += text[i]
+        if (i == 3 || i == 5) out += "-"
+    }
+    TransformedText(AnnotatedString(out), object : OffsetMapping {
+        override fun originalToTransformed(offset: Int): Int {
+            if (offset <= 3) return offset
+            if (offset <= 5) return offset + 1
+            return offset + 2
+        }
+
+        override fun transformedToOriginal(offset: Int): Int {
+            if (offset <= 3) return offset
+            if (offset <= 6) return offset - 1
+            return offset - 2
+        }
+    })
 }

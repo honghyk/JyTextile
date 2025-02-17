@@ -4,12 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.feature.inventory.release.ReleaseFormScreen
 import com.erp.jytextile.feature.inventory.roll.model.RollTable
 import com.erp.jytextile.feature.inventory.roll.model.toTableItem
+import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext
@@ -55,6 +58,8 @@ class RollInventoryPresenter(
 
     @Composable
     override fun present(): RollInventoryUiState {
+        val overlayHost = LocalOverlayHost.current
+
         val rollCount by inventoryRepository.getFabricRollsCount(zoneId).collectAsRetainedState(0)
 
         var currentPage by rememberRetained { mutableStateOf(0) }
@@ -99,7 +104,16 @@ class RollInventoryPresenter(
                     }
                 }
 
-                RollInventoryEvent.Release -> { /* TODO */ }
+                RollInventoryEvent.Release -> {
+                    launch {
+                        selectedRoll?.let {
+                            overlayHost.showInDialog(
+                                ReleaseFormScreen(it.id, it.code),
+                                navigator::goTo
+                            )
+                        }
+                    }
+                }
             }
         }
 

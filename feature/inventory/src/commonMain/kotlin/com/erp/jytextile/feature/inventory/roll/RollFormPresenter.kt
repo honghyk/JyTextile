@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
+import com.erp.jytextile.core.base.extension.DOUBLE_REGEX_PATTERN
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import com.slack.circuit.retained.rememberRetained
@@ -79,7 +80,7 @@ class RollFormPresenter(
                 is RollFormEvent.UpdateColor -> color = event.color
                 is RollFormEvent.UpdateFactory -> factory = event.factory
                 is RollFormEvent.UpdateQuantity -> {
-                    if (event.quantity.matches(QuantityRegex)) {
+                    if (event.quantity.matches(Regex(DOUBLE_REGEX_PATTERN))) {
                         quantity = event.quantity
                     }
                 }
@@ -99,10 +100,6 @@ class RollFormPresenter(
             remark = remark,
             eventSink = wrapEventSink(eventSink),
         )
-    }
-
-    companion object {
-        private val QuantityRegex = Regex("^\\d*\\.?\\d*\$")
     }
 }
 

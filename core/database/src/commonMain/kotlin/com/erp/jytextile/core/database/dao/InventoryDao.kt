@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
@@ -90,7 +91,7 @@ interface InventoryDao {
     suspend fun deleteFabricRoll(rollId: Long)
 
     @Query("UPDATE fabric_rolls SET remaining_length = :remaining WHERE id = :rollId")
-    suspend fun updateFabricRollRemainingLength(rollId: Long, remaining: Int)
+    suspend fun updateFabricRollRemainingLength(rollId: Long, remaining: Double)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertReleaseHistory(releaseHistory: ReleaseHistoryEntity): Long
@@ -100,4 +101,14 @@ interface InventoryDao {
 
     @Query("DELETE FROM release_history WHERE id = :releaseHistoryId")
     suspend fun deleteReleaseHistory(releaseHistoryId: Long)
+
+    @Transaction
+    suspend fun releaseFabricRollTransaction(
+        releaseHistory: ReleaseHistoryEntity,
+        rollId: Long,
+        newRemainingLength: Double
+    ) {
+        insertReleaseHistory(releaseHistory)
+        updateFabricRollRemainingLength(rollId, newRemainingLength)
+    }
 }

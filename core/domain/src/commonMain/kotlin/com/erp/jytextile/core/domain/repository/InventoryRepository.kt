@@ -4,8 +4,6 @@ import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.model.Zone
 import kotlinx.coroutines.flow.Flow
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 
 interface InventoryRepository {
 
@@ -54,8 +52,9 @@ interface InventoryRepository {
     suspend fun releaseFabricRoll(
         rollId: Long,
         quantity: Double,
-        destination: String,
-        releaseDate: Instant = Clock.System.now(),
+        lengthUnit: LengthUnit,
+        buyer: String,
+        releaseDate: String,
     )
 
     fun getRoll(rollId: Long): Flow<FabricRoll>

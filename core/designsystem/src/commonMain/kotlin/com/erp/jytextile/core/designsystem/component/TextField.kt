@@ -37,6 +37,7 @@ fun FormTextField(
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = RoundedCornerShape(8.dp),
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     color: Color = Palette.grey700,
     placeholderColor: Color = Palette.grey400,
     containerColor: Color = Color.Transparent,
@@ -50,6 +51,10 @@ fun FormTextField(
         unfocusedContainerColor = containerColor,
         focusedIndicatorColor = JyTheme.color.border,
         unfocusedIndicatorColor = JyTheme.color.border,
+        disabledTextColor = Palette.grey400,
+        disabledPlaceholderColor = placeholderColor.copy(alpha = 0.38f),
+        disabledContainerColor = JyTheme.color.border.copy(alpha = 0.38f),
+        disabledIndicatorColor = JyTheme.color.border,
     )
     val mergedTextStyle = textStyle.merge(TextStyle(color = color))
 
@@ -66,6 +71,7 @@ fun FormTextField(
         singleLine = singleLine,
         maxLines = maxLines,
         minLines = minLines,
+        visualTransformation = visualTransformation,
         decorationBox =
             @Composable { innerTextField ->
                 OutlinedTextFieldDefaults.DecorationBox(

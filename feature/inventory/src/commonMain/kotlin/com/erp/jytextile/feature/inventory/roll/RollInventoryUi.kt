@@ -31,6 +31,7 @@ import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
 import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
+import kotlin.math.round
 
 @Inject
 class RollInventoryUiFactory : Ui.Factory {
@@ -188,7 +189,7 @@ private fun RollDetailPanel(
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
                             Text(text = "Factory: ${roll.factory}")
-                            Text(text = "Qty(M): ${roll.remainingLength}/${roll.originalLength}")
+                            Text(text = "Qty(M): ${(round(roll.remainingLength * 10) / 10)}/${roll.originalLength}")
                             Text(text = "Remark: ${roll.remark}")
                         }
                     }
