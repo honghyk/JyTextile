@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.section
+package com.erp.jytextile.feature.inventory.zone
 
 import com.erp.jytextile.core.base.inject.ActivityScope
 import com.slack.circuit.runtime.presenter.Presenter
@@ -6,15 +6,15 @@ import com.slack.circuit.runtime.ui.Ui
 import me.tatarka.inject.annotations.IntoSet
 import me.tatarka.inject.annotations.Provides
 
-interface SectionFormComponent {
+interface ZoneFormComponent {
 
     @Provides
     @ActivityScope
     @IntoSet
-    fun bindUiFactory(factory: SectionFormUiFactory): Ui.Factory = factory
+    fun bindUiFactory(factory: ZoneFormUiFactory): Ui.Factory = factory
 
     @Provides
     @ActivityScope
     @IntoSet
-    fun bindPresenterFactory(factory: SectionFormPresenterFactory): Presenter.Factory = factory
+    fun bindPresenterFactory(factory: ZoneFormPresenterFactory): Presenter.Factory = factory
 }

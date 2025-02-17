@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.section
+package com.erp.jytextile.feature.inventory.zone
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.feature.inventory.common.ui.InventoryOverallPanel
 import com.erp.jytextile.feature.inventory.common.ui.InventoryTablePanel
-import com.erp.jytextile.feature.inventory.common.model.SectionTable
+import com.erp.jytextile.feature.inventory.zone.model.ZoneTable
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
@@ -22,11 +22,11 @@ import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class SectionInventoryUiFactory : Ui.Factory {
+class ZoneInventoryUiFactory : Ui.Factory {
     override fun create(screen: Screen, context: CircuitContext): Ui<*>? = when (screen) {
-        is SectionInventoryScreen -> {
-            ui<SectionInventoryUiState> { state, modifier ->
-                SectionInventoryUi(state, modifier)
+        is ZoneInventoryScreen -> {
+            ui<ZoneInventoryUiState> { state, modifier ->
+                ZoneInventoryUi(state, modifier)
             }
         }
 
@@ -36,8 +36,8 @@ class SectionInventoryUiFactory : Ui.Factory {
 
 
 @Composable
-fun SectionInventoryUi(
-    state: SectionInventoryUiState,
+fun ZoneInventoryUi(
+    state: ZoneInventoryUiState,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -48,18 +48,18 @@ fun SectionInventoryUi(
             ),
     ) {
         when (state) {
-            SectionInventoryUiState.Loading -> { /* TODO */
+            ZoneInventoryUiState.Loading -> { /* TODO */
             }
 
-            is SectionInventoryUiState.Sections -> {
-                SectionInventory(
-                    table = state.sectionTable,
-                    sectionsCount = state.sectionsCount,
+            is ZoneInventoryUiState.Zones -> {
+                ZoneInventory(
+                    table = state.zoneTable,
+                    zonesCount = state.zonesCount,
                     currentPage = state.currentPage,
                     totalPage = state.totalPage,
-                    onAddSectionClick = { state.eventSink(SectionInventoryEvent.AddSection) },
-                    onPreviousClick = { state.eventSink(SectionInventoryEvent.PreviousPage) },
-                    onNextClick = { state.eventSink(SectionInventoryEvent.NextPage) },
+                    onAddZoneClick = { state.eventSink(ZoneInventoryEvent.AddZone) },
+                    onPreviousClick = { state.eventSink(ZoneInventoryEvent.PreviousPage) },
+                    onNextClick = { state.eventSink(ZoneInventoryEvent.NextPage) },
                 )
             }
         }
@@ -67,12 +67,12 @@ fun SectionInventoryUi(
 }
 
 @Composable
-fun SectionInventory(
-    table: SectionTable,
-    sectionsCount: Int,
+private fun ZoneInventory(
+    table: ZoneTable,
+    zonesCount: Int,
     currentPage: Int,
     totalPage: Int,
-    onAddSectionClick: () -> Unit,
+    onAddZoneClick: () -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -84,15 +84,15 @@ fun SectionInventory(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight(),
-            total = sectionsCount,
-            title = "Sections",
+            total = zonesCount,
+            title = "Zones",
         )
         Spacer(modifier = Modifier.height(22.dp))
         InventoryTablePanel(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            title = "Sections",
+            title = "Zones",
             table = table,
             currentPage = currentPage,
             totalPage = totalPage,
@@ -100,11 +100,11 @@ fun SectionInventory(
             onNextClick = onNextClick,
         ) {
             JyButton(
-                onClick = onAddSectionClick,
+                onClick = onAddZoneClick,
             ) {
                 Text(
                     maxLines = 1,
-                    text = "Add Section"
+                    text = "Zone 추가"
                 )
             }
         }

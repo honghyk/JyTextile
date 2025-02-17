@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.section
+package com.erp.jytextile.feature.inventory.zone
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -35,13 +35,13 @@ import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
 
 @Parcelize
-data object AddSectionScreen : StaticScreen
+data object AddZoneScreen : StaticScreen
 
 @Inject
-class SectionFormUiFactory : Ui.Factory {
+class ZoneFormUiFactory : Ui.Factory {
     override fun create(screen: Screen, context: CircuitContext): Ui<*>? = when (screen) {
-        is AddSectionScreen -> {
-            ui<SectionFormUiState> { state, modifier -> AddSectionUi(state, modifier) }
+        is AddZoneScreen -> {
+            ui<ZoneFormUiState> { state, modifier -> AddZoneUi(state, modifier) }
         }
 
         else -> null
@@ -49,8 +49,8 @@ class SectionFormUiFactory : Ui.Factory {
 }
 
 @Composable
-fun AddSectionUi(
-    state: SectionFormUiState,
+fun AddZoneUi(
+    state: ZoneFormUiState,
     modifier: Modifier = Modifier
 ) {
     PanelSurface(
@@ -67,7 +67,7 @@ fun AddSectionUi(
             Text(
                 style = JyTheme.typography.textXLarge,
                 color = JyTheme.color.heading,
-                text = "New Section"
+                text = "신규 Zone 추가"
             )
             Spacer(modifier = Modifier.height(24.dp))
             Column(
@@ -77,10 +77,10 @@ fun AddSectionUi(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 FormField(
-                    label = "Section Name",
+                    label = "Zone 이름",
                     value = state.name,
-                    hint = "Enter section name",
-                    onValueChange = { state.eventSink(SectionFormEvent.UpdateName(it)) },
+                    hint = "Ex) A-1",
+                    onValueChange = { state.eventSink(ZoneFormEvent.UpdateName(it)) },
                 )
             }
             Spacer(modifier = Modifier.height(32.dp))
@@ -88,19 +88,19 @@ fun AddSectionUi(
                 modifier = Modifier.align(Alignment.End),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                JyOutlinedButton(onClick = { state.eventSink(SectionFormEvent.Discard) }) {
+                JyOutlinedButton(onClick = { state.eventSink(ZoneFormEvent.Discard) }) {
                     Text(
                         maxLines = 1,
-                        text = "Discard"
+                        text = "취소"
                     )
                 }
                 JyButton(
                     enabled = state.submittable,
-                    onClick = { state.eventSink(SectionFormEvent.Submit) }
+                    onClick = { state.eventSink(ZoneFormEvent.Submit) }
                 ) {
                     Text(
                         maxLines = 1,
-                        text = "Add Section"
+                        text = "Zone 추가"
                     )
                 }
             }

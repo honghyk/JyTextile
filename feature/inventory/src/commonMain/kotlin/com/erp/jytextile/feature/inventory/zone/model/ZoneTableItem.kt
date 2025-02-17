@@ -1,29 +1,27 @@
-package com.erp.jytextile.feature.inventory.common.model
+package com.erp.jytextile.feature.inventory.zone.model
 
 import com.erp.jytextile.core.domain.model.Section
+import com.erp.jytextile.feature.inventory.common.model.Table
+import com.erp.jytextile.feature.inventory.common.model.TableItem
 
-data class SectionTable(
+data class ZoneTable(
     override val headers: List<String> = listOf(
-        "ID",
         "Name",
         "Quantity",
     ),
-    override val items: List<SectionTableItem> = emptyList(),
+    override val items: List<ZoneTableItem> = emptyList(),
 ) : Table
 
-data class SectionTableItem(
-    val id: String,
+data class ZoneTableItem(
     val name: String,
     val rollCount: Int,
     override val tableRow: List<String> = listOf(
-        id,
         name,
         rollCount.toString(),
     )
 ) : TableItem
 
-fun Section.toTableItem() = SectionTableItem(
-    id = id.toString(),
+fun Section.toTableItem() = ZoneTableItem(
     name = name,
     rollCount = rollCount,
 )

@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.section
+package com.erp.jytextile.feature.inventory.zone
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -9,8 +9,8 @@ import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.Section
 import com.erp.jytextile.core.domain.repository.InventoryRepository
-import com.erp.jytextile.feature.inventory.common.model.SectionTable
-import com.erp.jytextile.feature.inventory.common.model.toTableItem
+import com.erp.jytextile.feature.inventory.zone.model.ZoneTable
+import com.erp.jytextile.feature.inventory.zone.model.toTableItem
 import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
@@ -27,11 +27,11 @@ import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 @Parcelize
-data object SectionInventoryScreen : StaticScreen
+data object ZoneInventoryScreen : StaticScreen
 
 @Inject
-class SectionInventoryPresenterFactory(
-    private val presenterFactory: (Navigator) -> SectionInventoryPresenter,
+class ZoneInventoryPresenterFactory(
+    private val presenterFactory: (Navigator) -> ZoneInventoryPresenter,
 ) : Presenter.Factory {
     override fun create(
         screen: Screen,
@@ -39,60 +39,60 @@ class SectionInventoryPresenterFactory(
         context: CircuitContext
     ): Presenter<*>? {
         return when (screen) {
-            SectionInventoryScreen -> presenterFactory(navigator)
+            ZoneInventoryScreen -> presenterFactory(navigator)
             else -> null
         }
     }
 }
 
 @Inject
-class SectionInventoryPresenter(
+class ZoneInventoryPresenter(
     @Assisted private val navigator: Navigator,
     private val inventoryRepository: InventoryRepository,
-) : Presenter<SectionInventoryUiState> {
+) : Presenter<ZoneInventoryUiState> {
 
     @Composable
-    override fun present(): SectionInventoryUiState {
+    override fun present(): ZoneInventoryUiState {
         val scope = rememberCoroutineScope()
         val overlayHost = LocalOverlayHost.current
 
-        val sectionsCount by inventoryRepository.getSectionsCount().collectAsRetainedState(0)
+        val zonesCount by inventoryRepository.getSectionsCount().collectAsRetainedState(0)
 
         var currentPage by rememberRetained { mutableStateOf(0) }
         val sectionPages by inventoryRepository.getSectionPages().collectAsRetainedState(0)
 
-        val sectionTable by rememberRetained(currentPage) {
+        val zoneTable by rememberRetained(currentPage) {
             inventoryRepository.getSections(currentPage).map { sections ->
-                SectionTable(
+                ZoneTable(
                     items = sections.map(Section::toTableItem)
                 )
             }
         }.collectAsRetainedState(null)
 
         return when {
-            sectionTable == null -> SectionInventoryUiState.Loading
+            zoneTable == null -> ZoneInventoryUiState.Loading
 
-            else -> SectionInventoryUiState.Sections(
-                sectionTable = sectionTable!!,
-                sectionsCount = sectionsCount,
+            else -> ZoneInventoryUiState.Zones(
+                zoneTable = zoneTable!!,
+                zonesCount = zonesCount,
                 currentPage = currentPage + 1,
                 totalPage = sectionPages
             ) { event ->
                 when (event) {
-                    SectionInventoryEvent.AddSection -> {
+                    ZoneInventoryEvent.AddZone -> {
                         scope.launch {
                             overlayHost.showInDialog(
-                                screen = AddSectionScreen,
+                                screen = AddZoneScreen,
                                 onGoToScreen = navigator::goTo
                             )
                         }
                     }
 
-                    SectionInventoryEvent.NextPage -> {
+                    ZoneInventoryEvent.NextPage -> {
                         currentPage = (currentPage + 1).coerceAtMost(sectionPages - 1)
                     }
 
-                    SectionInventoryEvent.PreviousPage -> {
+                    ZoneInventoryEvent.PreviousPage -> {
                         currentPage = (currentPage - 1).coerceAtLeast(0)
                     }
                 }
@@ -101,21 +101,21 @@ class SectionInventoryPresenter(
     }
 }
 
-sealed interface SectionInventoryUiState : CircuitUiState {
+sealed interface ZoneInventoryUiState : CircuitUiState {
 
-    data object Loading : SectionInventoryUiState
+    data object Loading : ZoneInventoryUiState
 
-    data class Sections(
-        val sectionTable: SectionTable,
-        val sectionsCount: Int,
+    data class Zones(
+        val zoneTable: ZoneTable,
+        val zonesCount: Int,
         val currentPage: Int,
         val totalPage: Int,
-        val eventSink: (SectionInventoryEvent) -> Unit = {},
-    ) : SectionInventoryUiState
+        val eventSink: (ZoneInventoryEvent) -> Unit = {},
+    ) : ZoneInventoryUiState
 }
 
-sealed interface SectionInventoryEvent : CircuitUiEvent {
-    data object AddSection : SectionInventoryEvent
-    data object PreviousPage : SectionInventoryEvent
-    data object NextPage : SectionInventoryEvent
+sealed interface ZoneInventoryEvent : CircuitUiEvent {
+    data object AddZone : ZoneInventoryEvent
+    data object PreviousPage : ZoneInventoryEvent
+    data object NextPage : ZoneInventoryEvent
 }

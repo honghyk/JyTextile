@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.section
+package com.erp.jytextile.feature.inventory.zone
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,8 +19,8 @@ import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class SectionFormPresenterFactory(
-    private val presenterFactory: (Navigator) -> SectionFormPresenter,
+class ZoneFormPresenterFactory(
+    private val presenterFactory: (Navigator) -> ZoneFormPresenter,
 ) : Presenter.Factory {
     override fun create(
         screen: Screen,
@@ -28,29 +28,29 @@ class SectionFormPresenterFactory(
         context: CircuitContext
     ): Presenter<*>? {
         return when (screen) {
-            is AddSectionScreen -> presenterFactory(navigator)
+            is AddZoneScreen -> presenterFactory(navigator)
             else -> return null
         }
     }
 }
 
 @Inject
-class SectionFormPresenter(
+class ZoneFormPresenter(
     @Assisted private val navigator: Navigator,
     private val inventoryRepository: InventoryRepository,
-) : Presenter<SectionFormUiState> {
+) : Presenter<ZoneFormUiState> {
 
     @Composable
-    override fun present(): SectionFormUiState {
+    override fun present(): ZoneFormUiState {
         var name by rememberRetained { mutableStateOf("") }
 
-        val eventSink: CoroutineScope.(SectionFormEvent) -> Unit = { event ->
+        val eventSink: CoroutineScope.(ZoneFormEvent) -> Unit = { event ->
             when (event) {
-                is SectionFormEvent.UpdateName -> {
+                is ZoneFormEvent.UpdateName -> {
                     name = event.name
                 }
 
-                SectionFormEvent.Submit -> {
+                ZoneFormEvent.Submit -> {
                     launch {
                         try {
                             inventoryRepository.addSection(name)
@@ -61,29 +61,29 @@ class SectionFormPresenter(
                     }
                 }
 
-                SectionFormEvent.Discard -> {
+                ZoneFormEvent.Discard -> {
                     navigator.pop()
                 }
             }
         }
 
-        return SectionFormUiState(
+        return ZoneFormUiState(
             name = name,
             eventSink = wrapEventSink(eventSink)
         )
     }
 }
 
-data class SectionFormUiState(
+data class ZoneFormUiState(
     val name: String,
-    val eventSink: (SectionFormEvent) -> Unit
+    val eventSink: (ZoneFormEvent) -> Unit
 ) : CircuitUiState {
     val submittable: Boolean
         get() = name.isNotEmpty()
 }
 
-sealed interface SectionFormEvent : CircuitUiEvent {
-    data class UpdateName(val name: String) : SectionFormEvent
-    data object Submit : SectionFormEvent
-    data object Discard : SectionFormEvent
+sealed interface ZoneFormEvent : CircuitUiEvent {
+    data class UpdateName(val name: String) : ZoneFormEvent
+    data object Submit : ZoneFormEvent
+    data object Discard : ZoneFormEvent
 }
