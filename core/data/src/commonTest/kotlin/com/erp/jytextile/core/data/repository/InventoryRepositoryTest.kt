@@ -2,7 +2,7 @@ package com.erp.jytextile.core.data.repository
 
 import com.erp.jytextile.core.data.testdouble.TestInventoryDao
 import com.erp.jytextile.core.database.dao.InventoryDao
-import com.erp.jytextile.core.database.model.SectionEntity
+import com.erp.jytextile.core.database.model.ZoneEntity
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -25,7 +25,7 @@ class InventoryRepositoryTest {
     fun get_section_page_count_is_exactly_divisible_by_page_size() = runTest {
         insertSections(20)
 
-        val result = testInventoryRepository.getSectionPages().first()
+        val result = testInventoryRepository.getZonePage().first()
 
         assertEquals(1, result)
     }
@@ -34,14 +34,14 @@ class InventoryRepositoryTest {
     fun get_section_page_count_is_not_exactly_divisible_by_page_size() = runTest {
         insertSections(50)
 
-        val result = testInventoryRepository.getSectionPages().first()
+        val result = testInventoryRepository.getZonePage().first()
 
         assertEquals(3, result)
     }
 
     private suspend fun insertSections(count: Int) {
         repeat(count) {
-            testInventoryDao.insertSection(SectionEntity(id = it.toLong(), name = "Section $it"))
+            testInventoryDao.insertZone(ZoneEntity(id = it.toLong(), name = "Section $it"))
         }
     }
 }

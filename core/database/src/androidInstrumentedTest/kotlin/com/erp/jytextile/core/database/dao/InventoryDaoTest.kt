@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.erp.jytextile.core.database.InventoryDatabase
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
-import com.erp.jytextile.core.database.model.SectionEntity
+import com.erp.jytextile.core.database.model.ZoneEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -39,14 +39,14 @@ class InventoryDaoTest {
             testSection("d1"),
         )
         sections.forEach { section ->
-            inventoryDao.insertSection(section)
+            inventoryDao.insertZone(section)
         }
 
-        val result = inventoryDao.getSections(10, 0).first()
+        val result = inventoryDao.getZones(10, 0).first()
 
         assertEquals(
             listOf("a1", "a2", "c1", "d1"),
-            result.map { it.section.name },
+            result.map { it.zone.name },
         )
     }
 
@@ -57,17 +57,17 @@ class InventoryDaoTest {
             testSection("a2"),
         )
         sections.forEach { section ->
-            inventoryDao.insertSection(section)
+            inventoryDao.insertZone(section)
         }
 
-        val result = inventoryDao.getSectionsCount().first()
+        val result = inventoryDao.getZonesCount().first()
 
         assertEquals(2, result)
     }
 
     @Test
     fun get_sections_with_roll_count() = runTest {
-        val section1 = inventoryDao.insertSection(testSection("a1"))
+        val section1 = inventoryDao.insertZone(testSection("a1"))
         val rolls = listOf(
             testFabricRoll(section1, "a1"),
             testFabricRoll(section1, "j3"),
@@ -77,15 +77,15 @@ class InventoryDaoTest {
             inventoryDao.insertFabricRoll(roll)
         }
 
-        val result = inventoryDao.getSections(10, 0).first()
+        val result = inventoryDao.getZones(10, 0).first()
 
         assertEquals(3, result.first().rollCount)
     }
 
     @Test
     fun get_fabric_rolls_by_ascending_code() = runTest {
-        val section1 = inventoryDao.insertSection(testSection("a1"))
-        val section2 = inventoryDao.insertSection(testSection("a2"))
+        val section1 = inventoryDao.insertZone(testSection("a1"))
+        val section2 = inventoryDao.insertZone(testSection("a2"))
         val rolls = listOf(
             testFabricRoll(section1, "a1"),
             testFabricRoll(section1, "j3"),
@@ -106,7 +106,7 @@ class InventoryDaoTest {
 
     @Test
     fun get_fabric_rolls_filtered_by_has_remaining_by_ascending_code() = runTest {
-        val section1 = inventoryDao.insertSection(testSection("a1"))
+        val section1 = inventoryDao.insertZone(testSection("a1"))
         val rolls = listOf(
             testFabricRoll(section1, "a1"),
             testFabricRoll(section1, "j3"),
@@ -128,7 +128,7 @@ class InventoryDaoTest {
 
     @Test
     fun update_fabric_roll() = runTest {
-        val sectionId = inventoryDao.insertSection(testSection("a1"))
+        val sectionId = inventoryDao.insertZone(testSection("a1"))
         inventoryDao.insertFabricRoll(testFabricRoll(sectionId, "code1"))
 
         inventoryDao.updateFabricRollRemainingLength(1, 10)
@@ -139,7 +139,7 @@ class InventoryDaoTest {
 
     @Test
     fun get_release_history_by_descending_order() = runTest {
-        val sectionId = inventoryDao.insertSection(testSection("a1"))
+        val sectionId = inventoryDao.insertZone(testSection("a1"))
         val rollId = inventoryDao.insertFabricRoll(testFabricRoll(sectionId, "code1"))
         val releaseHistories = listOf(
             testReleaseHistory(rollId, 1.0, 0),
@@ -162,7 +162,7 @@ class InventoryDaoTest {
 
 private fun testSection(
     name: String,
-) = SectionEntity(
+) = ZoneEntity(
     name = name,
 )
 
@@ -171,7 +171,7 @@ private fun testFabricRoll(
     code: String,
     totalLength: Int = 30,
 ) = FabricRollEntity(
-    sectionId = sectionId,
+    zoneId = sectionId,
     code = code,
     color = "",
     remainingLength = totalLength,

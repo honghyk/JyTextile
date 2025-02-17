@@ -9,13 +9,13 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
-import com.erp.jytextile.core.database.model.SectionEntity
+import com.erp.jytextile.core.database.model.ZoneEntity
 import com.erp.jytextile.core.database.util.InstantConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
 @Database(
-    entities = [SectionEntity::class, FabricRollEntity::class, ReleaseHistoryEntity::class],
+    entities = [ZoneEntity::class, FabricRollEntity::class, ReleaseHistoryEntity::class],
     version = 1,
 )
 @TypeConverters(

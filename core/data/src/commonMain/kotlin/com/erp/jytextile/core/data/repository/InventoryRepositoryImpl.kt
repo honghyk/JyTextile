@@ -2,12 +2,12 @@ package com.erp.jytextile.core.data.repository
 
 import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.model.FabricRollEntity
-import com.erp.jytextile.core.database.model.SectionEntity
-import com.erp.jytextile.core.database.model.SectionWithRollCountEntity
+import com.erp.jytextile.core.database.model.ZoneEntity
+import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import com.erp.jytextile.core.database.model.toDomain
 import com.erp.jytextile.core.database.model.toEntity
 import com.erp.jytextile.core.domain.model.FabricRoll
-import com.erp.jytextile.core.domain.model.Section
+import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,36 +19,36 @@ class InventoryRepositoryImpl(
     private val inventoryDao: InventoryDao,
 ) : InventoryRepository {
 
-    override suspend fun addSection(name: String) {
-        inventoryDao.insertSection(SectionEntity(name = name))
+    override suspend fun addZone(name: String) {
+        inventoryDao.insertZone(ZoneEntity(name = name))
     }
 
-    override fun getSections(page: Int): Flow<List<Section>> {
-        return inventoryDao.getSections(
+    override fun getZones(page: Int): Flow<List<Zone>> {
+        return inventoryDao.getZones(
             limit = PAGE_SIZE,
             offset = page * PAGE_SIZE,
         ).map { sections ->
-            sections.map(SectionWithRollCountEntity::toDomain)
+            sections.map(ZoneWithRollCountEntity::toDomain)
         }
     }
 
-    override fun getSectionsCount(): Flow<Int> {
-        return inventoryDao.getSectionsCount()
+    override fun getZonesCount(): Flow<Int> {
+        return inventoryDao.getZonesCount()
     }
 
-    override fun getSectionPages(): Flow<Int> {
-        return inventoryDao.getSectionsCount().map { count ->
+    override fun getZonePage(): Flow<Int> {
+        return inventoryDao.getZonesCount().map { count ->
             (count + PAGE_SIZE - 1) / PAGE_SIZE
         }
     }
 
     override fun getFabricRolls(
-        sectionId: Long,
+        zoneId: Long,
         page: Int,
         filterHasRemaining: Boolean
     ): Flow<List<FabricRoll>> {
         return inventoryDao.getFabricRolls(
-            sectionId = sectionId,
+            zoneId = zoneId,
             limit = PAGE_SIZE,
             offset = page * PAGE_SIZE,
             filterHasRemaining = filterHasRemaining

@@ -7,7 +7,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.base.parcel.Parcelize
-import com.erp.jytextile.core.domain.model.Section
+import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import com.erp.jytextile.feature.inventory.zone.model.ZoneTable
 import com.erp.jytextile.feature.inventory.zone.model.toTableItem
@@ -56,15 +56,15 @@ class ZoneInventoryPresenter(
         val scope = rememberCoroutineScope()
         val overlayHost = LocalOverlayHost.current
 
-        val zonesCount by inventoryRepository.getSectionsCount().collectAsRetainedState(0)
+        val zonesCount by inventoryRepository.getZonesCount().collectAsRetainedState(0)
 
         var currentPage by rememberRetained { mutableStateOf(0) }
-        val sectionPages by inventoryRepository.getSectionPages().collectAsRetainedState(0)
+        val sectionPages by inventoryRepository.getZonePage().collectAsRetainedState(0)
 
         val zoneTable by rememberRetained(currentPage) {
-            inventoryRepository.getSections(currentPage).map { sections ->
+            inventoryRepository.getZones(currentPage).map { sections ->
                 ZoneTable(
-                    items = sections.map(Section::toTableItem)
+                    items = sections.map(Zone::toTableItem)
                 )
             }
         }.collectAsRetainedState(null)

@@ -1,6 +1,6 @@
 package com.erp.jytextile.feature.inventory.zone.model
 
-import com.erp.jytextile.core.domain.model.Section
+import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.feature.inventory.common.model.Table
 import com.erp.jytextile.feature.inventory.common.model.TableItem
 
@@ -21,7 +21,7 @@ data class ZoneTableItem(
     )
 ) : TableItem
 
-fun Section.toTableItem() = ZoneTableItem(
+fun Zone.toTableItem() = ZoneTableItem(
     name = name,
     rollCount = rollCount,
 )

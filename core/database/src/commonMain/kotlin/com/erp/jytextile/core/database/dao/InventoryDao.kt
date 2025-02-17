@@ -6,8 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
-import com.erp.jytextile.core.database.model.SectionEntity
-import com.erp.jytextile.core.database.model.SectionWithRollCountEntity
+import com.erp.jytextile.core.database.model.ZoneEntity
+import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -15,37 +15,37 @@ interface InventoryDao {
 
     @Query(
         value = """
-                SELECT sections.*, COUNT(fabric_rolls.id) AS rollCount
-                FROM sections
-                LEFT JOIN fabric_rolls ON sections.id = fabric_rolls.section_id
-                GROUP BY sections.id
-                ORDER BY sections.name ASC
+                SELECT zones.*, COUNT(fabric_rolls.id) AS rollCount
+                FROM zones
+                LEFT JOIN fabric_rolls ON zones.id = fabric_rolls.zone_id
+                GROUP BY zones.id
+                ORDER BY zones.name ASC
                 LIMIT :limit
                 OFFSET :offset
             """
     )
-    fun getSections(
+    fun getZones(
         limit: Int,
         offset: Int,
-    ): Flow<List<SectionWithRollCountEntity>>
+    ): Flow<List<ZoneWithRollCountEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertSection(section: SectionEntity): Long
+    suspend fun insertZone(section: ZoneEntity): Long
 
-    @Query("DELETE FROM sections WHERE id = :sectionId")
-    suspend fun deleteSection(sectionId: Long)
+    @Query("DELETE FROM zones WHERE id = :sectionId")
+    suspend fun deleteZone(sectionId: Long)
 
     @Query(
         value = """
-            SELECT COUNT(*) FROM sections
+            SELECT COUNT(*) FROM zones
             """
     )
-    fun getSectionsCount(): Flow<Int>
+    fun getZonesCount(): Flow<Int>
 
     @Query(
         value = """
             SELECT * FROM fabric_rolls
-            WHERE section_id = :sectionId
+            WHERE zone_id = :zoneId
             AND (:filterHasRemaining = 0 OR remaining_length > 0)
             ORDER BY code ASC
             LIMIT :limit 
@@ -53,7 +53,7 @@ interface InventoryDao {
             """
     )
     fun getFabricRolls(
-        sectionId: Long,
+        zoneId: Long,
         limit: Int,
         offset: Int,
         filterHasRemaining: Boolean,

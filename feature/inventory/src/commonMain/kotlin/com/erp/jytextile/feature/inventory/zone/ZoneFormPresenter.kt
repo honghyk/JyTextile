@@ -53,7 +53,7 @@ class ZoneFormPresenter(
                 ZoneFormEvent.Submit -> {
                     launch {
                         try {
-                            inventoryRepository.addSection(name)
+                            inventoryRepository.addZone(name)
                             navigator.pop()
                         } catch (e: Exception) {
                             e.printStackTrace()

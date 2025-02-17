@@ -3,8 +3,8 @@ package com.erp.jytextile.core.data.testdouble
 import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
-import com.erp.jytextile.core.database.model.SectionEntity
-import com.erp.jytextile.core.database.model.SectionWithRollCountEntity
+import com.erp.jytextile.core.database.model.ZoneEntity
+import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -13,11 +13,11 @@ import kotlinx.coroutines.flow.update
 
 class TestInventoryDao : InventoryDao {
 
-    private val sectionEntitiesStateFlow = MutableStateFlow<List<SectionEntity>>(emptyList())
+    private val sectionEntitiesStateFlow = MutableStateFlow<List<ZoneEntity>>(emptyList())
 
     private val fabricRollEntitiesStateFlow = MutableStateFlow<List<FabricRollEntity>>(emptyList())
 
-    override fun getSections(limit: Int, offset: Int): Flow<List<SectionWithRollCountEntity>> {
+    override fun getZones(limit: Int, offset: Int): Flow<List<ZoneWithRollCountEntity>> {
         return combine(
             sectionEntitiesStateFlow,
             fabricRollEntitiesStateFlow,
@@ -32,27 +32,27 @@ class TestInventoryDao : InventoryDao {
         }
     }
 
-    override suspend fun insertSection(section: SectionEntity): Long {
+    override suspend fun insertZone(section: ZoneEntity): Long {
         sectionEntitiesStateFlow.update { oldValues ->
             (oldValues + section)
-                .distinctBy(SectionEntity::id)
+                .distinctBy(ZoneEntity::id)
                 .sortedBy { it.name }
         }
         return section.id
     }
 
-    override suspend fun deleteSection(sectionId: Long) {
+    override suspend fun deleteZone(sectionId: Long) {
         sectionEntitiesStateFlow.update { entities ->
             entities.filterNot { it.id == sectionId }
         }
     }
 
-    override fun getSectionsCount(): Flow<Int> {
+    override fun getZonesCount(): Flow<Int> {
         return sectionEntitiesStateFlow.map { it.size }
     }
 
     override fun getFabricRolls(
-        sectionId: Long,
+        zoneId: Long,
         limit: Int,
         offset: Int,
         filterHasRemaining: Boolean
@@ -85,11 +85,11 @@ class TestInventoryDao : InventoryDao {
     }
 }
 
-private fun SectionEntity.toSectionWithRollCountEntity(
+private fun ZoneEntity.toSectionWithRollCountEntity(
     fabricRolls: List<FabricRollEntity>
-) = SectionWithRollCountEntity(
-    section = this,
+) = ZoneWithRollCountEntity(
+    zone = this,
     rollCount = fabricRolls
-        .filter { it.sectionId == id }
+        .filter { it.zoneId == id }
         .size
 )

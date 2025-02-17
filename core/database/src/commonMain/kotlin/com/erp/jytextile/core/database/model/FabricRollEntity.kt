@@ -10,16 +10,16 @@ import com.erp.jytextile.core.domain.model.FabricRoll
     tableName = "fabric_rolls",
     foreignKeys = [
         ForeignKey(
-            entity = SectionEntity::class,
+            entity = ZoneEntity::class,
             parentColumns = ["id"],
-            childColumns = ["section_id"],
+            childColumns = ["zone_id"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class FabricRollEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    @ColumnInfo("section_id") val sectionId: Long,
+    @ColumnInfo("zone_id") val zoneId: Long,
     val code: String,
     val color: String,
     @ColumnInfo("remaining_length") val remainingLength: Int,
@@ -28,7 +28,7 @@ data class FabricRollEntity(
 
 fun FabricRollEntity.toDomain() = FabricRoll(
     id = id,
-    sectionId = sectionId,
+    zoneId = zoneId,
     code = code,
     color = color,
     remainingLength = remainingLength,
@@ -37,7 +37,7 @@ fun FabricRollEntity.toDomain() = FabricRoll(
 
 fun FabricRoll.toEntity() = FabricRollEntity(
     id = id,
-    sectionId = sectionId,
+    zoneId = zoneId,
     code = code,
     color = color,
     remainingLength = remainingLength,

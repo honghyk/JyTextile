@@ -1,25 +1,25 @@
 package com.erp.jytextile.core.domain.repository
 
 import com.erp.jytextile.core.domain.model.FabricRoll
-import com.erp.jytextile.core.domain.model.Section
+import com.erp.jytextile.core.domain.model.Zone
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 interface InventoryRepository {
 
-    suspend fun addSection(name: String)
+    suspend fun addZone(name: String)
 
-    fun getSections(
+    fun getZones(
         page: Int,
-    ): Flow<List<Section>>
+    ): Flow<List<Zone>>
 
-    fun getSectionsCount(): Flow<Int>
+    fun getZonesCount(): Flow<Int>
 
-    fun getSectionPages(): Flow<Int>
+    fun getZonePage(): Flow<Int>
 
     fun getFabricRolls(
-        sectionId: Long,
+        zoneId: Long,
         page: Int,
         filterHasRemaining: Boolean
     ): Flow<List<FabricRoll>>
