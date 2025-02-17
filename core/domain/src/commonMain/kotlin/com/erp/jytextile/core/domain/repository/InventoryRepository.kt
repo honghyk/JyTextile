@@ -30,7 +30,7 @@ interface InventoryRepository {
         itemNo: String,
         color: String,
         factory: String,
-        quantity: Int,
+        quantity: Double,
         remark: String,
         lengthUnit: LengthUnit,
     )
@@ -40,7 +40,7 @@ interface InventoryRepository {
         itemNo: String,
         color: String,
         factory: String,
-        quantity: Int,
+        quantity: Double,
         remark: String,
         lengthUnit: LengthUnit,
     )

@@ -63,7 +63,7 @@ class RollFormPresenter(
                                 itemNo = itemNo,
                                 color = color,
                                 factory = factory,
-                                quantity = quantity.toInt(),
+                                quantity = quantity.toDouble(),
                                 remark = remark,
                                 lengthUnit = lengthUnit,
                             )
@@ -79,8 +79,11 @@ class RollFormPresenter(
                 is RollFormEvent.UpdateColor -> color = event.color
                 is RollFormEvent.UpdateFactory -> factory = event.factory
                 is RollFormEvent.UpdateQuantity -> {
-                    quantity = event.quantity.filter { it.isDigit() }
+                    if (event.quantity.matches(QuantityRegex)) {
+                        quantity = event.quantity
+                    }
                 }
+
                 is RollFormEvent.UpdateRemark -> remark = event.remark
                 is RollFormEvent.UpdateLengthUnit -> lengthUnit = event.lengthUnit
             }
@@ -96,6 +99,10 @@ class RollFormPresenter(
             remark = remark,
             eventSink = wrapEventSink(eventSink),
         )
+    }
+
+    companion object {
+        private val QuantityRegex = Regex("^\\d*\\.?\\d*\$")
     }
 }
 

@@ -4,6 +4,7 @@ import com.erp.jytextile.core.base.extension.meterToYard
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.feature.inventory.common.model.Table
 import com.erp.jytextile.feature.inventory.common.model.TableItem
+import kotlin.math.round
 
 data class RollTable(
     override val headers: List<String> = listOf(
@@ -44,7 +45,7 @@ fun FabricRoll.toTableItem() = RollTableItem(
     color = color,
     factory = factory,
     qtyInMeter = remainingLength.toString(),
-    qtyInYard = meterToYard(remainingLength).toString(),
+    qtyInYard = (round(meterToYard(remainingLength) * 10) / 10).toString(),
     total = originalLength.toString(),
     remark = remark ?: "",
 )

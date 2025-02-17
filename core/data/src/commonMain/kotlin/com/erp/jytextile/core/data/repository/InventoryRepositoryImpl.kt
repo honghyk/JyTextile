@@ -64,7 +64,7 @@ class InventoryRepositoryImpl(
         itemNo: String,
         color: String,
         factory: String,
-        quantity: Int,
+        quantity: Double,
         remark: String,
         lengthUnit: LengthUnit
     ) {
@@ -86,7 +86,7 @@ class InventoryRepositoryImpl(
         itemNo: String,
         color: String,
         factory: String,
-        quantity: Int,
+        quantity: Double,
         remark: String,
         lengthUnit: LengthUnit
     ) {
@@ -133,8 +133,8 @@ class InventoryRepositoryImpl(
             .map(FabricRollWithZoneEntity::toDomain)
     }
 
-    private fun yardToMeter(yard: Int): Int {
-        return (yard * 0.9144).toInt()
+    private fun yardToMeter(yard: Double): Double {
+        return yard * 0.9144
     }
 }
 

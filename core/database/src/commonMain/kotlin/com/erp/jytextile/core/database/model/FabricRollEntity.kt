@@ -24,8 +24,8 @@ data class FabricRollEntity(
     val code: String,
     val color: String,
     val factory: String,
-    @ColumnInfo("remaining_length") val remainingLength: Int,
-    @ColumnInfo("original_length") val originalLength: Int,
+    @ColumnInfo("remaining_length") val remainingLength: Double,
+    @ColumnInfo("original_length") val originalLength: Double,
     val remark: String?,
 )
 

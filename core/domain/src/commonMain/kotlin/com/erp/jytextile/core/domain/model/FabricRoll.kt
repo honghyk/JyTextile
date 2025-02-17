@@ -6,7 +6,7 @@ data class FabricRoll(
     val code: String,
     val color: String,
     val factory: String,
-    val remainingLength: Int,
-    val originalLength: Int,
+    val remainingLength: Double,
+    val originalLength: Double,
     val remark: String?,
 )
