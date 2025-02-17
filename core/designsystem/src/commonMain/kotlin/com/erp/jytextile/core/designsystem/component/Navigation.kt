@@ -4,21 +4,20 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailDefaults
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
-import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
@@ -69,7 +68,7 @@ private fun JyNavigationRail(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     NavigationRail(
-        modifier = modifier.padding(top = 20.dp),
+        modifier = modifier,
         containerColor = containerColor,
         contentColor = contentColor,
         header = header,
@@ -87,7 +86,7 @@ fun JyNavigationSuiteScaffold(
     val layoutType = with(windowAdaptiveInfo) {
         when (windowSizeClass.windowWidthSizeClass) {
             WindowWidthSizeClass.MEDIUM,
-            WindowWidthSizeClass.EXPANDED -> NavigationSuiteType.NavigationDrawer
+            WindowWidthSizeClass.EXPANDED -> NavigationSuiteType.NavigationRail
 
             else -> NavigationSuiteType.None
         }
@@ -181,6 +180,7 @@ private fun JyNavigationSuite(
                 containerColor = colors.navigationRailContainerColor,
                 contentColor = colors.navigationRailContentColor,
             ) {
+                Spacer(Modifier.height(16.dp))
                 scope.itemList.forEach {
                     NavigationRailItem(
                         modifier = it.modifier,
@@ -188,7 +188,7 @@ private fun JyNavigationSuite(
                         onClick = it.onClick,
                         icon = { it.icon() },
                         enabled = it.enabled,
-                        label = it.label,
+                        label = null,
                         colors = itemColors.navigationRailItemColors,
                         alwaysShowLabel = it.alwaysShowLabel,
                     )
