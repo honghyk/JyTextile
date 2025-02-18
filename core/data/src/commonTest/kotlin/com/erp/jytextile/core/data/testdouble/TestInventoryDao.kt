@@ -2,6 +2,7 @@ package com.erp.jytextile.core.data.testdouble
 
 import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.model.FabricRollEntity
+import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
 import com.erp.jytextile.core.database.model.ZoneEntity
 import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
@@ -30,6 +31,10 @@ class TestInventoryDao : InventoryDao {
                 it.toSectionWithRollCountEntity(rolls)
             }
         }
+    }
+
+    override suspend fun findZoneByName(name: String): ZoneEntity? {
+        TODO("Not yet implemented")
     }
 
     override suspend fun insertZone(section: ZoneEntity): Long {
@@ -68,7 +73,7 @@ class TestInventoryDao : InventoryDao {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateFabricRollRemainingLength(rollId: Long, remaining: Int) {
+    override suspend fun updateFabricRollRemainingLength(rollId: Long, remaining: Double) {
         TODO("Not yet implemented")
     }
 
@@ -76,11 +81,27 @@ class TestInventoryDao : InventoryDao {
         TODO("Not yet implemented")
     }
 
-    override fun getReleaseHistory(rollId: Long): Flow<List<ReleaseHistoryEntity>> {
+    override fun getReleaseHistory(
+        rollId: Long,
+        limit: Int,
+        offset: Int
+    ): Flow<List<ReleaseHistoryEntity>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getReleaseHistoryCount(rollId: Long): Flow<Int> {
         TODO("Not yet implemented")
     }
 
     override suspend fun deleteReleaseHistory(releaseHistoryId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getFabricRollWithZone(rollId: Long): Flow<FabricRollWithZoneEntity?> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getFabricRollsCount(zoneId: Long): Flow<Int> {
         TODO("Not yet implemented")
     }
 }
