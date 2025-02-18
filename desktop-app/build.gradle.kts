@@ -30,7 +30,7 @@ compose.desktop {
         mainClass = "com.erp.jytextile.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
             packageName = "com.erp.jytextile"
             packageVersion = "1.0.0"
         }
