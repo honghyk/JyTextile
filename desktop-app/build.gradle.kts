@@ -29,6 +29,10 @@ compose.desktop {
     application {
         mainClass = "com.erp.jytextile.MainKt"
 
+        buildTypes.release.proguard {
+            version.set("7.5.0")
+        }
+
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
             packageName = "com.erp.jytextile"
