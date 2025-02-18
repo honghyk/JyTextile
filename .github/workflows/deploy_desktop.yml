@@ -23,7 +23,7 @@ jobs:
           cache-disabled: true
 
       - name: Build Desktop App
-        run: ./gradlew packageReleaseDistributionForCurrentOS
+        run: ./gradlew packageReleaseExecutableForCurrentOS
 
       - name: Upload build outputs
         uses: actions/upload-artifact@v4
