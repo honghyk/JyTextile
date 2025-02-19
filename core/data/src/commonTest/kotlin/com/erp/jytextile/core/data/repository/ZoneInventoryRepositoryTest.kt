@@ -25,7 +25,7 @@ class ZoneInventoryRepositoryTest {
     fun get_section_page_count_is_exactly_divisible_by_page_size() = runTest {
         insertSections(20)
 
-        val result = testInventoryRepository.getZonePage().first()
+        val result = testInventoryRepository.getZonePage(20).first()
 
         assertEquals(1, result)
     }
@@ -34,7 +34,7 @@ class ZoneInventoryRepositoryTest {
     fun get_section_page_count_is_not_exactly_divisible_by_page_size() = runTest {
         insertSections(50)
 
-        val result = testInventoryRepository.getZonePage().first()
+        val result = testInventoryRepository.getZonePage(20).first()
 
         assertEquals(3, result)
     }

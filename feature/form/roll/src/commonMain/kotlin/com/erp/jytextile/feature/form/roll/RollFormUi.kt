@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.navigation.RollFormScreen
+import com.erp.jytextile.core.ui.DropDownFormField
 import com.erp.jytextile.core.ui.FormPanel
 import com.erp.jytextile.core.ui.FormTextField
 import com.erp.jytextile.core.ui.RollQuantityFormField
@@ -42,10 +43,12 @@ private fun RollFormUi(
             Text(maxLines = 1, text = "ROLL 추가")
         }
     ) {
-        FormTextField(
+        DropDownFormField(
             label = "Zone",
-            value = state.zoneName,
-            onValueChange = { state.eventSink(RollFormEvent.UpdateZoneName(it)) },
+            items = state.zones,
+            selected = state.selectedZone,
+            onItemSelected = { state.eventSink(RollFormEvent.UpdateZone(it)) },
+            textGetter = { it.name }
         )
         FormTextField(
             label = "No",

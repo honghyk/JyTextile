@@ -7,9 +7,12 @@ import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
+import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository
+import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
 import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.kotlin.utils.DOUBLE_REGEX_PATTERN
+import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -43,11 +46,16 @@ class RollFormPresenterFactory(
 class RollFormPresenter(
     @Assisted private val navigator: Navigator,
     private val rollInventoryRepository: RollInventoryRepository,
+    private val zoneInventoryRepository: ZoneInventoryRepository,
 ) : Presenter<RollFormUiState> {
 
     @Composable
     override fun present(): RollFormUiState {
-        var zoneName by rememberRetained { mutableStateOf("") }
+        val zones by rememberRetained {
+            zoneInventoryRepository.getZones(page = 0, pageSize = 100)
+        }.collectAsRetainedState(emptyList())
+
+        var selectedZone: Zone? by rememberRetained { mutableStateOf(null) }
         var id by rememberRetained { mutableStateOf("") }
         var itemNo by rememberRetained { mutableStateOf("") }
         var orderNo by rememberRetained { mutableStateOf("") }
@@ -64,7 +72,7 @@ class RollFormPresenter(
                     launch {
                         try {
                             rollInventoryRepository.addFabricRoll(
-                                zoneName = zoneName,
+                                zoneId = selectedZone!!.id,
                                 rollInsertion = FabricRollInsertion(
                                     id = id.toLong(),
                                     itemNo = itemNo,
@@ -83,7 +91,7 @@ class RollFormPresenter(
                     }
                 }
 
-                is RollFormEvent.UpdateZoneName -> zoneName = event.zoneName
+                is RollFormEvent.UpdateZone -> selectedZone = event.zone
                 is RollFormEvent.UpdateId -> {
                     id = event.id.filter { it.isDigit() }
                 }
@@ -104,7 +112,8 @@ class RollFormPresenter(
         }
 
         return RollFormUiState(
-            zoneName = zoneName,
+            zones = zones,
+            selectedZone = selectedZone,
             id = id,
             itemNo = itemNo,
             orderNo = orderNo,
@@ -119,7 +128,8 @@ class RollFormPresenter(
 }
 
 data class RollFormUiState(
-    val zoneName: String,
+    val zones: List<Zone>,
+    val selectedZone: Zone?,
     val id: String,
     val itemNo: String,
     val orderNo: String,
@@ -131,7 +141,7 @@ data class RollFormUiState(
     val eventSink: (RollFormEvent) -> Unit
 ) : CircuitUiState {
     val canSubmit: Boolean
-        get() = zoneName.isNotEmpty() &&
+        get() = selectedZone != null &&
                 id.isNotEmpty() &&
                 itemNo.isNotEmpty() &&
                 orderNo.isNotEmpty() &&
@@ -141,7 +151,7 @@ data class RollFormUiState(
 }
 
 sealed interface RollFormEvent : CircuitUiEvent {
-    data class UpdateZoneName(val zoneName: String) : RollFormEvent
+    data class UpdateZone(val zone: Zone) : RollFormEvent
     data class UpdateId(val id: String) : RollFormEvent
     data class UpdateItemNo(val itemNo: String) : RollFormEvent
     data class UpdateOrderNo(val orderNo: String) : RollFormEvent

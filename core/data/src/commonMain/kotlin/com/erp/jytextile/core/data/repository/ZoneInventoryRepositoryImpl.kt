@@ -19,10 +19,13 @@ class ZoneInventoryRepositoryImpl(
         inventoryDao.insertZone(ZoneEntity(name = name))
     }
 
-    override fun getZones(page: Int): Flow<List<Zone>> {
+    override fun getZones(
+        page: Int,
+        pageSize: Int,
+    ): Flow<List<Zone>> {
         return inventoryDao.getZones(
-            limit = PAGE_SIZE,
-            offset = page * PAGE_SIZE,
+            limit = pageSize,
+            offset = page * pageSize,
         ).map { sections ->
             sections.map(ZoneWithRollCountEntity::toDomain)
         }
@@ -32,11 +35,9 @@ class ZoneInventoryRepositoryImpl(
         return inventoryDao.getZonesCount()
     }
 
-    override fun getZonePage(): Flow<Int> {
+    override fun getZonePage(pageSize: Int): Flow<Int> {
         return inventoryDao.getZonesCount().map { count ->
-            (count + PAGE_SIZE - 1) / PAGE_SIZE
+            (count + pageSize - 1) / pageSize
         }
     }
 }
-
-private const val PAGE_SIZE = 20

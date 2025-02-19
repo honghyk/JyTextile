@@ -31,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -130,7 +131,7 @@ fun FormTextField(
 fun <T> DropDownFormField(
     label: String,
     items: List<T>,
-    selected: T,
+    selected: T?,
     onItemSelected: (T) -> Unit,
     modifier: Modifier = Modifier,
     textGetter: (T) -> String = { it.toString() },
@@ -144,17 +145,18 @@ fun <T> DropDownFormField(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .height(44.dp)
                 .border(
                     width = 1.dp,
                     color = JyTheme.color.border,
                     shape = RoundedCornerShape(8.dp),
                 )
+                .clip(RoundedCornerShape(8.dp))
                 .clickable { expanded = !expanded }
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(horizontal = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -162,7 +164,7 @@ fun <T> DropDownFormField(
                 Text(
                     modifier = Modifier.weight(1f),
                     style = JyTheme.typography.textMedium,
-                    text = textGetter(selected),
+                    text = selected?.let(textGetter).orEmpty(),
                 )
                 Image(
                     modifier = Modifier.size(24.dp),

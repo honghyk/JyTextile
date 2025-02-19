@@ -56,10 +56,10 @@ class ZoneInventoryPresenter(
         val overlayHost = LocalOverlayHost.current
 
         var currentPage by rememberRetained { mutableStateOf(0) }
-        val sectionPages by inventoryRepository.getZonePage().collectAsRetainedState(0)
+        val sectionPages by inventoryRepository.getZonePage(PAGE_SIZE).collectAsRetainedState(0)
 
         val zoneTable by rememberRetained(currentPage) {
-            inventoryRepository.getZones(currentPage).map { sections ->
+            inventoryRepository.getZones(currentPage, pageSize = PAGE_SIZE).map { sections ->
                 ZoneTable(
                     items = sections.map(Zone::toTableItem)
                 )
@@ -111,6 +111,8 @@ class ZoneInventoryPresenter(
         }
     }
 }
+
+private const val PAGE_SIZE = 20
 
 sealed interface ZoneInventoryUiState : CircuitUiState {
 

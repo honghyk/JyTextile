@@ -9,9 +9,10 @@ interface ZoneInventoryRepository {
 
     fun getZones(
         page: Int,
+        pageSize: Int,
     ): Flow<List<Zone>>
 
     fun getZonesCount(): Flow<Int>
 
-    fun getZonePage(): Flow<Int>
+    fun getZonePage(pageSize: Int): Flow<Int>
 }
