@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyTopAppBar
+import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
 import com.slack.circuit.runtime.CircuitContext

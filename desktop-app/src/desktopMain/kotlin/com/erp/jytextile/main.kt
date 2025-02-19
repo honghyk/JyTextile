@@ -4,7 +4,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import com.erp.jytextile.feature.inventory.zone.ZoneInventoryScreen
+import com.erp.jytextile.core.navigation.ZoneInventoryScreen
 import com.erp.jytextile.feature.root.rememberAppState
 import com.erp.jytextile.shared.DesktopApplicationComponent
 import com.erp.jytextile.shared.WindowComponent

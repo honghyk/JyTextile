@@ -6,13 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.base.circuit.wrapEventSink
-import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.navigation.ReleaseFormScreen
+import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
+import com.erp.jytextile.core.navigation.RollInventoryScreen
 import com.erp.jytextile.core.ui.model.RollTable
 import com.erp.jytextile.core.ui.model.toTableItem
-import com.erp.jytextile.feature.inventory.release.ReleaseFormScreen
-import com.erp.jytextile.feature.inventory.release.ReleaseHistoryScreen
 import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
@@ -28,11 +28,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-
-@Parcelize
-data class RollInventoryScreen(
-    val zoneId: Long,
-) : Screen
 
 @Inject
 class RollInventoryPresenterFactory(
@@ -85,19 +80,19 @@ class RollInventoryPresenter(
 
         val eventSink: CoroutineScope.(RollInventoryEvent) -> Unit = { event ->
             when (event) {
-                RollInventoryEvent.Back -> navigator.pop()
+                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.Back -> navigator.pop()
 
                 is RollInventoryEvent.RollSelected -> selectedRollId = event.rollId
 
-                RollInventoryEvent.NextPage -> {
+                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.NextPage -> {
                     currentPage = (currentPage + 1).coerceAtMost(totalPage - 1)
                 }
 
-                RollInventoryEvent.PreviousPage -> {
+                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.PreviousPage -> {
                     currentPage = (currentPage - 1).coerceAtLeast(0)
                 }
 
-                RollInventoryEvent.Remove -> {
+                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.Remove -> {
                     launch {
                         selectedRollId?.let { rollId ->
                             inventoryRepository.removeFabricRoll(rollId)
@@ -105,7 +100,7 @@ class RollInventoryPresenter(
                     }
                 }
 
-                RollInventoryEvent.Release -> {
+                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.Release -> {
                     launch {
                         selectedRoll?.let {
                             overlayHost.showInDialog(
@@ -116,7 +111,7 @@ class RollInventoryPresenter(
                     }
                 }
 
-                RollInventoryEvent.ReleaseHistory -> {
+                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.ReleaseHistory -> {
                     selectedRoll?.let { roll ->
                         navigator.goTo(ReleaseHistoryScreen(roll.id, roll.itemNo))
                     }

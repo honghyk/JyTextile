@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
+import com.erp.jytextile.core.navigation.ZoneInventoryScreen
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.ZoneTable
 import com.slack.circuit.runtime.CircuitContext

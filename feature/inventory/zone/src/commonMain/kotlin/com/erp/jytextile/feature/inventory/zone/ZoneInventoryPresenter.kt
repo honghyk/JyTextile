@@ -6,13 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.showInDialog
-import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.navigation.RollFormScreen
+import com.erp.jytextile.core.navigation.RollInventoryScreen
+import com.erp.jytextile.core.navigation.ZoneFormScreen
+import com.erp.jytextile.core.navigation.ZoneInventoryScreen
 import com.erp.jytextile.core.ui.model.ZoneTable
 import com.erp.jytextile.core.ui.model.toTableItem
-import com.erp.jytextile.feature.inventory.roll.RollFormScreen
-import com.erp.jytextile.feature.inventory.roll.RollInventoryScreen
 import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
@@ -22,14 +23,10 @@ import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
-import com.slack.circuit.runtime.screen.StaticScreen
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-
-@Parcelize
-data object ZoneInventoryScreen : StaticScreen
 
 @Inject
 class ZoneInventoryPresenterFactory(
@@ -87,7 +84,7 @@ class ZoneInventoryPresenter(
                     ZoneInventoryEvent.AddZone -> {
                         scope.launch {
                             overlayHost.showInDialog(
-                                screen = AddZoneScreen,
+                                screen = ZoneFormScreen,
                                 onGoToScreen = navigator::goTo
                             )
                         }

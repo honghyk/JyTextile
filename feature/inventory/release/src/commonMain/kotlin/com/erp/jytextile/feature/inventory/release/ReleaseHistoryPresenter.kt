@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
 import com.erp.jytextile.core.ui.model.toTableItem
 import com.slack.circuit.retained.collectAsRetainedState
@@ -20,12 +20,6 @@ import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
-
-@Parcelize
-data class ReleaseHistoryScreen(
-    val rollId: Long,
-    val rollItemNo: String,
-): Screen
 
 @Inject
 class ReleaseHistoryPresenterFactory(

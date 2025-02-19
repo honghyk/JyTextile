@@ -19,6 +19,9 @@ kotlin {
             api(projects.core.database)
             api(projects.feature.root)
             api(projects.feature.inventory)
+            api(projects.feature.inventory.zone)
+            api(projects.feature.inventory.roll)
+            api(projects.feature.inventory.release)
 
             implementation(libs.kotlininject.runtime)
             implementation(libs.circuit.foundation)

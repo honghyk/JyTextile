@@ -24,6 +24,7 @@ import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.theme.JyTheme
 import com.erp.jytextile.core.designsystem.theme.Palette
 import com.erp.jytextile.core.domain.model.FabricRoll
+import com.erp.jytextile.core.navigation.RollInventoryScreen
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.RollTable
 import com.slack.circuit.runtime.CircuitContext
