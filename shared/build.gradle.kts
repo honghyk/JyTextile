@@ -18,10 +18,12 @@ kotlin {
             api(projects.core.data)
             api(projects.core.database)
             api(projects.feature.root)
-            api(projects.feature.inventory)
             api(projects.feature.inventory.zone)
             api(projects.feature.inventory.roll)
             api(projects.feature.inventory.release)
+            api(projects.feature.form.zone)
+            api(projects.feature.form.roll)
+            api(projects.feature.form.release)
 
             implementation(libs.kotlininject.runtime)
             implementation(libs.circuit.foundation)

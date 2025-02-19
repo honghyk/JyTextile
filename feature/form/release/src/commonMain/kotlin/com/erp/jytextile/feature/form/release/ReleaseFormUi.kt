@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.release
+package com.erp.jytextile.feature.form.release
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -9,7 +9,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.erp.jytextile.core.base.parcel.Parcelize
+import com.erp.jytextile.core.navigation.ReleaseFormScreen
 import com.erp.jytextile.core.ui.FormPanel
 import com.erp.jytextile.core.ui.FormTextField
 import com.erp.jytextile.core.ui.RollQuantityFormField
@@ -18,12 +18,6 @@ import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
 import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
-
-@Parcelize
-data class ReleaseFormScreen(
-    val rollId: Long,
-    val rollItemNo: String
-) : Screen
 
 @Inject
 class ReleaseFormUiFactory : Ui.Factory {
@@ -37,7 +31,7 @@ class ReleaseFormUiFactory : Ui.Factory {
 }
 
 @Composable
-fun ReleaseFormUi(
+private fun ReleaseFormUi(
     state: ReleaseFormUiState,
     modifier: Modifier = Modifier,
 ) {

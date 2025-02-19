@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.release
+package com.erp.jytextile.feature.form.release
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.navigation.ReleaseFormScreen
 import com.erp.jytextile.kotlin.utils.DOUBLE_REGEX_PATTERN
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext

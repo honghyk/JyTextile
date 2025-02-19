@@ -3,17 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "com.erp.jytextile.feature.inventory"
+    namespace = "com.erp.jytextile.feature.form.release"
 }
 
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core.ui)
             implementation(projects.core.kotlinUtils)
-
-            implementation(libs.circuit.overlay)
-            implementation(libs.kotlinx.datetime)
         }
     }
 }

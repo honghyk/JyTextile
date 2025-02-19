@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.zone
+package com.erp.jytextile.feature.form.zone
 
 import com.erp.jytextile.core.base.inject.ActivityScope
 import com.slack.circuit.runtime.presenter.Presenter

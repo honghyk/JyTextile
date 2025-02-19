@@ -1,10 +1,10 @@
 package com.erp.jytextile.shared
 
-import com.erp.jytextile.feature.inventory.release.ReleaseFormComponent
+import com.erp.jytextile.feature.form.release.ReleaseFormComponent
+import com.erp.jytextile.feature.form.roll.RollFormComponent
+import com.erp.jytextile.feature.form.zone.ZoneFormComponent
 import com.erp.jytextile.feature.inventory.release.ReleaseHistoryComponent
-import com.erp.jytextile.feature.inventory.roll.RollFormComponent
 import com.erp.jytextile.feature.inventory.roll.RollInventoryComponent
-import com.erp.jytextile.feature.inventory.zone.ZoneFormComponent
 import com.erp.jytextile.feature.inventory.zone.ZoneInventoryComponent
 import com.erp.jytextile.feature.root.AppContent
 import com.erp.jytextile.feature.root.RootComponent

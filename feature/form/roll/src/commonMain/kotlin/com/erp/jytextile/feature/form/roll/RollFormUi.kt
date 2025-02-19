@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.roll
+package com.erp.jytextile.feature.form.roll
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -6,19 +6,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.erp.jytextile.core.base.parcel.Parcelize
+import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.ui.FormPanel
 import com.erp.jytextile.core.ui.FormTextField
 import com.erp.jytextile.core.ui.RollQuantityFormField
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
-import com.slack.circuit.runtime.screen.StaticScreen
 import com.slack.circuit.runtime.ui.Ui
 import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
-
-@Parcelize
-data object RollFormScreen : StaticScreen
 
 @Inject
 class RollFormUiFactory : Ui.Factory {
@@ -32,7 +28,7 @@ class RollFormUiFactory : Ui.Factory {
 }
 
 @Composable
-fun RollFormUi(
+private fun RollFormUi(
     state: RollFormUiState,
     modifier: Modifier = Modifier,
 ) {

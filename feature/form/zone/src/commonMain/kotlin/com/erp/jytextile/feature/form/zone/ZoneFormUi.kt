@@ -1,27 +1,23 @@
-package com.erp.jytextile.feature.inventory.zone
+package com.erp.jytextile.feature.form.zone
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.erp.jytextile.core.base.parcel.Parcelize
+import com.erp.jytextile.core.navigation.ZoneFormScreen
 import com.erp.jytextile.core.ui.FormPanel
 import com.erp.jytextile.core.ui.FormTextField
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
-import com.slack.circuit.runtime.screen.StaticScreen
 import com.slack.circuit.runtime.ui.Ui
 import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
 
-@Parcelize
-data object AddZoneScreen : StaticScreen
-
 @Inject
 class ZoneFormUiFactory : Ui.Factory {
     override fun create(screen: Screen, context: CircuitContext): Ui<*>? = when (screen) {
-        is AddZoneScreen -> {
+        is ZoneFormScreen -> {
             ui<ZoneFormUiState> { state, modifier -> AddZoneUi(state, modifier) }
         }
 
@@ -30,7 +26,7 @@ class ZoneFormUiFactory : Ui.Factory {
 }
 
 @Composable
-fun AddZoneUi(
+private fun AddZoneUi(
     state: ZoneFormUiState,
     modifier: Modifier = Modifier
 ) {
