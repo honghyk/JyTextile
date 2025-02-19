@@ -156,7 +156,7 @@ private fun RollDetailPanel(
                         style = JyTheme.typography.textXLarge,
                         color = JyTheme.color.heading,
                         maxLines = 1,
-                        text = roll.code,
+                        text = roll.itemNo,
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Row(

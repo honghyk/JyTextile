@@ -109,7 +109,7 @@ class RollInventoryPresenter(
                     launch {
                         selectedRoll?.let {
                             overlayHost.showInDialog(
-                                ReleaseFormScreen(it.id, it.code),
+                                ReleaseFormScreen(it.id, it.itemNo),
                                 navigator::goTo
                             )
                         }
@@ -118,7 +118,7 @@ class RollInventoryPresenter(
 
                 RollInventoryEvent.ReleaseHistory -> {
                     selectedRoll?.let { roll ->
-                        navigator.goTo(ReleaseHistoryScreen(roll.id, roll.code))
+                        navigator.goTo(ReleaseHistoryScreen(roll.id, roll.itemNo))
                     }
                 }
             }

@@ -52,7 +52,7 @@ interface InventoryDao {
             SELECT * FROM fabric_rolls
             WHERE zone_id = :zoneId
             AND (:filterHasRemaining = 0 OR remaining_length > 0)
-            ORDER BY code ASC
+            ORDER BY id ASC
             LIMIT :limit 
             OFFSET :offset
             """

@@ -3,6 +3,7 @@ package com.erp.jytextile.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import kotlinx.datetime.Instant
@@ -16,12 +17,14 @@ import kotlinx.datetime.Instant
             childColumns = ["roll_id"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index("roll_id")
     ]
 )
 data class ReleaseHistoryEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo("roll_id") val rollId: Long,
-    @ColumnInfo("order_no") val orderNo: String,
     val quantity: Double,
     @ColumnInfo("release_date") val releaseDate: Instant,
     val destination: String,
@@ -30,7 +33,7 @@ data class ReleaseHistoryEntity(
 fun ReleaseHistoryEntity.toDomain() = ReleaseHistory(
     id = id,
     rollId = rollId,
-    orderNo = orderNo,
+    orderNo = "", // TODO: Remove
     quantity = quantity,
     releaseDate = releaseDate,
     destination = destination,

@@ -3,6 +3,7 @@ package com.erp.jytextile.core.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.Zone
@@ -16,12 +17,16 @@ import com.erp.jytextile.core.domain.model.Zone
             childColumns = ["zone_id"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index("zone_id")
     ]
 )
 data class FabricRollEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey val id: Long = 0,
     @ColumnInfo("zone_id") val zoneId: Long,
-    val code: String,
+    val itemNo: String,
+    val orderNo: String,
     val color: String,
     val factory: String,
     @ColumnInfo("remaining_length") val remainingLength: Double,
@@ -32,7 +37,7 @@ data class FabricRollEntity(
 fun FabricRollEntity.toDomain() = FabricRoll(
     id = id,
     zone = Zone(id = id),
-    code = code,
+    itemNo = itemNo,
     color = color,
     factory = factory,
     remainingLength = remainingLength,
@@ -43,7 +48,8 @@ fun FabricRollEntity.toDomain() = FabricRoll(
 fun FabricRoll.toEntity() = FabricRollEntity(
     id = id,
     zoneId = zone.id,
-    code = code,
+    itemNo = itemNo,
+    orderNo = "", // TODO: Add orderNo
     color = color,
     factory = factory,
     remainingLength = remainingLength,

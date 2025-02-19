@@ -41,7 +41,7 @@ data class RollTableItem(
 
 fun FabricRoll.toTableItem() = RollTableItem(
     id = id,
-    itemNo = code,
+    itemNo = itemNo,
     color = color,
     factory = factory,
     qtyInMeter = (round(remainingLength * 10) / 10).toString(),

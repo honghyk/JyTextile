@@ -75,8 +75,10 @@ class InventoryRepositoryImpl(
     ) {
         val length = if (lengthUnit == LengthUnit.METER) quantity else yardToMeter(quantity)
         val roll = FabricRollEntity(
+            id = 0L, // TODO: Add id
             zoneId = zoneId,
-            code = itemNo,
+            itemNo = itemNo,
+            orderNo = "", // TODO: Add orderNo
             color = color,
             factory = factory,
             remainingLength = length,
@@ -125,7 +127,7 @@ class InventoryRepositoryImpl(
 
     override suspend fun releaseFabricRoll(
         rollId: Long,
-        orderNo: String,
+        orderNo: String, // TODO: Remove
         quantity: Double,
         lengthUnit: LengthUnit,
         buyer: String,
@@ -143,7 +145,6 @@ class InventoryRepositoryImpl(
         inventoryDao.releaseFabricRollTransaction(
             releaseHistory = ReleaseHistoryEntity(
                 rollId = rollId,
-                orderNo = orderNo,
                 quantity = quantity,
                 destination = buyer,
                 releaseDate = date,

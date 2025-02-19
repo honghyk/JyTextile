@@ -16,7 +16,7 @@ fun FabricRollWithZoneEntity.toDomain() = FabricRoll(
         id = fabricRoll.zoneId,
         name = zoneName,
     ),
-    code = fabricRoll.code,
+    itemNo = fabricRoll.itemNo,
     color = fabricRoll.color,
     factory = fabricRoll.factory,
     remainingLength = fabricRoll.remainingLength,

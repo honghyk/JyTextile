@@ -69,9 +69,9 @@ class InventoryDaoTest {
     fun get_sections_with_roll_count() = runTest {
         val section1 = inventoryDao.insertZone(testSection("a1"))
         val rolls = listOf(
-            testFabricRoll(section1, "a1"),
-            testFabricRoll(section1, "j3"),
-            testFabricRoll(section1, "c1"),
+            testFabricRoll(0, section1, "a1"),
+            testFabricRoll(1, section1, "j3"),
+            testFabricRoll(2, section1, "c1"),
         )
         rolls.forEach { roll ->
             inventoryDao.insertFabricRoll(roll)
@@ -83,14 +83,14 @@ class InventoryDaoTest {
     }
 
     @Test
-    fun get_fabric_rolls_by_ascending_code() = runTest {
+    fun get_fabric_rolls_by_ascending_id() = runTest {
         val section1 = inventoryDao.insertZone(testSection("a1"))
         val section2 = inventoryDao.insertZone(testSection("a2"))
         val rolls = listOf(
-            testFabricRoll(section1, "a1"),
-            testFabricRoll(section1, "j3"),
-            testFabricRoll(section1, "c1"),
-            testFabricRoll(section2, "a2"),
+            testFabricRoll(0, section1, "a1"),
+            testFabricRoll(2, section1, "c1"),
+            testFabricRoll(3, section2, "a2"),
+            testFabricRoll(1, section1, "j3"),
         )
         rolls.forEach { roll ->
             inventoryDao.insertFabricRoll(roll)
@@ -99,39 +99,38 @@ class InventoryDaoTest {
         val result = inventoryDao.getFabricRolls(section1, 10, 0, false).first()
 
         assertEquals(
-            listOf("a1", "c1", "j3"),
-            result.map { it.code },
+            listOf(0, 1, 2),
+            result.map { it.id },
         )
     }
 
     @Test
-    fun get_fabric_rolls_filtered_by_has_remaining_by_ascending_code() = runTest {
+    fun get_fabric_rolls_filtered_by_has_remaining_by_ascending_id() = runTest {
         val section1 = inventoryDao.insertZone(testSection("a1"))
         val rolls = listOf(
-            testFabricRoll(section1, "a1"),
-            testFabricRoll(section1, "j3"),
-            testFabricRoll(section1, "c1"),
+            testFabricRoll(0, section1, "a1"),
+            testFabricRoll(1, section1, "j3"),
+            testFabricRoll(2, section1, "c1"),
         )
-        val rollIds = mutableListOf<Long>()
         rolls.forEach { roll ->
-            rollIds.add(inventoryDao.insertFabricRoll(roll))
+            inventoryDao.insertFabricRoll(roll)
         }
-        inventoryDao.updateFabricRollRemainingLength(rollIds.first(), 0)
+        inventoryDao.updateFabricRollRemainingLength(0, 0.0)
 
         val result = inventoryDao.getFabricRolls(section1, 10, 0, true).first()
 
         assertEquals(
-            listOf("c1", "j3"),
-            result.map { it.code }
+            listOf(1, 2),
+            result.map { it.itemNo }
         )
     }
 
     @Test
     fun update_fabric_roll() = runTest {
         val sectionId = inventoryDao.insertZone(testSection("a1"))
-        inventoryDao.insertFabricRoll(testFabricRoll(sectionId, "code1"))
+        inventoryDao.insertFabricRoll(testFabricRoll(0, sectionId, "code1"))
 
-        inventoryDao.updateFabricRollRemainingLength(1, 10)
+        inventoryDao.updateFabricRollRemainingLength(1, 10.0)
 
         val result = inventoryDao.getFabricRolls(sectionId, 10, 0, false).first()
         assertEquals(10, result.first().remainingLength)
@@ -140,7 +139,7 @@ class InventoryDaoTest {
     @Test
     fun get_release_history_by_descending_order() = runTest {
         val sectionId = inventoryDao.insertZone(testSection("a1"))
-        val rollId = inventoryDao.insertFabricRoll(testFabricRoll(sectionId, "code1"))
+        val rollId = inventoryDao.insertFabricRoll(testFabricRoll(0, sectionId, "code1"))
         val releaseHistories = listOf(
             testReleaseHistory(rollId, 1.0, 0),
             testReleaseHistory(rollId, 2.0, 3),
@@ -151,7 +150,7 @@ class InventoryDaoTest {
             inventoryDao.insertReleaseHistory(history)
         }
 
-        val result = inventoryDao.getReleaseHistory(rollId).first()
+        val result = inventoryDao.getReleaseHistory(rollId, 10, 0).first()
 
         assertEquals(
             listOf(3L, 2L, 1L, 0L),
@@ -167,15 +166,20 @@ private fun testSection(
 )
 
 private fun testFabricRoll(
-    sectionId: Long,
-    code: String,
-    totalLength: Int = 30,
+    id: Long,
+    zoneId: Long,
+    itemNo: String,
+    totalLength: Double = 30.0,
 ) = FabricRollEntity(
-    zoneId = sectionId,
-    code = code,
+    id = id,
+    zoneId = zoneId,
+    itemNo = itemNo,
+    orderNo = "",
     color = "",
+    factory = "",
     remainingLength = totalLength,
     originalLength = totalLength,
+    remark = "",
 )
 
 private fun testReleaseHistory(
