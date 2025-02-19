@@ -2,11 +2,8 @@ package com.erp.jytextile.feature.inventory.zone
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,7 +12,6 @@ import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.ZoneTable
-import com.erp.jytextile.feature.inventory.common.ui.InventoryOverallPanel
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
@@ -55,7 +51,6 @@ fun ZoneInventoryUi(
             is ZoneInventoryUiState.Zones -> {
                 ZoneInventory(
                     table = state.zoneTable,
-                    zonesCount = state.zonesCount,
                     currentPage = state.currentPage,
                     totalPage = state.totalPage,
                     onZoneClick = { state.eventSink(ZoneInventoryEvent.ToRolls(it)) },
@@ -72,7 +67,6 @@ fun ZoneInventoryUi(
 @Composable
 private fun ZoneInventory(
     table: ZoneTable,
-    zonesCount: Int,
     currentPage: Int,
     totalPage: Int,
     onZoneClick: (Long) -> Unit,
@@ -85,14 +79,6 @@ private fun ZoneInventory(
     Column(
         modifier = modifier
     ) {
-        InventoryOverallPanel(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            total = zonesCount,
-            title = "Zones",
-        )
-        Spacer(modifier = Modifier.height(22.dp))
         TablePanel(
             modifier = Modifier
                 .fillMaxWidth()

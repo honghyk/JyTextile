@@ -58,8 +58,6 @@ class ZoneInventoryPresenter(
         val scope = rememberCoroutineScope()
         val overlayHost = LocalOverlayHost.current
 
-        val zonesCount by inventoryRepository.getZonesCount().collectAsRetainedState(0)
-
         var currentPage by rememberRetained { mutableStateOf(0) }
         val sectionPages by inventoryRepository.getZonePage().collectAsRetainedState(0)
 
@@ -76,7 +74,6 @@ class ZoneInventoryPresenter(
 
             else -> ZoneInventoryUiState.Zones(
                 zoneTable = zoneTable!!,
-                zonesCount = zonesCount,
                 currentPage = currentPage + 1,
                 totalPage = sectionPages
             ) { event ->
@@ -124,7 +121,6 @@ sealed interface ZoneInventoryUiState : CircuitUiState {
 
     data class Zones(
         val zoneTable: ZoneTable,
-        val zonesCount: Int,
         val currentPage: Int,
         val totalPage: Int,
         val eventSink: (ZoneInventoryEvent) -> Unit = {},
