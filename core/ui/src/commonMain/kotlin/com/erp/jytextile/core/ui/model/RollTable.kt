@@ -1,6 +1,7 @@
 package com.erp.jytextile.core.ui.model
 
 import com.erp.jytextile.core.domain.model.FabricRoll
+import com.erp.jytextile.kotlin.utils.meterToYard
 import kotlin.math.round
 
 data class RollTable(
@@ -42,12 +43,7 @@ fun FabricRoll.toTableItem() = RollTableItem(
     color = color,
     factory = factory,
     qtyInMeter = (round(remainingQuantity * 10) / 10).toString(),
-    qtyInYard = (round(meterToYard(remainingQuantity) * 10) / 10).toString(),
+    qtyInYard = (round(remainingQuantity.meterToYard() * 10) / 10).toString(),
     total = originalQuantity.toString(),
     remark = remark ?: "",
 )
-
-// TODO: Move to kotlin util module
-private fun meterToYard(meter: Double): Double {
-    return meter * 1.09361
-}

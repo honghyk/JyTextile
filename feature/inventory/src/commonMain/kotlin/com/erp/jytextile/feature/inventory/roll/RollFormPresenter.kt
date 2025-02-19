@@ -5,10 +5,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
-import com.erp.jytextile.core.base.extension.DOUBLE_REGEX_PATTERN
 import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.kotlin.utils.DOUBLE_REGEX_PATTERN
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.CircuitUiEvent

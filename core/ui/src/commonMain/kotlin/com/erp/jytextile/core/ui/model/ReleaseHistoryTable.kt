@@ -1,6 +1,7 @@
 package com.erp.jytextile.core.ui.model
 
 import com.erp.jytextile.core.domain.model.ReleaseHistory
+import com.erp.jytextile.kotlin.utils.meterToYard
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -40,15 +41,10 @@ fun ReleaseHistory.toTableItem() = ReleaseHistoryTableItem(
     id = id,
     buyer = destination,
     qtyInMeter = (round(quantity * 10) / 10).toString(),
-    qtyInYard = (round(meterToYard(quantity) * 10) / 10).toString(),
+    qtyInYard = (round(quantity.meterToYard() * 10) / 10).toString(),
     releaseDate = releaseDate.toLocalDateTime(TimeZone.currentSystemDefault()).format(
         LocalDateTime.Format {
             date(LocalDate.Formats.ISO)
         }
     )
 )
-
-// TODO: Move to kotlin util module
-private fun meterToYard(meter: Double): Double {
-    return meter * 1.09361
-}

@@ -5,8 +5,9 @@ plugins {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.kotlinx.datetime)
+            implementation(projects.core.kotlinUtils)
 
+            implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.coroutines.core)
         }
     }

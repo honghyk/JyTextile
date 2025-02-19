@@ -1,5 +1,7 @@
 package com.erp.jytextile.core.domain.model
 
+import com.erp.jytextile.kotlin.utils.yardToMeter
+
 data class FabricRollInsertion(
     val id: Long,
     val itemNo: String,
@@ -24,12 +26,7 @@ data class FabricRollInsertion(
         orderNo = orderNo,
         color = color,
         factory = factory,
-        quantity = if (lengthUnit == LengthUnit.METER) quantity else yardToMeter(quantity),
+        quantity = if (lengthUnit == LengthUnit.METER) quantity else quantity.yardToMeter(),
         remark = remark,
     )
-}
-
-// TODO: Move to kotlin util module
-private fun yardToMeter(yard: Double): Double {
-    return yard * 0.9144
 }

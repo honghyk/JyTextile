@@ -10,6 +10,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.ui)
+            implementation(projects.core.kotlinUtils)
 
             implementation(libs.circuit.overlay)
             implementation(libs.kotlinx.datetime)

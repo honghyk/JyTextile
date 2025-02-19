@@ -13,6 +13,7 @@ import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.kotlin.utils.yardToMeter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
@@ -118,7 +119,7 @@ class InventoryRepositoryImpl(
         releaseDate: String,
     ) {
         val roll = getRoll(rollId).firstOrNull() ?: return
-        val length = if (lengthUnit == LengthUnit.METER) quantity else yardToMeter(quantity)
+        val length = if (lengthUnit == LengthUnit.METER) quantity else quantity.yardToMeter()
         if (length > roll.remainingQuantity) {
             throw IllegalStateException("release more than remaining")
         }
@@ -158,10 +159,6 @@ class InventoryRepositoryImpl(
         return inventoryDao.getReleaseHistoryCount(rollId).map { count ->
             (count + PAGE_SIZE - 1) / PAGE_SIZE
         }
-    }
-
-    private fun yardToMeter(yard: Double): Double {
-        return yard * 0.9144
     }
 }
 
