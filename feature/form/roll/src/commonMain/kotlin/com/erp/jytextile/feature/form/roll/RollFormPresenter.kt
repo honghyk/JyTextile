@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
-import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.domain.repository.RollInventoryRepository
 import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.kotlin.utils.DOUBLE_REGEX_PATTERN
 import com.slack.circuit.retained.rememberRetained
@@ -42,7 +42,7 @@ class RollFormPresenterFactory(
 @Inject
 class RollFormPresenter(
     @Assisted private val navigator: Navigator,
-    private val inventoryRepository: InventoryRepository,
+    private val rollInventoryRepository: RollInventoryRepository,
 ) : Presenter<RollFormUiState> {
 
     @Composable
@@ -63,7 +63,7 @@ class RollFormPresenter(
                 RollFormEvent.Submit -> {
                     launch {
                         try {
-                            inventoryRepository.addFabricRoll(
+                            rollInventoryRepository.addFabricRoll(
                                 zoneName = zoneName,
                                 rollInsertion = FabricRollInsertion(
                                     id = id.toLong(),

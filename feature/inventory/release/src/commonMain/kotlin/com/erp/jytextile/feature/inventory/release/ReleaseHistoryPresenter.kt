@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.domain.model.ReleaseHistory
-import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.domain.repository.ReleaseHistoryRepository
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
 import com.erp.jytextile.core.ui.model.toTableItem
@@ -42,17 +42,17 @@ class ReleaseHistoryPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val rollId: Long,
     @Assisted private val rollItemNo: String,
-    private val inventoryRepository: InventoryRepository,
+    private val releaseHistoryRepository: ReleaseHistoryRepository,
 ) : Presenter<ReleaseHistoryUiState> {
 
     @Composable
     override fun present(): ReleaseHistoryUiState {
         var currentPage by rememberRetained { mutableStateOf(0) }
-        val totalPage by inventoryRepository.getReleaseHistoriesPage(rollId)
+        val totalPage by releaseHistoryRepository.getReleaseHistoriesPage(rollId)
             .collectAsRetainedState(0)
 
         val releaseHistoryTable by rememberRetained(currentPage) {
-            inventoryRepository.getReleaseHistories(rollId, currentPage).map { histories ->
+            releaseHistoryRepository.getReleaseHistories(rollId, currentPage).map { histories ->
                 ReleaseHistoryTable(
                     items = histories.map(ReleaseHistory::toTableItem)
                 )

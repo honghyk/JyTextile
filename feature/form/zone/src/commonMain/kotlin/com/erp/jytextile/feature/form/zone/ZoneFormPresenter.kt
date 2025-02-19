@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
-import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
 import com.erp.jytextile.core.navigation.ZoneFormScreen
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext
@@ -38,7 +38,7 @@ class ZoneFormPresenterFactory(
 @Inject
 class ZoneFormPresenter(
     @Assisted private val navigator: Navigator,
-    private val inventoryRepository: InventoryRepository,
+    private val inventoryRepository: ZoneInventoryRepository,
 ) : Presenter<ZoneFormUiState> {
 
     @Composable

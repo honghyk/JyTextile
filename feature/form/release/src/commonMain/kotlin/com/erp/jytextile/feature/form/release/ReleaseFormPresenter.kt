@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.domain.model.LengthUnit
-import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.domain.repository.RollInventoryRepository
 import com.erp.jytextile.core.navigation.ReleaseFormScreen
 import com.erp.jytextile.kotlin.utils.DOUBLE_REGEX_PATTERN
 import com.slack.circuit.retained.rememberRetained
@@ -43,7 +43,7 @@ class ReleaseFormPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val rollId: Long,
     @Assisted private val rollItemNo: String,
-    private val inventoryRepository: InventoryRepository,
+    private val rollInventoryRepository: RollInventoryRepository,
 ) : Presenter<ReleaseFormUiState> {
 
     @Composable
@@ -59,7 +59,7 @@ class ReleaseFormPresenter(
                 ReleaseFormEvent.Submit -> {
                     launch {
                         try {
-                            inventoryRepository.releaseFabricRoll(
+                            rollInventoryRepository.releaseFabricRoll(
                                 rollId = rollId,
                                 buyer = buyer,
                                 quantity = quantity.toDouble(),

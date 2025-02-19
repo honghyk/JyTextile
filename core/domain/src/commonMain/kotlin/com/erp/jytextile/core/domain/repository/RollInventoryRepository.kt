@@ -3,27 +3,21 @@ package com.erp.jytextile.core.domain.repository
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
-import com.erp.jytextile.core.domain.model.ReleaseHistory
-import com.erp.jytextile.core.domain.model.Zone
 import kotlinx.coroutines.flow.Flow
 
-interface InventoryRepository {
-
-    suspend fun addZone(name: String)
-
-    fun getZones(
-        page: Int,
-    ): Flow<List<Zone>>
-
-    fun getZonesCount(): Flow<Int>
-
-    fun getZonePage(): Flow<Int>
+interface RollInventoryRepository {
 
     fun getFabricRolls(
         zoneId: Long,
         page: Int,
         filterHasRemaining: Boolean
     ): Flow<List<FabricRoll>>
+
+    fun getRoll(rollId: Long): Flow<FabricRoll>
+
+    fun getFabricRollsCount(zoneId: Long): Flow<Int>
+
+    fun getFabricRollsPage(zoneId: Long): Flow<Int>
 
     suspend fun addFabricRoll(
         zoneId: Long,
@@ -37,10 +31,6 @@ interface InventoryRepository {
 
     suspend fun removeFabricRoll(rollId: Long)
 
-    fun getFabricRollsCount(zoneId: Long): Flow<Int>
-
-    fun getFabricRollsPage(zoneId: Long): Flow<Int>
-
     suspend fun releaseFabricRoll(
         rollId: Long,
         quantity: Double,
@@ -48,13 +38,4 @@ interface InventoryRepository {
         buyer: String,
         releaseDate: String,
     )
-
-    fun getRoll(rollId: Long): Flow<FabricRoll>
-
-    fun getReleaseHistories(
-        rollId: Long,
-        page: Int,
-    ): Flow<List<ReleaseHistory>>
-
-    fun getReleaseHistoriesPage(rollId: Long): Flow<Int>
 }

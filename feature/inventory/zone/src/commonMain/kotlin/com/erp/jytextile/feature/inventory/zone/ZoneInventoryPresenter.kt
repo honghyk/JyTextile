@@ -7,7 +7,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.domain.model.Zone
-import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
 import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.navigation.RollInventoryScreen
 import com.erp.jytextile.core.navigation.ZoneFormScreen
@@ -47,7 +47,7 @@ class ZoneInventoryPresenterFactory(
 @Inject
 class ZoneInventoryPresenter(
     @Assisted private val navigator: Navigator,
-    private val inventoryRepository: InventoryRepository,
+    private val inventoryRepository: ZoneInventoryRepository,
 ) : Presenter<ZoneInventoryUiState> {
 
     @Composable

@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.domain.model.FabricRoll
-import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.domain.repository.RollInventoryRepository
 import com.erp.jytextile.core.navigation.ReleaseFormScreen
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.navigation.RollInventoryScreen
@@ -49,20 +49,20 @@ class RollInventoryPresenterFactory(
 class RollInventoryPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val zoneId: Long,
-    private val inventoryRepository: InventoryRepository,
+    private val rollInventoryRepository: RollInventoryRepository,
 ) : Presenter<RollInventoryUiState> {
 
     @Composable
     override fun present(): RollInventoryUiState {
         val overlayHost = LocalOverlayHost.current
 
-        val rollCount by inventoryRepository.getFabricRollsCount(zoneId).collectAsRetainedState(0)
+        val rollCount by rollInventoryRepository.getFabricRollsCount(zoneId).collectAsRetainedState(0)
 
         var currentPage by rememberRetained { mutableStateOf(0) }
-        val totalPage by inventoryRepository.getFabricRollsPage(zoneId).collectAsRetainedState(0)
+        val totalPage by rollInventoryRepository.getFabricRollsPage(zoneId).collectAsRetainedState(0)
 
         val rollTable by rememberRetained(currentPage) {
-            inventoryRepository.getFabricRolls(zoneId, currentPage, false).map { rolls ->
+            rollInventoryRepository.getFabricRolls(zoneId, currentPage, false).map { rolls ->
                 RollTable(
                     items = rolls.map(FabricRoll::toTableItem)
                 )
@@ -74,33 +74,33 @@ class RollInventoryPresenter(
             if (selectedRollId == null) {
                 flowOf(null)
             } else {
-                inventoryRepository.getRoll(selectedRollId!!)
+                rollInventoryRepository.getRoll(selectedRollId!!)
             }
         }.collectAsRetainedState(null)
 
         val eventSink: CoroutineScope.(RollInventoryEvent) -> Unit = { event ->
             when (event) {
-                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.Back -> navigator.pop()
+                RollInventoryEvent.Back -> navigator.pop()
 
                 is RollInventoryEvent.RollSelected -> selectedRollId = event.rollId
 
-                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.NextPage -> {
+                RollInventoryEvent.NextPage -> {
                     currentPage = (currentPage + 1).coerceAtMost(totalPage - 1)
                 }
 
-                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.PreviousPage -> {
+                RollInventoryEvent.PreviousPage -> {
                     currentPage = (currentPage - 1).coerceAtLeast(0)
                 }
 
-                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.Remove -> {
+                RollInventoryEvent.Remove -> {
                     launch {
                         selectedRollId?.let { rollId ->
-                            inventoryRepository.removeFabricRoll(rollId)
+                            rollInventoryRepository.removeFabricRoll(rollId)
                         }
                     }
                 }
 
-                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.Release -> {
+                RollInventoryEvent.Release -> {
                     launch {
                         selectedRoll?.let {
                             overlayHost.showInDialog(
@@ -111,7 +111,7 @@ class RollInventoryPresenter(
                     }
                 }
 
-                com.erp.jytextile.feature.inventory.roll.RollInventoryEvent.ReleaseHistory -> {
+                RollInventoryEvent.ReleaseHistory -> {
                     selectedRoll?.let { roll ->
                         navigator.goTo(ReleaseHistoryScreen(roll.id, roll.itemNo))
                     }

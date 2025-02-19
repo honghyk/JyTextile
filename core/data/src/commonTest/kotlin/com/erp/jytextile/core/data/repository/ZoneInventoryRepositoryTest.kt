@@ -3,22 +3,22 @@ package com.erp.jytextile.core.data.repository
 import com.erp.jytextile.core.data.testdouble.TestInventoryDao
 import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.model.ZoneEntity
-import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class InventoryRepositoryTest {
+class ZoneInventoryRepositoryTest {
 
     private lateinit var testInventoryDao: InventoryDao
-    private lateinit var testInventoryRepository: InventoryRepository
+    private lateinit var testInventoryRepository: ZoneInventoryRepository
 
     @BeforeTest
     fun setUp() {
         testInventoryDao = TestInventoryDao()
-        testInventoryRepository = InventoryRepositoryImpl(testInventoryDao)
+        testInventoryRepository = ZoneInventoryRepositoryImpl(testInventoryDao)
     }
 
     @Test

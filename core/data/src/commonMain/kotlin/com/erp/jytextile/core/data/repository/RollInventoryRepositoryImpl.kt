@@ -5,14 +5,11 @@ import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
 import com.erp.jytextile.core.database.model.ZoneEntity
-import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import com.erp.jytextile.core.database.model.toDomain
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
-import com.erp.jytextile.core.domain.model.ReleaseHistory
-import com.erp.jytextile.core.domain.model.Zone
-import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.domain.repository.RollInventoryRepository
 import com.erp.jytextile.kotlin.utils.yardToMeter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
@@ -24,32 +21,9 @@ import kotlinx.datetime.atStartOfDayIn
 import me.tatarka.inject.annotations.Inject
 
 @Inject
-class InventoryRepositoryImpl(
+class RollInventoryRepositoryImpl(
     private val inventoryDao: InventoryDao,
-) : InventoryRepository {
-
-    override suspend fun addZone(name: String) {
-        inventoryDao.insertZone(ZoneEntity(name = name))
-    }
-
-    override fun getZones(page: Int): Flow<List<Zone>> {
-        return inventoryDao.getZones(
-            limit = PAGE_SIZE,
-            offset = page * PAGE_SIZE,
-        ).map { sections ->
-            sections.map(ZoneWithRollCountEntity::toDomain)
-        }
-    }
-
-    override fun getZonesCount(): Flow<Int> {
-        return inventoryDao.getZonesCount()
-    }
-
-    override fun getZonePage(): Flow<Int> {
-        return inventoryDao.getZonesCount().map { count ->
-            (count + PAGE_SIZE - 1) / PAGE_SIZE
-        }
-    }
+): RollInventoryRepository {
 
     override fun getFabricRolls(
         zoneId: Long,
@@ -63,6 +37,18 @@ class InventoryRepositoryImpl(
             filterHasRemaining = filterHasRemaining
         ).map { rolls ->
             rolls.map(FabricRollEntity::toDomain)
+        }
+    }
+
+    override fun getRoll(rollId: Long): Flow<FabricRoll> {
+        return inventoryDao.getFabricRollWithZone(rollId)
+            .filterNotNull()
+            .map(FabricRollWithZoneEntity::toDomain)
+    }
+
+    override fun getFabricRollsPage(zoneId: Long): Flow<Int> {
+        return inventoryDao.getFabricRollsCount(zoneId).map { count ->
+            (count + PAGE_SIZE - 1) / PAGE_SIZE
         }
     }
 
@@ -97,18 +83,12 @@ class InventoryRepositoryImpl(
         )
     }
 
-    override suspend fun removeFabricRoll(rollId: Long) {
-        inventoryDao.deleteFabricRoll(rollId)
-    }
-
-    override fun getFabricRollsPage(zoneId: Long): Flow<Int> {
-        return inventoryDao.getFabricRollsCount(zoneId).map { count ->
-            (count + PAGE_SIZE - 1) / PAGE_SIZE
-        }
-    }
-
     override fun getFabricRollsCount(zoneId: Long): Flow<Int> {
         return inventoryDao.getFabricRollsCount(zoneId)
+    }
+
+    override suspend fun removeFabricRoll(rollId: Long) {
+        inventoryDao.deleteFabricRoll(rollId)
     }
 
     override suspend fun releaseFabricRoll(
@@ -137,28 +117,6 @@ class InventoryRepositoryImpl(
             rollId = rollId,
             newRemainingLength = roll.remainingQuantity - length
         )
-    }
-
-    override fun getRoll(rollId: Long): Flow<FabricRoll> {
-        return inventoryDao.getFabricRollWithZone(rollId)
-            .filterNotNull()
-            .map(FabricRollWithZoneEntity::toDomain)
-    }
-
-    override fun getReleaseHistories(rollId: Long, page: Int): Flow<List<ReleaseHistory>> {
-        return inventoryDao.getReleaseHistory(
-            rollId = rollId,
-            limit = PAGE_SIZE,
-            offset = page * PAGE_SIZE,
-        ).map { histories ->
-            histories.map(ReleaseHistoryEntity::toDomain)
-        }
-    }
-
-    override fun getReleaseHistoriesPage(rollId: Long): Flow<Int> {
-        return inventoryDao.getReleaseHistoryCount(rollId).map { count ->
-            (count + PAGE_SIZE - 1) / PAGE_SIZE
-        }
     }
 }
 
