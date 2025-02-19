@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,6 +15,7 @@ import com.erp.jytextile.core.navigation.RollDetailScreen
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
 import com.slack.circuit.foundation.CircuitContent
+import com.slack.circuit.foundation.NavEvent
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
@@ -46,7 +46,7 @@ private fun ReleaseHistoryUi(
     ) {
         JyTopAppBar(
             onBackClick = { state.eventSink(ReleaseHistoryEvent.Back) },
-            title = { Text(state.title) }
+            title = { }
         )
         Column(
             modifier = modifier
@@ -59,7 +59,13 @@ private fun ReleaseHistoryUi(
 
                 is ReleaseHistoryUiState.ReleaseHistories -> {
                     CircuitContent(
-                        screen = RollDetailScreen(rollId = state.rollId)
+                        screen = RollDetailScreen(rollId = state.rollId),
+                        onNavEvent = {  event ->
+                            when (event) {
+                                is NavEvent.Pop -> state.eventSink(ReleaseHistoryEvent.Back)
+                                else -> Unit
+                            }
+                        }
                     )
                     Spacer(modifier = Modifier.height(22.dp))
                     ReleaseHistories(

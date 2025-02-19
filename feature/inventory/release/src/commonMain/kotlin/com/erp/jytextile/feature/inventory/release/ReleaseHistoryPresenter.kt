@@ -23,7 +23,7 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 class ReleaseHistoryPresenterFactory(
-    private val presenterFactory: (Navigator, Long, String) -> ReleaseHistoryPresenter,
+    private val presenterFactory: (Navigator, Long) -> ReleaseHistoryPresenter,
 ) : Presenter.Factory {
     override fun create(
         screen: Screen,
@@ -31,7 +31,7 @@ class ReleaseHistoryPresenterFactory(
         context: CircuitContext
     ): Presenter<*>? {
         return when (screen) {
-            is ReleaseHistoryScreen -> presenterFactory(navigator, screen.rollId, screen.rollItemNo)
+            is ReleaseHistoryScreen -> presenterFactory(navigator, screen.rollId)
             else -> null
         }
     }
@@ -41,7 +41,6 @@ class ReleaseHistoryPresenterFactory(
 class ReleaseHistoryPresenter(
     @Assisted private val navigator: Navigator,
     @Assisted private val rollId: Long,
-    @Assisted private val rollItemNo: String,
     private val releaseHistoryRepository: ReleaseHistoryRepository,
 ) : Presenter<ReleaseHistoryUiState> {
 
@@ -78,12 +77,10 @@ class ReleaseHistoryPresenter(
 
         return when {
             releaseHistoryTable == null -> ReleaseHistoryUiState.Loading(
-                title = "(no.$rollId) $rollItemNo",
                 eventSink = eventSink,
             )
 
             else -> ReleaseHistoryUiState.ReleaseHistories(
-                title = "($rollId) $rollItemNo",
                 rollId = rollId,
                 releaseHistoryTable = releaseHistoryTable!!,
                 currentPage = currentPage + 1,
@@ -95,16 +92,13 @@ class ReleaseHistoryPresenter(
 }
 
 sealed interface ReleaseHistoryUiState : CircuitUiState {
-    val title: String
     val eventSink: (ReleaseHistoryEvent) -> Unit
 
     data class Loading(
-        override val title: String,
         override val eventSink: (ReleaseHistoryEvent) -> Unit = {},
     ) : ReleaseHistoryUiState
 
     data class ReleaseHistories(
-        override val title: String,
         val rollId: Long,
         val releaseHistoryTable: ReleaseHistoryTable,
         val currentPage: Int,

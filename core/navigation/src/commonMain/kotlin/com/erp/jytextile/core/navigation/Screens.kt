@@ -26,7 +26,6 @@ data class ReleaseFormScreen(
 @Parcelize
 data class ReleaseHistoryScreen(
     val rollId: Long,
-    val rollItemNo: String,
 ) : Screen
 
 @Parcelize
