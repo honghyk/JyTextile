@@ -1,6 +1,7 @@
 package com.erp.jytextile.core.domain.repository
 
 import com.erp.jytextile.core.domain.model.FabricRoll
+import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.model.Zone
@@ -26,22 +27,12 @@ interface InventoryRepository {
 
     suspend fun addFabricRoll(
         zoneId: Long,
-        itemNo: String,
-        color: String,
-        factory: String,
-        quantity: Double,
-        remark: String,
-        lengthUnit: LengthUnit,
+        rollInsertion: FabricRollInsertion,
     )
 
     suspend fun addFabricRoll(
         zoneName: String,
-        itemNo: String,
-        color: String,
-        factory: String,
-        quantity: Double,
-        remark: String,
-        lengthUnit: LengthUnit,
+        rollInsertion: FabricRollInsertion,
     )
 
     suspend fun removeFabricRoll(rollId: Long)

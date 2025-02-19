@@ -17,9 +17,10 @@ fun FabricRollWithZoneEntity.toDomain() = FabricRoll(
         name = zoneName,
     ),
     itemNo = fabricRoll.itemNo,
+    orderNo = fabricRoll.orderNo,
     color = fabricRoll.color,
     factory = fabricRoll.factory,
-    remainingLength = fabricRoll.remainingLength,
-    originalLength = fabricRoll.originalLength,
+    remainingQuantity = fabricRoll.remainingLength,
+    originalQuantity = fabricRoll.originalLength,
     remark = fabricRoll.remark,
 )

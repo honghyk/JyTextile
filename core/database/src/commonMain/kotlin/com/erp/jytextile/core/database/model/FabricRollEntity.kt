@@ -38,10 +38,11 @@ fun FabricRollEntity.toDomain() = FabricRoll(
     id = id,
     zone = Zone(id = id),
     itemNo = itemNo,
+    orderNo = orderNo,
     color = color,
     factory = factory,
-    remainingLength = remainingLength,
-    originalLength = originalLength,
+    remainingQuantity = remainingLength,
+    originalQuantity = originalLength,
     remark = remark,
 )
 
@@ -49,10 +50,10 @@ fun FabricRoll.toEntity() = FabricRollEntity(
     id = id,
     zoneId = zone.id,
     itemNo = itemNo,
-    orderNo = "", // TODO: Add orderNo
+    orderNo = orderNo,
     color = color,
     factory = factory,
-    remainingLength = remainingLength,
-    originalLength = originalLength,
+    remainingLength = remainingQuantity,
+    originalLength = originalQuantity,
     remark = remark,
 )

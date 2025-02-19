@@ -4,9 +4,10 @@ data class FabricRoll(
     val id: Long,
     val zone: Zone,
     val itemNo: String,
+    val orderNo: String,
     val color: String,
     val factory: String,
-    val remainingLength: Double,
-    val originalLength: Double,
+    val remainingQuantity: Double,
+    val originalQuantity: Double,
     val remark: String?,
 )

@@ -44,8 +44,8 @@ fun FabricRoll.toTableItem() = RollTableItem(
     itemNo = itemNo,
     color = color,
     factory = factory,
-    qtyInMeter = (round(remainingLength * 10) / 10).toString(),
-    qtyInYard = (round(meterToYard(remainingLength) * 10) / 10).toString(),
-    total = originalLength.toString(),
+    qtyInMeter = (round(remainingQuantity * 10) / 10).toString(),
+    qtyInYard = (round(meterToYard(remainingQuantity) * 10) / 10).toString(),
+    total = originalQuantity.toString(),
     remark = remark ?: "",
 )

@@ -8,6 +8,7 @@ import com.erp.jytextile.core.database.model.ZoneEntity
 import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import com.erp.jytextile.core.database.model.toDomain
 import com.erp.jytextile.core.domain.model.FabricRoll
+import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.model.Zone
@@ -66,48 +67,32 @@ class InventoryRepositoryImpl(
 
     override suspend fun addFabricRoll(
         zoneId: Long,
-        itemNo: String,
-        color: String,
-        factory: String,
-        quantity: Double,
-        remark: String,
-        lengthUnit: LengthUnit
+        rollInsertion: FabricRollInsertion,
     ) {
-        val length = if (lengthUnit == LengthUnit.METER) quantity else yardToMeter(quantity)
         val roll = FabricRollEntity(
-            id = 0L, // TODO: Add id
             zoneId = zoneId,
-            itemNo = itemNo,
-            orderNo = "", // TODO: Add orderNo
-            color = color,
-            factory = factory,
-            remainingLength = length,
-            originalLength = length,
-            remark = remark,
+            id = rollInsertion.id,
+            itemNo = rollInsertion.itemNo,
+            orderNo = rollInsertion.orderNo,
+            color = rollInsertion.color,
+            factory = rollInsertion.factory,
+            remainingLength = rollInsertion.quantity,
+            originalLength = rollInsertion.quantity,
+            remark = rollInsertion.remark,
         )
         inventoryDao.insertFabricRoll(roll)
     }
 
     override suspend fun addFabricRoll(
         zoneName: String,
-        itemNo: String,
-        color: String,
-        factory: String,
-        quantity: Double,
-        remark: String,
-        lengthUnit: LengthUnit
+        rollInsertion: FabricRollInsertion,
     ) {
         val zone = inventoryDao.findZoneByName(zoneName)
         val zoneId = zone?.id ?: inventoryDao.insertZone(ZoneEntity(name = zoneName))
 
         addFabricRoll(
             zoneId = zoneId,
-            itemNo = itemNo,
-            color = color,
-            factory = factory,
-            quantity = quantity,
-            remark = remark,
-            lengthUnit = lengthUnit
+            rollInsertion = rollInsertion,
         )
     }
 
@@ -127,7 +112,7 @@ class InventoryRepositoryImpl(
 
     override suspend fun releaseFabricRoll(
         rollId: Long,
-        orderNo: String, // TODO: Remove
+        orderNo: String, // TODO: R
         quantity: Double,
         lengthUnit: LengthUnit,
         buyer: String,
@@ -135,7 +120,7 @@ class InventoryRepositoryImpl(
     ) {
         val roll = getRoll(rollId).firstOrNull() ?: return
         val length = if (lengthUnit == LengthUnit.METER) quantity else yardToMeter(quantity)
-        if (length > roll.remainingLength) {
+        if (length > roll.remainingQuantity) {
             throw IllegalStateException("release more than remaining")
         }
         val date = LocalDate
@@ -150,7 +135,7 @@ class InventoryRepositoryImpl(
                 releaseDate = date,
             ),
             rollId = rollId,
-            newRemainingLength = roll.remainingLength - length
+            newRemainingLength = roll.remainingQuantity - length
         )
     }
 

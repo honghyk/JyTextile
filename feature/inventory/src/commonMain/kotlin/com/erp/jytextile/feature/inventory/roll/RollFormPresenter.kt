@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.base.extension.DOUBLE_REGEX_PATTERN
+import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.repository.InventoryRepository
 import com.slack.circuit.retained.rememberRetained
@@ -46,7 +47,9 @@ class RollFormPresenter(
     @Composable
     override fun present(): RollFormUiState {
         var zoneName by rememberRetained { mutableStateOf("") }
+        var id by rememberRetained { mutableStateOf("") }
         var itemNo by rememberRetained { mutableStateOf("") }
+        var orderNo by rememberRetained { mutableStateOf("") }
         var color by rememberRetained { mutableStateOf("") }
         var factory by rememberRetained { mutableStateOf("") }
         var quantity by rememberRetained { mutableStateOf("") }
@@ -61,12 +64,16 @@ class RollFormPresenter(
                         try {
                             inventoryRepository.addFabricRoll(
                                 zoneName = zoneName,
-                                itemNo = itemNo,
-                                color = color,
-                                factory = factory,
-                                quantity = quantity.toDouble(),
-                                remark = remark,
-                                lengthUnit = lengthUnit,
+                                rollInsertion = FabricRollInsertion(
+                                    id = id.toLong(),
+                                    itemNo = itemNo,
+                                    orderNo = orderNo,
+                                    color = color,
+                                    factory = factory,
+                                    quantity = quantity.toDouble(),
+                                    remark = remark,
+                                    lengthUnit = lengthUnit,
+                                ),
                             )
                             navigator.pop()
                         } catch (e: Exception) {
@@ -76,7 +83,12 @@ class RollFormPresenter(
                 }
 
                 is RollFormEvent.UpdateZoneName -> zoneName = event.zoneName
+                is RollFormEvent.UpdateId -> {
+                    id = event.id.filter { it.isDigit() }
+                }
+
                 is RollFormEvent.UpdateItemNo -> itemNo = event.itemNo
+                is RollFormEvent.UpdateOrderNo -> orderNo = event.orderNo
                 is RollFormEvent.UpdateColor -> color = event.color
                 is RollFormEvent.UpdateFactory -> factory = event.factory
                 is RollFormEvent.UpdateQuantity -> {
@@ -92,7 +104,9 @@ class RollFormPresenter(
 
         return RollFormUiState(
             zoneName = zoneName,
+            id = id,
             itemNo = itemNo,
+            orderNo = orderNo,
             color = color,
             factory = factory,
             quantity = quantity,
@@ -105,7 +119,9 @@ class RollFormPresenter(
 
 data class RollFormUiState(
     val zoneName: String,
+    val id: String,
     val itemNo: String,
+    val orderNo: String,
     val color: String,
     val factory: String,
     val quantity: String,
@@ -115,7 +131,9 @@ data class RollFormUiState(
 ) : CircuitUiState {
     val canSubmit: Boolean
         get() = zoneName.isNotEmpty() &&
+                id.isNotEmpty() &&
                 itemNo.isNotEmpty() &&
+                orderNo.isNotEmpty() &&
                 color.isNotEmpty() &&
                 factory.isNotEmpty() &&
                 quantity.isNotEmpty()
@@ -123,7 +141,9 @@ data class RollFormUiState(
 
 sealed interface RollFormEvent : CircuitUiEvent {
     data class UpdateZoneName(val zoneName: String) : RollFormEvent
+    data class UpdateId(val id: String) : RollFormEvent
     data class UpdateItemNo(val itemNo: String) : RollFormEvent
+    data class UpdateOrderNo(val orderNo: String) : RollFormEvent
     data class UpdateColor(val color: String) : RollFormEvent
     data class UpdateFactory(val factory: String) : RollFormEvent
     data class UpdateQuantity(val quantity: String) : RollFormEvent
