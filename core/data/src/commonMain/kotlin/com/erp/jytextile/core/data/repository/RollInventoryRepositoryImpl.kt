@@ -63,6 +63,7 @@ class RollInventoryRepositoryImpl(
             orderNo = rollInsertion.orderNo,
             color = rollInsertion.color,
             factory = rollInsertion.factory,
+            finish = rollInsertion.finish,
             remainingLength = rollInsertion.quantity,
             originalLength = rollInsertion.quantity,
             remark = rollInsertion.remark,

@@ -8,6 +8,7 @@ data class FabricRollInsertion(
     val orderNo: String,
     val color: String,
     val factory: String,
+    val finish: String,
     val quantity: Double,
     val remark: String,
 ) {
@@ -17,6 +18,7 @@ data class FabricRollInsertion(
         orderNo: String,
         color: String,
         factory: String,
+        finish: String,
         quantity: Double,
         lengthUnit: LengthUnit,
         remark: String
@@ -26,6 +28,7 @@ data class FabricRollInsertion(
         orderNo = orderNo,
         color = color,
         factory = factory,
+        finish = finish,
         quantity = if (lengthUnit == LengthUnit.METER) quantity else quantity.yardToMeter(),
         remark = remark,
     )

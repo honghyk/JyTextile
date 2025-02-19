@@ -177,6 +177,7 @@ private fun testFabricRoll(
     orderNo = "",
     color = "",
     factory = "",
+    finish = "",
     remainingLength = totalLength,
     originalLength = totalLength,
     remark = "",

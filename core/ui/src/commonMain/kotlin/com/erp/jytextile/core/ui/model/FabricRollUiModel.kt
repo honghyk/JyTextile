@@ -13,6 +13,7 @@ data class FabricRollUiModel(
     val factory: String,
     val remainingQuantity: Double,
     val originalQuantity: Double,
+    val finish: String,
     val remark: String?,
 ) {
     val remainingQuantityInYard: Double = remainingQuantity.meterToYard()
@@ -28,5 +29,6 @@ fun FabricRoll.toUiModel() = FabricRollUiModel(
     factory = factory,
     remainingQuantity = remainingQuantity,
     originalQuantity = originalQuantity,
+    finish = finish,
     remark = remark,
 )

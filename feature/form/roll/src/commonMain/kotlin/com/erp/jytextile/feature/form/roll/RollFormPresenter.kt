@@ -61,6 +61,7 @@ class RollFormPresenter(
         var orderNo by rememberRetained { mutableStateOf("") }
         var color by rememberRetained { mutableStateOf("") }
         var factory by rememberRetained { mutableStateOf("") }
+        var finish by rememberRetained { mutableStateOf("") }
         var quantity by rememberRetained { mutableStateOf("") }
         var remark by rememberRetained { mutableStateOf("") }
         var lengthUnit by rememberRetained { mutableStateOf(LengthUnit.METER) }
@@ -79,6 +80,7 @@ class RollFormPresenter(
                                     orderNo = orderNo,
                                     color = color,
                                     factory = factory,
+                                    finish = finish,
                                     quantity = quantity.toDouble(),
                                     remark = remark,
                                     lengthUnit = lengthUnit,
@@ -100,6 +102,7 @@ class RollFormPresenter(
                 is RollFormEvent.UpdateOrderNo -> orderNo = event.orderNo
                 is RollFormEvent.UpdateColor -> color = event.color
                 is RollFormEvent.UpdateFactory -> factory = event.factory
+                is RollFormEvent.UpdateFinish -> finish = event.finish
                 is RollFormEvent.UpdateQuantity -> {
                     if (event.quantity.matches(Regex(DOUBLE_REGEX_PATTERN))) {
                         quantity = event.quantity
@@ -119,6 +122,7 @@ class RollFormPresenter(
             orderNo = orderNo,
             color = color,
             factory = factory,
+            finish = finish,
             quantity = quantity,
             lengthUnit = lengthUnit,
             remark = remark,
@@ -135,6 +139,7 @@ data class RollFormUiState(
     val orderNo: String,
     val color: String,
     val factory: String,
+    val finish: String,
     val quantity: String,
     val lengthUnit: LengthUnit,
     val remark: String,
@@ -147,6 +152,7 @@ data class RollFormUiState(
                 orderNo.isNotEmpty() &&
                 color.isNotEmpty() &&
                 factory.isNotEmpty() &&
+                finish.isNotEmpty() &&
                 quantity.isNotEmpty()
 }
 
@@ -157,6 +163,7 @@ sealed interface RollFormEvent : CircuitUiEvent {
     data class UpdateOrderNo(val orderNo: String) : RollFormEvent
     data class UpdateColor(val color: String) : RollFormEvent
     data class UpdateFactory(val factory: String) : RollFormEvent
+    data class UpdateFinish(val finish: String) : RollFormEvent
     data class UpdateQuantity(val quantity: String) : RollFormEvent
     data class UpdateRemark(val remark: String) : RollFormEvent
     data class UpdateLengthUnit(val lengthUnit: LengthUnit) : RollFormEvent

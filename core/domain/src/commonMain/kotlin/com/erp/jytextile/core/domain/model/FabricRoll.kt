@@ -7,6 +7,7 @@ data class FabricRoll(
     val orderNo: String,
     val color: String,
     val factory: String,
+    val finish: String,
     val remainingQuantity: Double,
     val originalQuantity: Double,
     val remark: String?,

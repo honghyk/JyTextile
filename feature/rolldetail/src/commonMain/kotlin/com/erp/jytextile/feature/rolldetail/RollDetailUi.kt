@@ -124,6 +124,11 @@ private fun RollDetailGrid(
                         append(roll.originalQuantityInYard.formatDecimal(decimalPlaces = 1))
                     }
                 )
+            }
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text(text = "Finish: ${roll.finish}")
                 Text(text = "Remark: ${roll.remark}")
             }
         }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "057ecba0e8dc8a3cc277b28b75af1dac",
+    "identityHash": "df8f8e9707ec683d823febbd83ff7d9b",
     "entities": [
       {
         "tableName": "zones",
@@ -41,7 +41,7 @@
       },
       {
         "tableName": "fabric_rolls",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `zone_id` INTEGER NOT NULL, `itemNo` TEXT NOT NULL, `orderNo` TEXT NOT NULL, `color` TEXT NOT NULL, `factory` TEXT NOT NULL, `remaining_length` REAL NOT NULL, `original_length` REAL NOT NULL, `remark` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`zone_id`) REFERENCES `zones`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `zone_id` INTEGER NOT NULL, `itemNo` TEXT NOT NULL, `orderNo` TEXT NOT NULL, `color` TEXT NOT NULL, `factory` TEXT NOT NULL, `finish` TEXT NOT NULL, `remaining_length` REAL NOT NULL, `original_length` REAL NOT NULL, `remark` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`zone_id`) REFERENCES `zones`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -76,6 +76,12 @@
           {
             "fieldPath": "factory",
             "columnName": "factory",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "finish",
+            "columnName": "finish",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -197,7 +203,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '057ecba0e8dc8a3cc277b28b75af1dac')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'df8f8e9707ec683d823febbd83ff7d9b')"
     ]
   }
 }

@@ -76,6 +76,11 @@ private fun RollFormUi(
             value = state.factory,
             onValueChange = { state.eventSink(RollFormEvent.UpdateFactory(it)) },
         )
+        FormTextField(
+            label = "Finish",
+            value = state.finish,
+            onValueChange = { state.eventSink(RollFormEvent.UpdateFinish(it)) },
+        )
         RollQuantityFormField(
             quantity = state.quantity,
             lengthUnit = state.lengthUnit,
