@@ -112,7 +112,6 @@ class InventoryRepositoryImpl(
 
     override suspend fun releaseFabricRoll(
         rollId: Long,
-        orderNo: String, // TODO: R
         quantity: Double,
         lengthUnit: LengthUnit,
         buyer: String,

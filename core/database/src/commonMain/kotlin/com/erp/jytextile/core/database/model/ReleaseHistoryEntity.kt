@@ -33,7 +33,6 @@ data class ReleaseHistoryEntity(
 fun ReleaseHistoryEntity.toDomain() = ReleaseHistory(
     id = id,
     rollId = rollId,
-    orderNo = "", // TODO: Remove
     quantity = quantity,
     releaseDate = releaseDate,
     destination = destination,

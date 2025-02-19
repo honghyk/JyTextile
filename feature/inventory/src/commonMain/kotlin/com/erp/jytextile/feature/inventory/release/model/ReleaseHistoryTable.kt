@@ -26,14 +26,12 @@ data class ReleaseHistoryTable(
 
 data class ReleaseHistoryTableItem(
     override val id: Long,
-    val orderNo: String,
     val buyer: String,
     val qtyInMeter: String,
     val qtyInYard: String,
     val releaseDate: String,
     override val tableRow: List<String> = listOf(
         id.toString(),
-        orderNo,
         buyer,
         qtyInMeter,
         qtyInYard,
@@ -43,7 +41,6 @@ data class ReleaseHistoryTableItem(
 
 fun ReleaseHistory.toTableItem() = ReleaseHistoryTableItem(
     id = id,
-    orderNo = orderNo,
     buyer = destination,
     qtyInMeter = (round(quantity * 10) / 10).toString(),
     qtyInYard = (round(meterToYard(quantity) * 10) / 10).toString(),

@@ -85,11 +85,6 @@ fun ReleaseFormUi(
                     onValueChange = {},
                 )
                 FormField(
-                    label = "Order No",
-                    value = state.orderNo,
-                    onValueChange = { state.eventSink(ReleaseFormEvent.UpdateOrderNo(it)) },
-                )
-                FormField(
                     label = "Buyer",
                     value = state.buyer,
                     onValueChange = { state.eventSink(ReleaseFormEvent.UpdateBuyer(it)) },

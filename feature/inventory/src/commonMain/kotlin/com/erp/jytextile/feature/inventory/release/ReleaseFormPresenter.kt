@@ -47,7 +47,6 @@ class ReleaseFormPresenter(
 
     @Composable
     override fun present(): ReleaseFormUiState {
-        var orderNo by rememberRetained { mutableStateOf("") }
         var buyer by rememberRetained { mutableStateOf("") }
         var quantity by rememberRetained { mutableStateOf("") }
         var lengthUnit by rememberRetained { mutableStateOf(LengthUnit.METER) }
@@ -61,7 +60,6 @@ class ReleaseFormPresenter(
                         try {
                             inventoryRepository.releaseFabricRoll(
                                 rollId = rollId,
-                                orderNo = orderNo,
                                 buyer = buyer,
                                 quantity = quantity.toDouble(),
                                 lengthUnit = lengthUnit,
@@ -74,7 +72,6 @@ class ReleaseFormPresenter(
                     }
                 }
 
-                is ReleaseFormEvent.UpdateOrderNo -> orderNo = event.orderNo
                 is ReleaseFormEvent.UpdateBuyer -> buyer = event.buyer
                 is ReleaseFormEvent.UpdateQuantity -> {
                     if (event.quantity.matches(Regex(DOUBLE_REGEX_PATTERN))) {
@@ -93,7 +90,6 @@ class ReleaseFormPresenter(
         }
         return ReleaseFormUiState(
             rollId = rollId.toString(),
-            orderNo = orderNo,
             rollItemNo = rollItemNo,
             buyer = buyer,
             quantity = quantity,
@@ -108,7 +104,6 @@ class ReleaseFormPresenter(
 data class ReleaseFormUiState(
     val rollId: String,
     val rollItemNo: String,
-    val orderNo: String,
     val buyer: String,
     val quantity: String,
     val lengthUnit: LengthUnit,
@@ -122,7 +117,6 @@ data class ReleaseFormUiState(
 }
 
 sealed interface ReleaseFormEvent : CircuitUiEvent {
-    data class UpdateOrderNo(val orderNo: String) : ReleaseFormEvent
     data class UpdateBuyer(val buyer: String) : ReleaseFormEvent
     data class UpdateQuantity(val quantity: String) : ReleaseFormEvent
     data class UpdateLengthUnit(val lengthUnit: LengthUnit) : ReleaseFormEvent
