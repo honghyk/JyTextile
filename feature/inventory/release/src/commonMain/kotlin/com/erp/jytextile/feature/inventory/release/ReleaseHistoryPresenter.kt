@@ -84,6 +84,7 @@ class ReleaseHistoryPresenter(
 
             else -> ReleaseHistoryUiState.ReleaseHistories(
                 title = "($rollId) $rollItemNo",
+                rollId = rollId,
                 releaseHistoryTable = releaseHistoryTable!!,
                 currentPage = currentPage + 1,
                 totalPage = totalPage,
@@ -104,6 +105,7 @@ sealed interface ReleaseHistoryUiState : CircuitUiState {
 
     data class ReleaseHistories(
         override val title: String,
+        val rollId: Long,
         val releaseHistoryTable: ReleaseHistoryTable,
         val currentPage: Int,
         val totalPage: Int,

@@ -24,6 +24,7 @@ kotlin {
             api(projects.feature.form.zone)
             api(projects.feature.form.roll)
             api(projects.feature.form.release)
+            api(projects.feature.rolldetail)
 
             implementation(libs.kotlininject.runtime)
             implementation(libs.circuit.foundation)

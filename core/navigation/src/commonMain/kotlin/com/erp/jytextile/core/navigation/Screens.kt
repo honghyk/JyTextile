@@ -28,3 +28,8 @@ data class ReleaseHistoryScreen(
     val rollId: Long,
     val rollItemNo: String,
 ) : Screen
+
+@Parcelize
+data class RollDetailScreen(
+    val rollId: Long
+) : Screen

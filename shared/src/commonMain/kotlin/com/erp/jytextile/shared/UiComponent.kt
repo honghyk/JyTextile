@@ -6,6 +6,7 @@ import com.erp.jytextile.feature.form.zone.ZoneFormComponent
 import com.erp.jytextile.feature.inventory.release.ReleaseHistoryComponent
 import com.erp.jytextile.feature.inventory.roll.RollInventoryComponent
 import com.erp.jytextile.feature.inventory.zone.ZoneInventoryComponent
+import com.erp.jytextile.feature.rolldetail.RollDetailComponent
 import com.erp.jytextile.feature.root.AppContent
 import com.erp.jytextile.feature.root.RootComponent
 import com.slack.circuit.foundation.Circuit
@@ -20,6 +21,7 @@ interface UiComponent
     RollFormComponent,
     ReleaseFormComponent,
     ReleaseHistoryComponent,
+    RollDetailComponent,
     RootComponent {
 
     val appContent: AppContent
