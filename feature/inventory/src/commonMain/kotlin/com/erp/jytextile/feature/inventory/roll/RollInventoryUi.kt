@@ -24,8 +24,8 @@ import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.theme.JyTheme
 import com.erp.jytextile.core.designsystem.theme.Palette
 import com.erp.jytextile.core.domain.model.FabricRoll
-import com.erp.jytextile.feature.inventory.common.ui.InventoryTablePanel
-import com.erp.jytextile.feature.inventory.roll.model.RollTable
+import com.erp.jytextile.core.ui.TablePanel
+import com.erp.jytextile.core.ui.model.RollTable
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
@@ -117,7 +117,7 @@ private fun RollInventory(
             onReleaseHistoryClick = onReleaseHistoryClick
         )
         Spacer(modifier = Modifier.height(22.dp))
-        InventoryTablePanel(
+        TablePanel(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -128,7 +128,6 @@ private fun RollInventory(
             onItemClick = { onItemClick(it.id) },
             onPreviousClick = onPreviousClick,
             onNextClick = onNextClick,
-            headerButtonContent = { },
         )
     }
 }

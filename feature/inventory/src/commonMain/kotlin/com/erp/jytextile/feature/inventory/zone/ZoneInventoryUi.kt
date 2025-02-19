@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
+import com.erp.jytextile.core.ui.TablePanel
+import com.erp.jytextile.core.ui.model.ZoneTable
 import com.erp.jytextile.feature.inventory.common.ui.InventoryOverallPanel
-import com.erp.jytextile.feature.inventory.common.ui.InventoryTablePanel
-import com.erp.jytextile.feature.inventory.zone.model.ZoneTable
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
@@ -93,7 +93,7 @@ private fun ZoneInventory(
             title = "Zones",
         )
         Spacer(modifier = Modifier.height(22.dp))
-        InventoryTablePanel(
+        TablePanel(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),

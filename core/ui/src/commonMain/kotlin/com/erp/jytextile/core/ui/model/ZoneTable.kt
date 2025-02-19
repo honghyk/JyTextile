@@ -1,8 +1,6 @@
-package com.erp.jytextile.feature.inventory.zone.model
+package com.erp.jytextile.core.ui.model
 
 import com.erp.jytextile.core.domain.model.Zone
-import com.erp.jytextile.feature.inventory.common.model.Table
-import com.erp.jytextile.feature.inventory.common.model.TableItem
 
 data class ZoneTable(
     override val headers: List<String> = listOf(

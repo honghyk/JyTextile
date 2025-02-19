@@ -1,4 +1,4 @@
-package com.erp.jytextile.feature.inventory.common.ui
+package com.erp.jytextile.core.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -17,13 +19,11 @@ import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.component.Table
 import com.erp.jytextile.core.designsystem.theme.JyTheme
-import com.erp.jytextile.feature.inventory.common.model.Table
-import com.erp.jytextile.feature.inventory.common.model.TableItem
-
+import com.erp.jytextile.core.ui.model.Table
+import com.erp.jytextile.core.ui.model.TableItem
 
 @Composable
-internal fun InventoryTablePanel(
-    title: String,
+fun TablePanel(
     table: Table,
     currentPage: Int,
     totalPage: Int,
@@ -31,7 +31,33 @@ internal fun InventoryTablePanel(
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier,
-    headerButtonContent: @Composable RowScope.() -> Unit,
+    title: String = "",
+    titleActionButtons: @Composable (RowScope.() -> Unit)? = null,
+) {
+    TablePanel(
+        modifier = modifier,
+        table = table,
+        currentPage = currentPage,
+        totalPage = totalPage,
+        onItemClick = onItemClick,
+        onPreviousClick = onPreviousClick,
+        onNextClick = onNextClick,
+        title = { Text(text = title, maxLines = 1) },
+        titleActionButtons = titleActionButtons,
+    )
+}
+
+@Composable
+fun TablePanel(
+    table: Table,
+    currentPage: Int,
+    totalPage: Int,
+    onItemClick: (TableItem) -> Unit,
+    onPreviousClick: () -> Unit,
+    onNextClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    title: @Composable () -> Unit,
+    titleActionButtons: @Composable (RowScope.() -> Unit)? = null,
 ) {
     PanelSurface(
         modifier = modifier,
@@ -39,84 +65,76 @@ internal fun InventoryTablePanel(
         Column(
             modifier = Modifier.fillMaxWidth(),
         ) {
-            InventoryTableHeader(
+            TableTitle(
                 modifier = Modifier.fillMaxWidth(),
                 title = title,
-                headerButtonContent = headerButtonContent,
+                titleActionButtons = titleActionButtons,
             )
-            InventoryTable(
+            TableContent(
                 modifier = Modifier.weight(1f),
-                headers = table.headers,
-                items = table.items,
-                onRowClick = onItemClick,
+                table = table,
+                onItemClick = onItemClick,
             )
-            if (totalPage > 0) {
-                InventoryTableFooter(
-                    modifier = Modifier.fillMaxWidth(),
-                    currentPage = currentPage,
-                    totalPage = totalPage,
-                    onPreviousClick = onPreviousClick,
-                    onNextClick = onNextClick
-                )
-            }
+            TableFooter(
+                modifier = Modifier.fillMaxWidth(),
+                currentPage = currentPage,
+                totalPage = totalPage,
+                onPreviousClick = onPreviousClick,
+                onNextClick = onNextClick
+            )
         }
     }
 }
 
 @Composable
-private fun InventoryTableHeader(
-    title: String,
-    modifier: Modifier = Modifier,
-    headerButtonContent: @Composable RowScope.() -> Unit,
+private fun TableTitle(
+    title: @Composable () -> Unit,
+    titleActionButtons: @Composable (RowScope.() -> Unit)?,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier
-            .padding(
-                top = 20.dp,
-                start = 16.dp,
-                end = 16.dp,
-                bottom = 8.dp,
-            ),
+        modifier = modifier.padding(
+            top = 20.dp,
+            start = 16.dp,
+            end = 16.dp,
+            bottom = 8.dp,
+        ),
         verticalAlignment = Alignment.Bottom,
     ) {
-        Text(
-            style = JyTheme.typography.textXLarge,
-            color = JyTheme.color.heading,
-            maxLines = 1,
-            text = title,
+        CompositionLocalProvider(
+            LocalTextStyle provides JyTheme.typography.textXLarge.copy(
+                color = JyTheme.color.heading,
+            ),
+            title
         )
         Spacer(modifier = Modifier.weight(1f))
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            content = headerButtonContent,
-        )
+        if (titleActionButtons != null) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                content = titleActionButtons,
+            )
+        }
     }
 }
 
 @Composable
-private fun <T : TableItem> InventoryTable(
-    headers: List<String>,
-    items: List<T>,
-    onRowClick: (T) -> Unit,
-    modifier: Modifier = Modifier,
+private fun TableContent(
+    table: Table,
+    onItemClick: (TableItem) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Table(
         modifier = modifier,
-        headers = headers,
-        items = items,
-        onRowClick = onRowClick
+        headers = table.headers,
+        items = table.items,
+        onRowClick = onItemClick,
     ) { item ->
-        item.tableRow.forEach {
-            TableCell(
-                modifier = Modifier,
-                value = it
-            )
-        }
+        item.tableRow.forEach { TableCell(modifier = Modifier, value = it) }
     }
 }
 
 @Composable
-private fun InventoryTableFooter(
+private fun TableFooter(
     currentPage: Int,
     totalPage: Int,
     onPreviousClick: () -> Unit,

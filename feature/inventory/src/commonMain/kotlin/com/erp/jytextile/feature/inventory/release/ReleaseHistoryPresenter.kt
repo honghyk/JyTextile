@@ -7,8 +7,8 @@ import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.repository.InventoryRepository
-import com.erp.jytextile.feature.inventory.release.model.ReleaseHistoryTable
-import com.erp.jytextile.feature.inventory.release.model.toTableItem
+import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
+import com.erp.jytextile.core.ui.model.toTableItem
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext

@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.theme.JyTheme
-import com.erp.jytextile.core.designsystem.theme.Palette
 
 @Composable
 fun <T> Table(
@@ -62,7 +61,7 @@ private fun TableHeader(
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides JyTheme.typography.textSmall.copy(
-                color = Palette.grey500
+                color = JyTheme.color.tableHeading,
             )
         ) {
             headers.forEach { header ->
@@ -94,9 +93,7 @@ private fun TableRow(
     ) {
         val tableRowScope = remember { TableRowScopeImpl(this) }
         CompositionLocalProvider(
-            LocalTextStyle provides JyTheme.typography.textSmall.copy(
-                color = Palette.grey700,
-            )
+            LocalTextStyle provides JyTheme.typography.textSmall
         ) {
             content(tableRowScope)
         }

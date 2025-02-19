@@ -1,9 +1,6 @@
-package com.erp.jytextile.feature.inventory.release.model
+package com.erp.jytextile.core.ui.model
 
-import com.erp.jytextile.core.base.extension.meterToYard
 import com.erp.jytextile.core.domain.model.ReleaseHistory
-import com.erp.jytextile.feature.inventory.common.model.Table
-import com.erp.jytextile.feature.inventory.common.model.TableItem
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -50,3 +47,8 @@ fun ReleaseHistory.toTableItem() = ReleaseHistoryTableItem(
         }
     )
 )
+
+// TODO: Move to kotlin util module
+private fun meterToYard(meter: Double): Double {
+    return meter * 1.09361
+}

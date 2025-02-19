@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyTopAppBar
-import com.erp.jytextile.feature.inventory.common.ui.InventoryTablePanel
-import com.erp.jytextile.feature.inventory.release.model.ReleaseHistoryTable
+import com.erp.jytextile.core.ui.TablePanel
+import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
@@ -84,7 +84,7 @@ private fun ReleaseHistories(
     Column(
         modifier = modifier
     ) {
-        InventoryTablePanel(
+        TablePanel(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -92,10 +92,9 @@ private fun ReleaseHistories(
             table = table,
             currentPage = currentPage,
             totalPage = totalPage,
-            onItemClick = { },
+            onItemClick = {},
             onPreviousClick = onPreviousClick,
             onNextClick = onNextClick,
-            headerButtonContent = { },
         )
     }
 }

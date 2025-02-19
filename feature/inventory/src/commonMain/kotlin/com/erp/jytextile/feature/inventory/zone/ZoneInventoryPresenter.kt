@@ -9,10 +9,10 @@ import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.base.parcel.Parcelize
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.InventoryRepository
+import com.erp.jytextile.core.ui.model.ZoneTable
+import com.erp.jytextile.core.ui.model.toTableItem
 import com.erp.jytextile.feature.inventory.roll.RollFormScreen
 import com.erp.jytextile.feature.inventory.roll.RollInventoryScreen
-import com.erp.jytextile.feature.inventory.zone.model.ZoneTable
-import com.erp.jytextile.feature.inventory.zone.model.toTableItem
 import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained

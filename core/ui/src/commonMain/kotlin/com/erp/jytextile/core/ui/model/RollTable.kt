@@ -1,9 +1,6 @@
-package com.erp.jytextile.feature.inventory.roll.model
+package com.erp.jytextile.core.ui.model
 
-import com.erp.jytextile.core.base.extension.meterToYard
 import com.erp.jytextile.core.domain.model.FabricRoll
-import com.erp.jytextile.feature.inventory.common.model.Table
-import com.erp.jytextile.feature.inventory.common.model.TableItem
 import kotlin.math.round
 
 data class RollTable(
@@ -49,3 +46,8 @@ fun FabricRoll.toTableItem() = RollTableItem(
     total = originalQuantity.toString(),
     remark = remark ?: "",
 )
+
+// TODO: Move to kotlin util module
+private fun meterToYard(meter: Double): Double {
+    return meter * 1.09361
+}
