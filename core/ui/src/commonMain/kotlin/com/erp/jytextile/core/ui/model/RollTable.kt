@@ -7,6 +7,7 @@ import com.erp.jytextile.kotlin.utils.meterToYard
 data class RollTable(
     override val headers: List<String> = listOf(
         "NO",
+        "ORDER NO",
         "ITEM NO",
         "COLOR",
         "FACTORY",
@@ -22,6 +23,7 @@ data class RollTable(
 
 data class RollTableItem(
     override val id: Long,
+    val orderNo: String,
     val itemNo: String,
     val color: String,
     val factory: String,
@@ -32,6 +34,7 @@ data class RollTableItem(
     val remark: String,
     override val tableRow: List<String> = listOf(
         id.toString(),
+        orderNo,
         itemNo,
         color,
         factory,
@@ -44,6 +47,7 @@ data class RollTableItem(
 
 fun FabricRoll.toTableItem() = RollTableItem(
     id = id,
+    orderNo = orderNo,
     itemNo = itemNo,
     color = color,
     factory = factory,

@@ -57,14 +57,14 @@ private fun RollFormUi(
             onValueChange = { state.eventSink(RollFormEvent.UpdateId(it)) },
         )
         FormTextField(
-            label = "Item No",
-            value = state.itemNo,
-            onValueChange = { state.eventSink(RollFormEvent.UpdateItemNo(it)) },
-        )
-        FormTextField(
             label = "Order No",
             value = state.orderNo,
             onValueChange = { state.eventSink(RollFormEvent.UpdateOrderNo(it)) },
+        )
+        FormTextField(
+            label = "Item No",
+            value = state.itemNo,
+            onValueChange = { state.eventSink(RollFormEvent.UpdateItemNo(it)) },
         )
         FormTextField(
             label = "Color",
