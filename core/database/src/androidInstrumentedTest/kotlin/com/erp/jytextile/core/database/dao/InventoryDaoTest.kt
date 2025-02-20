@@ -23,7 +23,9 @@ class InventoryDaoTest {
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(context, InventoryDatabase::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(context, InventoryDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
         inventoryDao = db.inventoryDao()
     }
 
@@ -99,7 +101,7 @@ class InventoryDaoTest {
         val result = inventoryDao.getFabricRolls(section1, 10, 0, false).first()
 
         assertEquals(
-            listOf(0, 1, 2),
+            listOf(0L, 1L, 2L),
             result.map { it.id },
         )
     }
@@ -120,20 +122,20 @@ class InventoryDaoTest {
         val result = inventoryDao.getFabricRolls(section1, 10, 0, true).first()
 
         assertEquals(
-            listOf(1, 2),
+            listOf("j3", "c1"),
             result.map { it.itemNo }
         )
     }
 
     @Test
-    fun update_fabric_roll() = runTest {
+    fun update_fabric_roll_remaining_length() = runTest {
         val sectionId = inventoryDao.insertZone(testSection("a1"))
         inventoryDao.insertFabricRoll(testFabricRoll(0, sectionId, "code1"))
 
-        inventoryDao.updateFabricRollRemainingLength(1, 10.0)
+        inventoryDao.updateFabricRollRemainingLength(0, 10.0)
 
         val result = inventoryDao.getFabricRolls(sectionId, 10, 0, false).first()
-        assertEquals(10, result.first().remainingLength)
+        assertEquals(10.0, result.first().remainingLength)
     }
 
     @Test
@@ -169,12 +171,13 @@ private fun testFabricRoll(
     id: Long,
     zoneId: Long,
     itemNo: String,
+    orderNo: String = "",
     totalLength: Double = 30.0,
 ) = FabricRollEntity(
     id = id,
     zoneId = zoneId,
     itemNo = itemNo,
-    orderNo = "",
+    orderNo = orderNo,
     color = "",
     factory = "",
     finish = "",
