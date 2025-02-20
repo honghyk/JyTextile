@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.core.designsystem.component.JyDropDownMenu
 import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
+import com.erp.jytextile.core.designsystem.component.OutlinedTextField
 import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.theme.JyTheme
 import com.erp.jytextile.core.domain.model.LengthUnit
@@ -114,7 +115,7 @@ fun FormTextField(
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         FormLabel(label = label)
-        com.erp.jytextile.core.designsystem.component.FormTextField(
+        OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = value,
             enabled = enabled,

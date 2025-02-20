@@ -1,6 +1,7 @@
 package com.erp.jytextile.core.designsystem.component
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -8,8 +9,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,48 +26,58 @@ import com.erp.jytextile.core.designsystem.theme.Palette
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormTextField(
+fun OutlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    readOnly: Boolean = false,
     textStyle: TextStyle = JyTheme.typography.textMedium,
+    label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    prefix: @Composable (() -> Unit)? = null,
+    suffix: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
-    singleLine: Boolean = true,
+    singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    interactionSource: MutableInteractionSource? = null,
     shape: Shape = RoundedCornerShape(8.dp),
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    color: Color = Palette.grey700,
-    placeholderColor: Color = Palette.grey400,
-    containerColor: Color = Color.Transparent,
-) {
-    val colors = TextFieldDefaults.colors(
-        focusedTextColor = color,
-        focusedPlaceholderColor = placeholderColor,
-        focusedContainerColor = containerColor,
-        unfocusedTextColor = color,
-        unfocusedPlaceholderColor = placeholderColor,
-        unfocusedContainerColor = containerColor,
+    colors: TextFieldColors = TextFieldDefaults.colors(
+        focusedTextColor = JyTheme.color.body,
+        focusedPlaceholderColor = Palette.grey400,
+        focusedContainerColor = Color.Transparent,
+        unfocusedTextColor = JyTheme.color.body,
+        unfocusedPlaceholderColor = Palette.grey400,
+        unfocusedContainerColor = Color.Transparent,
         focusedIndicatorColor = JyTheme.color.border,
         unfocusedIndicatorColor = JyTheme.color.border,
         disabledTextColor = Palette.grey400,
-        disabledPlaceholderColor = placeholderColor.copy(alpha = 0.38f),
+        disabledPlaceholderColor = Palette.grey400.copy(alpha = 0.38f),
         disabledContainerColor = JyTheme.color.border.copy(alpha = 0.38f),
         disabledIndicatorColor = JyTheme.color.border,
+        cursorColor = JyTheme.color.body,
     )
-    val mergedTextStyle = textStyle.merge(TextStyle(color = color))
+) {
+    @Suppress("NAME_SHADOWING")
+    val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
+    val focused by interactionSource.collectIsFocusedAsState()
+    val textColor = colors.textColor(enabled, focused)
+    val mergedTextStyle = textStyle.merge(TextStyle(color = textColor))
 
     BasicTextField(
         value = value,
         modifier = modifier,
         onValueChange = onValueChange,
         enabled = enabled,
+        readOnly = readOnly,
         textStyle = mergedTextStyle,
-        cursorBrush = SolidColor(color),
+        cursorBrush = SolidColor(colors.cursorColor),
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         interactionSource = interactionSource,
@@ -77,11 +90,18 @@ fun FormTextField(
                 OutlinedTextFieldDefaults.DecorationBox(
                     value = value,
                     innerTextField = innerTextField,
-                    placeholder = placeholder,
-                    singleLine = singleLine,
                     enabled = enabled,
-                    visualTransformation = VisualTransformation.None,
+                    singleLine = singleLine,
+                    visualTransformation = visualTransformation,
                     interactionSource = interactionSource,
+                    isError = false,
+                    label = label,
+                    placeholder = placeholder,
+                    leadingIcon = leadingIcon,
+                    trailingIcon = trailingIcon,
+                    prefix = prefix,
+                    suffix = suffix,
+                    supportingText = supportingText,
                     colors = colors,
                     contentPadding = PaddingValues(
                         horizontal = 14.dp,
@@ -94,9 +114,22 @@ fun FormTextField(
                             interactionSource = interactionSource,
                             colors = colors,
                             shape = shape,
+                            focusedBorderThickness = 1.dp,
+                            unfocusedBorderThickness = 1.dp,
                         )
                     }
                 )
             }
     )
+}
+
+private fun TextFieldColors.textColor(
+    enabled: Boolean,
+    focused: Boolean
+): Color {
+    return when {
+        !enabled -> disabledTextColor
+        !focused -> unfocusedTextColor
+        else -> focusedTextColor
+    }
 }
