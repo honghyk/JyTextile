@@ -25,8 +25,6 @@ import com.erp.jytextile.core.ui.model.TableItem
 @Composable
 fun TablePanel(
     table: Table,
-    currentPage: Int,
-    totalPage: Int,
     onItemClick: (TableItem) -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -37,8 +35,8 @@ fun TablePanel(
     TablePanel(
         modifier = modifier,
         table = table,
-        currentPage = currentPage,
-        totalPage = totalPage,
+        currentPage = table.currentPage,
+        totalPage = table.totalPage,
         onItemClick = onItemClick,
         onPreviousClick = onPreviousClick,
         onNextClick = onNextClick,
@@ -77,7 +75,7 @@ fun TablePanel(
             )
             TableFooter(
                 modifier = Modifier.fillMaxWidth(),
-                currentPage = currentPage,
+                currentPage = currentPage + 1,
                 totalPage = totalPage,
                 onPreviousClick = onPreviousClick,
                 onNextClick = onNextClick
@@ -141,34 +139,36 @@ private fun TableFooter(
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 8.dp,
-                bottom = 12.dp,
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        JyOutlinedButton(onClick = onPreviousClick) {
+    if (totalPage > 0) {
+        Row(
+            modifier = modifier
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 12.dp,
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            JyOutlinedButton(onClick = onPreviousClick) {
+                Text(
+                    maxLines = 1,
+                    text = "이전"
+                )
+            }
             Text(
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center,
+                style = JyTheme.typography.textSmall,
                 maxLines = 1,
-                text = "이전"
+                text = "페이지 $currentPage of $totalPage"
             )
-        }
-        Text(
-            modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center,
-            style = JyTheme.typography.textSmall,
-            maxLines = 1,
-            text = "페이지 $currentPage of $totalPage"
-        )
-        JyOutlinedButton(onClick = onNextClick) {
-            Text(
-                maxLines = 1,
-                text = "다음"
-            )
+            JyOutlinedButton(onClick = onNextClick) {
+                Text(
+                    maxLines = 1,
+                    text = "다음"
+                )
+            }
         }
     }
 }

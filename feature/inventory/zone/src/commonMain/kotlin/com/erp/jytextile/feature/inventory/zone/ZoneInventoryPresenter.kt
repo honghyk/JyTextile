@@ -56,12 +56,14 @@ class ZoneInventoryPresenter(
         val overlayHost = LocalOverlayHost.current
 
         var currentPage by rememberRetained { mutableStateOf(0) }
-        val sectionPages by inventoryRepository.getZonePage(PAGE_SIZE).collectAsRetainedState(0)
+        val totalPage by inventoryRepository.getZonePage(PAGE_SIZE).collectAsRetainedState(0)
 
         val zoneTable by rememberRetained(currentPage) {
             inventoryRepository.getZones(currentPage, pageSize = PAGE_SIZE).map { sections ->
                 ZoneTable(
-                    items = sections.map(Zone::toTableItem)
+                    items = sections.map(Zone::toTableItem),
+                    currentPage = currentPage,
+                    totalPage = totalPage
                 )
             }
         }.collectAsRetainedState(null)
@@ -71,8 +73,6 @@ class ZoneInventoryPresenter(
 
             else -> ZoneInventoryUiState.Zones(
                 zoneTable = zoneTable!!,
-                currentPage = currentPage + 1,
-                totalPage = sectionPages
             ) { event ->
                 when (event) {
                     is ZoneInventoryEvent.ToRolls -> {
@@ -100,7 +100,7 @@ class ZoneInventoryPresenter(
                     }
 
                     ZoneInventoryEvent.NextPage -> {
-                        currentPage = (currentPage + 1).coerceAtMost(sectionPages - 1)
+                        currentPage = (currentPage + 1).coerceAtMost(totalPage - 1)
                     }
 
                     ZoneInventoryEvent.PreviousPage -> {
@@ -120,8 +120,6 @@ sealed interface ZoneInventoryUiState : CircuitUiState {
 
     data class Zones(
         val zoneTable: ZoneTable,
-        val currentPage: Int,
-        val totalPage: Int,
         val eventSink: (ZoneInventoryEvent) -> Unit = {},
     ) : ZoneInventoryUiState
 }

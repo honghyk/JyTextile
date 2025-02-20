@@ -3,7 +3,6 @@ package com.erp.jytextile.feature.inventory.roll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -54,10 +53,9 @@ fun RollInventoryUi(
                 }
 
                 is RollInventoryUiState.Rolls -> {
-                    RollInventory(
+                    RollInventoryPanel(
+                        modifier = Modifier.fillMaxSize(),
                         table = state.rollTable,
-                        currentPage = state.currentPage,
-                        totalPage = state.totalPage,
                         onItemClick = { state.eventSink(RollInventoryEvent.RollSelected(it)) },
                         onPreviousClick = { state.eventSink(RollInventoryEvent.PreviousPage) },
                         onNextClick = { state.eventSink(RollInventoryEvent.NextPage) },
@@ -69,29 +67,19 @@ fun RollInventoryUi(
 }
 
 @Composable
-private fun RollInventory(
+private fun RollInventoryPanel(
     table: RollTable,
-    currentPage: Int,
-    totalPage: Int,
     onItemClick: (Long) -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-    ) {
-        TablePanel(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            title = "Rolls",
-            table = table,
-            currentPage = currentPage,
-            totalPage = totalPage,
-            onItemClick = { onItemClick(it.id) },
-            onPreviousClick = onPreviousClick,
-            onNextClick = onNextClick,
-        )
-    }
+    TablePanel(
+        modifier = modifier,
+        title = "Rolls",
+        table = table,
+        onItemClick = { onItemClick(it.id) },
+        onPreviousClick = onPreviousClick,
+        onNextClick = onNextClick,
+    )
 }

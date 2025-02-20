@@ -53,7 +53,9 @@ class ReleaseHistoryPresenter(
         val releaseHistoryTable by rememberRetained(currentPage) {
             releaseHistoryRepository.getReleaseHistories(rollId, currentPage).map { histories ->
                 ReleaseHistoryTable(
-                    items = histories.map(ReleaseHistory::toTableItem)
+                    items = histories.map(ReleaseHistory::toTableItem),
+                    currentPage = currentPage,
+                    totalPage = totalPage,
                 )
             }
         }.collectAsRetainedState(null)
@@ -83,8 +85,6 @@ class ReleaseHistoryPresenter(
             else -> ReleaseHistoryUiState.ReleaseHistories(
                 rollId = rollId,
                 releaseHistoryTable = releaseHistoryTable!!,
-                currentPage = currentPage + 1,
-                totalPage = totalPage,
                 eventSink = eventSink,
             )
         }
@@ -101,8 +101,6 @@ sealed interface ReleaseHistoryUiState : CircuitUiState {
     data class ReleaseHistories(
         val rollId: Long,
         val releaseHistoryTable: ReleaseHistoryTable,
-        val currentPage: Int,
-        val totalPage: Int,
         override val eventSink: (ReleaseHistoryEvent) -> Unit = {},
     ) : ReleaseHistoryUiState
 }

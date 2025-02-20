@@ -20,6 +20,8 @@ data class ReleaseHistoryTable(
         "OUT DATE",
     ),
     override val items: List<ReleaseHistoryTableItem> = emptyList(),
+    override val currentPage: Int,
+    override val totalPage: Int,
 ) : Table
 
 data class ReleaseHistoryTableItem(

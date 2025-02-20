@@ -60,7 +60,7 @@ private fun ReleaseHistoryUi(
                 is ReleaseHistoryUiState.ReleaseHistories -> {
                     CircuitContent(
                         screen = RollDetailScreen(rollId = state.rollId),
-                        onNavEvent = {  event ->
+                        onNavEvent = { event ->
                             when (event) {
                                 is NavEvent.Pop -> state.eventSink(ReleaseHistoryEvent.Back)
                                 else -> Unit
@@ -71,8 +71,6 @@ private fun ReleaseHistoryUi(
                     ReleaseHistories(
                         modifier = Modifier.weight(1f),
                         table = state.releaseHistoryTable,
-                        currentPage = state.currentPage,
-                        totalPage = state.totalPage,
                         onPreviousClick = { state.eventSink(ReleaseHistoryEvent.PreviousPage) },
                         onNextClick = { state.eventSink(ReleaseHistoryEvent.NextPage) },
                         onRemoveClick = { state.eventSink(ReleaseHistoryEvent.Remove) },
@@ -86,27 +84,17 @@ private fun ReleaseHistoryUi(
 @Composable
 private fun ReleaseHistories(
     table: ReleaseHistoryTable,
-    currentPage: Int,
-    totalPage: Int,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     onRemoveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-    ) {
-        TablePanel(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            title = "출고 이력",
-            table = table,
-            currentPage = currentPage,
-            totalPage = totalPage,
-            onItemClick = {},
-            onPreviousClick = onPreviousClick,
-            onNextClick = onNextClick,
-        )
-    }
+    TablePanel(
+        modifier = modifier,
+        title = "출고 이력",
+        table = table,
+        onItemClick = {},
+        onPreviousClick = onPreviousClick,
+        onNextClick = onNextClick,
+    )
 }

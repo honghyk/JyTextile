@@ -1,8 +1,7 @@
 package com.erp.jytextile.feature.inventory.zone
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,10 +45,9 @@ fun ZoneInventoryUi(
             }
 
             is ZoneInventoryUiState.Zones -> {
-                ZoneInventory(
+                ZoneInventoryPanel(
+                    modifier = Modifier.fillMaxSize(),
                     table = state.zoneTable,
-                    currentPage = state.currentPage,
-                    totalPage = state.totalPage,
                     onZoneClick = { state.eventSink(ZoneInventoryEvent.ToRolls(it)) },
                     onAddRollClick = { state.eventSink(ZoneInventoryEvent.AddRoll) },
                     onAddZoneClick = { state.eventSink(ZoneInventoryEvent.AddZone) },
@@ -62,10 +60,8 @@ fun ZoneInventoryUi(
 }
 
 @Composable
-private fun ZoneInventory(
+private fun ZoneInventoryPanel(
     table: ZoneTable,
-    currentPage: Int,
-    totalPage: Int,
     onZoneClick: (Long) -> Unit,
     onAddRollClick: () -> Unit,
     onAddZoneClick: () -> Unit,
@@ -73,33 +69,25 @@ private fun ZoneInventory(
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
+    TablePanel(
+        modifier = modifier,
+        title = "Zones",
+        table = table,
+        onPreviousClick = onPreviousClick,
+        onNextClick = onNextClick,
+        onItemClick = { onZoneClick(it.id) },
     ) {
-        TablePanel(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            title = "Zones",
-            table = table,
-            currentPage = currentPage,
-            totalPage = totalPage,
-            onPreviousClick = onPreviousClick,
-            onNextClick = onNextClick,
-            onItemClick = { onZoneClick(it.id) },
-        ) {
-            JyOutlinedButton(onClick = onAddZoneClick) {
-                Text(
-                    maxLines = 1,
-                    text = "Zone 추가"
-                )
-            }
-            JyButton(onClick = onAddRollClick) {
-                Text(
-                    maxLines = 1,
-                    text = "Roll 입고"
-                )
-            }
+        JyOutlinedButton(onClick = onAddZoneClick) {
+            Text(
+                maxLines = 1,
+                text = "Zone 추가"
+            )
+        }
+        JyButton(onClick = onAddRollClick) {
+            Text(
+                maxLines = 1,
+                text = "Roll 입고"
+            )
         }
     }
 }

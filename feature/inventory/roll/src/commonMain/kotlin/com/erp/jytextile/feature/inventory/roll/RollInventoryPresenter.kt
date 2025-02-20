@@ -59,7 +59,9 @@ class RollInventoryPresenter(
         val rollTable by rememberRetained(currentPage) {
             rollInventoryRepository.getFabricRolls(zoneId, currentPage, false).map { rolls ->
                 RollTable(
-                    items = rolls.map(FabricRoll::toTableItem)
+                    items = rolls.map(FabricRoll::toTableItem),
+                    currentPage = currentPage,
+                    totalPage = totalPage,
                 )
             }
         }.collectAsRetainedState(null)
@@ -87,9 +89,6 @@ class RollInventoryPresenter(
 
             else -> RollInventoryUiState.Rolls(
                 rollTable = rollTable!!,
-                rollCount = rollCount,
-                currentPage = currentPage + 1,
-                totalPage = totalPage,
                 eventSink = wrapEventSink(eventSink),
             )
         }
@@ -105,9 +104,6 @@ sealed interface RollInventoryUiState : CircuitUiState {
 
     data class Rolls(
         val rollTable: RollTable,
-        val rollCount: Int,
-        val currentPage: Int,
-        val totalPage: Int,
         override val eventSink: (RollInventoryEvent) -> Unit = {},
     ) : RollInventoryUiState
 }
