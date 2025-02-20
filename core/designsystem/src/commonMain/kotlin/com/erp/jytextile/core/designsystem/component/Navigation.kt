@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
@@ -68,7 +69,7 @@ private fun JyNavigationRail(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     NavigationRail(
-        modifier = modifier,
+        modifier = modifier.padding(end = 2.dp),
         containerColor = containerColor,
         contentColor = contentColor,
         header = header,

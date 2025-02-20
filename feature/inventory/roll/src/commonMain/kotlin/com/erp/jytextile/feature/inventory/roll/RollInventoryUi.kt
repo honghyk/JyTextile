@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.erp.jytextile.core.designsystem.component.JyTopAppBar
+import com.erp.jytextile.core.designsystem.component.TopAppBar
+import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.RollInventoryScreen
 import com.erp.jytextile.core.ui.TablePanel
@@ -39,9 +40,9 @@ fun RollInventoryUi(
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
-        JyTopAppBar(
-            onBackClick = { state.eventSink(RollInventoryEvent.Back) },
-            title = {}
+        TopAppBar(
+            navigationIcon = JyIcons.ArrowBack,
+            onNavigationClick = { state.eventSink(RollInventoryEvent.Back) },
         )
         Box(
             modifier = modifier

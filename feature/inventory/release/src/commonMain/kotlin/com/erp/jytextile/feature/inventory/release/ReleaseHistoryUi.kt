@@ -3,12 +3,12 @@ package com.erp.jytextile.feature.inventory.release
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.erp.jytextile.core.designsystem.component.JyTopAppBar
+import com.erp.jytextile.core.designsystem.component.TopAppBar
+import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.navigation.RollDetailScreen
@@ -44,9 +44,9 @@ private fun ReleaseHistoryUi(
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
-        JyTopAppBar(
-            onBackClick = { state.eventSink(ReleaseHistoryEvent.Back) },
-            title = { }
+        TopAppBar(
+            navigationIcon = JyIcons.ArrowBack,
+            onNavigationClick = { state.eventSink(ReleaseHistoryEvent.Back) },
         )
         Column(
             modifier = modifier
