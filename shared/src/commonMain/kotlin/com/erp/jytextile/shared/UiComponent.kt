@@ -9,6 +9,7 @@ import com.erp.jytextile.feature.inventory.zone.ZoneInventoryComponent
 import com.erp.jytextile.feature.rolldetail.RollDetailComponent
 import com.erp.jytextile.feature.root.AppContent
 import com.erp.jytextile.feature.root.RootComponent
+import com.erp.jytextile.feature.search.SearchComponent
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.ui.Ui
@@ -22,6 +23,7 @@ interface UiComponent
     ReleaseFormComponent,
     ReleaseHistoryComponent,
     RollDetailComponent,
+    SearchComponent,
     RootComponent {
 
     val appContent: AppContent

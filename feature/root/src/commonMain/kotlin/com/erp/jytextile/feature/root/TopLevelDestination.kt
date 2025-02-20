@@ -1,6 +1,7 @@
 package com.erp.jytextile.feature.root
 
 import com.erp.jytextile.core.designsystem.icon.JyIcons
+import com.erp.jytextile.core.navigation.SearchScreen
 import com.erp.jytextile.core.navigation.ZoneInventoryScreen
 import com.slack.circuit.runtime.screen.Screen
 import org.jetbrains.compose.resources.DrawableResource
@@ -14,5 +15,10 @@ enum class TopLevelDestination(
         icon = JyIcons.Inventory,
         iconText = "Inventory",
         screen = ZoneInventoryScreen,
-    )
+    ),
+    Release(
+        icon = JyIcons.Release,
+        iconText = "출고",
+        screen = SearchScreen,
+    ),
 }

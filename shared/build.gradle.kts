@@ -25,6 +25,7 @@ kotlin {
             api(projects.feature.form.roll)
             api(projects.feature.form.release)
             api(projects.feature.rolldetail)
+            api(projects.feature.search)
 
             implementation(libs.kotlininject.runtime)
             implementation(libs.circuit.foundation)
