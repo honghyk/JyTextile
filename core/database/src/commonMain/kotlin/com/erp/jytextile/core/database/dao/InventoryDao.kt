@@ -131,4 +131,21 @@ interface InventoryDao {
         insertReleaseHistory(releaseHistory)
         updateFabricRollRemainingLength(rollId, newRemainingLength)
     }
+
+    @Query(
+        value = """
+            SELECT * FROM fabric_rolls 
+            WHERE (CAST(id AS TEXT) LIKE :query AND :query GLOB '[0-9]*') 
+            OR itemNo LIKE '%' || :query || '%' 
+            OR orderNo LIKE '%' || :query || '%'
+            ORDER BY id ASC
+            LIMIT :limit
+            OFFSET :offset
+            """
+    )
+    fun searchFabricRoll(
+        query: String,
+        limit: Int,
+        offset: Int,
+    ): Flow<List<FabricRollEntity>>
 }

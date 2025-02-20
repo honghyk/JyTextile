@@ -159,6 +159,69 @@ class InventoryDaoTest {
             result.map { it.releaseDate.toEpochMilliseconds() },
         )
     }
+
+    @Test
+    fun search_fabric_rolls_by_id() = runTest {
+        val zoneId = inventoryDao.insertZone(testSection("a1"))
+        val rolls = listOf(
+            testFabricRoll(id = 0, zoneId = zoneId, itemNo = "Item"),
+            testFabricRoll(id = 1, zoneId = zoneId, itemNo = "Test"),
+            testFabricRoll(id = 2, zoneId = zoneId, itemNo = "Roll"),
+        )
+        rolls.forEach {
+            inventoryDao.insertFabricRoll(it)
+        }
+
+        val result = inventoryDao.searchFabricRoll("1", 10, 0)
+
+        assertEquals(
+            listOf("Test"),
+            result.map { it.itemNo }
+        )
+    }
+
+    @Test
+    fun search_fabric_rolls_by_item_id() = runTest {
+        val zoneId = inventoryDao.insertZone(testSection("a1"))
+        val rolls = listOf(
+            testFabricRoll(id = 0, zoneId = zoneId, itemNo = "item1"),
+            testFabricRoll(id = 1, zoneId = zoneId, itemNo = "item2"),
+            testFabricRoll(id = 2, zoneId = zoneId, itemNo = "item3"),
+            testFabricRoll(id = 5, zoneId = zoneId, itemNo = "test", orderNo = "order1")
+        )
+        rolls.forEach { roll ->
+            inventoryDao.insertFabricRoll(roll)
+        }
+
+        val result = inventoryDao.searchFabricRoll("item", 10, 0)
+
+        assertEquals(
+            listOf("item1", "item2", "item3"),
+            result.map { it.itemNo }
+        )
+    }
+
+    @Test
+    fun search_fabric_rolls_by_partial_match() = runTest {
+        val zoneId = inventoryDao.insertZone(testSection("a1"))
+        val rolls = listOf(
+            testFabricRoll(id = 0, zoneId = zoneId, itemNo = "item1"),
+            testFabricRoll(id = 1, zoneId = zoneId, itemNo = "item2"),
+            testFabricRoll(id = 2, zoneId = zoneId, itemNo = "item3"),
+            testFabricRoll(id = 3, zoneId = zoneId, itemNo = "item1", orderNo = "order2"),
+            testFabricRoll(id = 5, zoneId = zoneId, itemNo = "test", orderNo = "order1")
+        )
+        rolls.forEach { roll ->
+            inventoryDao.insertFabricRoll(roll)
+        }
+
+        val result = inventoryDao.searchFabricRoll("1", 10, 0)
+
+        assertEquals(
+            listOf("item1", "item2", "item1", "test"),
+            result.map { it.itemNo },
+        )
+    }
 }
 
 private fun testSection(
