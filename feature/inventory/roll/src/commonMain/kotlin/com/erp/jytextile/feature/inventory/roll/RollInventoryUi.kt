@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyTopAppBar
+import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.RollInventoryScreen
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.RollTable
@@ -47,10 +47,7 @@ fun RollInventoryUi(
         Box(
             modifier = modifier
                 .weight(1f)
-                .padding(
-                    horizontal = 32.dp,
-                    vertical = 22.dp,
-                ),
+                .padding(Dimension.backgroundPadding),
         ) {
             when (state) {
                 is RollInventoryUiState.Loading -> { /* TODO */

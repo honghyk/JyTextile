@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
+import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.ZoneInventoryScreen
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.ZoneTable
@@ -39,11 +39,7 @@ fun ZoneInventoryUi(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .padding(
-                horizontal = 32.dp,
-                vertical = 22.dp,
-            ),
+        modifier = modifier.padding(Dimension.backgroundPadding),
     ) {
         when (state) {
             ZoneInventoryUiState.Loading -> { /* TODO */

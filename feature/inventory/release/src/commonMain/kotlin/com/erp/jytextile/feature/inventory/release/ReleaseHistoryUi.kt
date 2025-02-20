@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyTopAppBar
+import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.navigation.RollDetailScreen
 import com.erp.jytextile.core.ui.TablePanel
@@ -51,7 +51,7 @@ private fun ReleaseHistoryUi(
         Column(
             modifier = modifier
                 .weight(1f)
-                .padding(horizontal = 32.dp, vertical = 22.dp),
+                .padding(Dimension.backgroundPadding),
         ) {
             when (state) {
                 is ReleaseHistoryUiState.Loading -> { /* TODO */
@@ -67,7 +67,7 @@ private fun ReleaseHistoryUi(
                             }
                         }
                     )
-                    Spacer(modifier = Modifier.height(22.dp))
+                    Spacer(modifier = Modifier.height(Dimension.panelSpacing))
                     ReleaseHistories(
                         modifier = Modifier.weight(1f),
                         table = state.releaseHistoryTable,
