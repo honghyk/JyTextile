@@ -143,9 +143,19 @@ interface InventoryDao {
             OFFSET :offset
             """
     )
-    fun searchFabricRoll(
+    suspend fun searchFabricRoll(
         query: String,
         limit: Int,
         offset: Int,
-    ): Flow<List<FabricRollEntity>>
+    ): List<FabricRollEntity>
+
+    @Query(
+        value = """
+        SELECT COUNT(*) FROM fabric_rolls 
+        WHERE (CAST(id AS TEXT) LIKE :query AND :query GLOB '[0-9]*') 
+        OR itemNo LIKE '%' || :query || '%' 
+        OR orderNo LIKE '%' || :query || '%'
+        """
+    )
+    suspend fun getFabricRollSearchResultCount(query: String): Int
 }
