@@ -4,10 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,17 +32,16 @@ fun <T> Table(
     modifier: Modifier = Modifier,
     tableRowContent: @Composable TableRowScope.(T) -> Unit,
 ) {
-    Column(
-        modifier = modifier,
-    ) {
+    Column(modifier = modifier.horizontalScroll(rememberScrollState())) {
         TableHeader(headers = headers)
         LazyColumn {
             items(items) { item ->
-                HorizontalDivider(color = JyTheme.color.border)
-                TableRow(
-                    onRowClick = { onRowClick(item) }
-                ) {
-                    tableRowContent(item)
+                Column(modifier = Modifier.width(IntrinsicSize.Min)) {
+                    TableRow(
+                        onRowClick = { onRowClick(item) },
+                        content = { tableRowContent(item) }
+                    )
+                    HorizontalDivider(color = JyTheme.color.border)
                 }
             }
         }
@@ -55,7 +56,7 @@ private fun TableHeader(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
+//            .horizontalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -83,8 +84,8 @@ private fun TableRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
-            .clickable(onClick = onRowClick)
+//            .horizontalScroll(rememberScrollState())
+            .clickable(onClick = onRowClick, indication = null, interactionSource = null)
             .padding(
                 horizontal = 16.dp,
                 vertical = 14.dp,
@@ -126,4 +127,4 @@ private class TableRowScopeImpl(rowScope: RowScope) : TableRowScope, RowScope by
     }
 }
 
-private val MinimumCellWidth = 80.dp
+private val MinimumCellWidth = 120.dp
