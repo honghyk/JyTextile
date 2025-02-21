@@ -52,12 +52,6 @@ private fun ReleaseFormUi(
             onValueChange = {},
         )
         FormTextField(
-            label = "Roll Id",
-            value = state.rollId,
-            enabled = false,
-            onValueChange = {},
-        )
-        FormTextField(
             label = "Roll Item No",
             value = state.rollItemNo,
             enabled = false,
