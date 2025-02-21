@@ -36,7 +36,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
-            packageName = "com.erp.jytextile"
+            packageName = "JyTextileERP"
             packageVersion = "1.0.0"
 
             windows {
