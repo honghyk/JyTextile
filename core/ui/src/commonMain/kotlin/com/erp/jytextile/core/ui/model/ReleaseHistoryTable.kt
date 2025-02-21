@@ -13,7 +13,6 @@ import kotlin.math.round
 data class ReleaseHistoryTable(
     override val headers: List<String> = listOf(
         "NO",
-        "ORDER NO",
         "BUYER",
         "QTY(M)",
         "QTY(Y)",
