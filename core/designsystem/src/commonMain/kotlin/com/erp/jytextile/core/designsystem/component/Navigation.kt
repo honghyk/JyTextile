@@ -2,22 +2,16 @@ package com.erp.jytextile.core.designsystem.component
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItemDefaults
-import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailDefaults
-import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -43,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.erp.jytextile.core.designsystem.theme.JyTheme
+import com.erp.jytextile.core.designsystem.theme.Palette
 
 @Composable
 private fun JyNavigationBar(
@@ -56,23 +51,6 @@ private fun JyNavigationBar(
         containerColor = containerColor,
         contentColor = contentColor,
         tonalElevation = 0.dp,
-        content = content,
-    )
-}
-
-@Composable
-private fun JyNavigationRail(
-    modifier: Modifier = Modifier,
-    containerColor: Color = NavigationRailDefaults.ContainerColor,
-    contentColor: Color = contentColorFor(containerColor),
-    header: @Composable (ColumnScope.() -> Unit)? = null,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    NavigationRail(
-        modifier = modifier.padding(end = 2.dp),
-        containerColor = containerColor,
-        contentColor = contentColor,
-        header = header,
         content = content,
     )
 }
@@ -141,7 +119,7 @@ object JyNavigationDefaults {
     fun navigationSelectedItemColor() = JyTheme.color.primary
 
     @Composable
-    fun navigationIndicatorColor() = Color.Transparent
+    fun navigationIndicatorColor() = Palette.grey50
 }
 
 @Composable
@@ -181,17 +159,14 @@ private fun JyNavigationSuite(
                 containerColor = colors.navigationRailContainerColor,
                 contentColor = colors.navigationRailContentColor,
             ) {
-                Spacer(Modifier.height(16.dp))
                 scope.itemList.forEach {
-                    NavigationRailItem(
+                    JyNavigationRailItem(
                         modifier = it.modifier,
                         selected = it.selected,
                         onClick = it.onClick,
                         icon = { it.icon() },
                         enabled = it.enabled,
-                        label = null,
                         colors = itemColors.navigationRailItemColors,
-                        alwaysShowLabel = it.alwaysShowLabel,
                     )
                 }
             }

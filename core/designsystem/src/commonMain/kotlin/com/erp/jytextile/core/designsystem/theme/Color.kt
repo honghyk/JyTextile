@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
 object Palette {
+    val grey50 = Color(0xFFF0F1F3)
     val grey400 = Color(0xFF858D9D)
     val grey500 = Color(0xFF667085)
     val grey600 = Color(0xFF5D6679)
