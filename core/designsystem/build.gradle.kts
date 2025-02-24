@@ -19,6 +19,12 @@ kotlin {
             implementation(compose.components.resources)
 
             implementation(libs.material3.adaptive)
+            implementation(libs.data.table.material3)
+        }
+
+        androidMain.dependencies {
+            implementation(libs.compose.ui.tooling)
+            implementation(libs.compose.ui.tooling.preview)
         }
     }
 }

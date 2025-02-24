@@ -73,6 +73,7 @@ private fun ZoneInventoryPanel(
         modifier = modifier,
         title = "Zones",
         table = table,
+        isWrapColumnWidth = false,
         onPreviousClick = onPreviousClick,
         onNextClick = onNextClick,
         onItemClick = { onZoneClick(it.id) },

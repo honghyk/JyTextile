@@ -30,6 +30,7 @@ fun TablePanel(
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = "",
+    isWrapColumnWidth: Boolean = true,
     titleActionButtons: @Composable (RowScope.() -> Unit)? = null,
 ) {
     TablePanel(
@@ -37,6 +38,7 @@ fun TablePanel(
         table = table,
         currentPage = table.currentPage,
         totalPage = table.totalPage,
+        isWrapColumnWidth = isWrapColumnWidth,
         onItemClick = onItemClick,
         onPreviousClick = onPreviousClick,
         onNextClick = onNextClick,
@@ -54,6 +56,7 @@ fun TablePanel(
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isWrapColumnWidth: Boolean = true,
     title: @Composable () -> Unit,
     titleActionButtons: @Composable (RowScope.() -> Unit)? = null,
 ) {
@@ -71,6 +74,7 @@ fun TablePanel(
             TableContent(
                 modifier = Modifier.weight(1f),
                 table = table,
+                isWrapColumnWidth = isWrapColumnWidth,
                 onItemClick = onItemClick,
             )
             TableFooter(
@@ -119,15 +123,24 @@ private fun TableTitle(
 private fun TableContent(
     table: Table,
     onItemClick: (TableItem) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isWrapColumnWidth: Boolean = true,
 ) {
     Table(
-        modifier = modifier,
-        headers = table.headers,
-        items = table.items,
-        onRowClick = onItemClick,
-    ) { item ->
-        item.tableRow.forEach { TableCell(modifier = Modifier, value = it) }
+        modifier = modifier.fillMaxWidth(),
+        columns = table.headers,
+        rows = table.items,
+        isWrapColumnWidth = isWrapColumnWidth,
+        onRowClick = { onItemClick(it) },
+    ) { row ->
+        row.tableRow.forEach { cell ->
+            cell {
+                Text(
+                    style = JyTheme.typography.textSmall,
+                    text = cell,
+                )
+            }
+        }
     }
 }
 
