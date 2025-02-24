@@ -12,5 +12,5 @@ interface ReleaseHistoryRepository {
 
     fun getReleaseHistoriesPage(rollId: Long): Flow<Int>
 
-    suspend fun removeReleaseHistory(id: Long)
+    suspend fun removeReleaseHistories(ids: List<Long>)
 }

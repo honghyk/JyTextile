@@ -115,7 +115,7 @@ private fun TableTitle(
             end = 16.dp,
             bottom = 8.dp,
         ),
-        verticalAlignment = Alignment.Bottom,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides JyTheme.typography.textXLarge.copy(

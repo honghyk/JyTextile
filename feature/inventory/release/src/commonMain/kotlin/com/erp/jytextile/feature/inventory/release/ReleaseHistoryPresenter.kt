@@ -82,7 +82,15 @@ class ReleaseHistoryPresenter(
                 }
 
                 ReleaseHistoryEvent.Remove -> {
-                    TODO("Not yet implemented")
+                    launch {
+                        try {
+                            releaseHistoryRepository.removeReleaseHistories(
+                                selectedRows.map { it.id }.toList()
+                            )
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
                 }
 
                 ReleaseHistoryEvent.ModifyRoll -> {

@@ -118,7 +118,6 @@ class RollInventoryRepositoryImpl(
                 remark = remark,
             ),
             rollId = rollId,
-            newRemainingLength = roll.remainingQuantity - length
         )
     }
 }

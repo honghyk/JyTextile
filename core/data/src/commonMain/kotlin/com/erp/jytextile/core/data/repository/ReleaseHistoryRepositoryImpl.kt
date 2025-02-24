@@ -30,8 +30,8 @@ class ReleaseHistoryRepositoryImpl(
         }
     }
 
-    override suspend fun removeReleaseHistory(id: Long) {
-        inventoryDao.deleteReleaseHistory(id)
+    override suspend fun removeReleaseHistories(ids: List<Long>) {
+        inventoryDao.deleteReleaseHistories(ids)
     }
 }
 

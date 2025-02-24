@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.designsystem.component.TopAppBar
 import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
@@ -111,5 +113,12 @@ private fun ReleaseHistories(
         onItemClick = onItemClick,
         onPreviousClick = onPreviousClick,
         onNextClick = onNextClick,
+        titleActionButtons = {
+            JyOutlinedButton(
+                enabled = selectedRows.isNotEmpty(),
+                onClick = onRemoveClick,
+                content = { Text(maxLines = 1, text = "삭제") }
+            )
+        }
     )
 }

@@ -119,11 +119,19 @@ class TestInventoryDao : InventoryDao {
         TODO("Not yet implemented")
     }
 
+    override suspend fun getReleaseHistoryById(id: Long): ReleaseHistoryEntity? {
+        TODO("Not yet implemented")
+    }
+
     override fun getReleaseHistoryCount(rollId: Long): Flow<Int> {
         TODO("Not yet implemented")
     }
 
     override suspend fun deleteReleaseHistory(releaseHistoryId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getFabricRollRemainingLength(rollId: Long): Double {
         TODO("Not yet implemented")
     }
 

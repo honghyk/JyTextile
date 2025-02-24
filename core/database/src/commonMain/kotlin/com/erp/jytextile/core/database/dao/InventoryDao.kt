@@ -118,24 +118,55 @@ interface InventoryDao {
 
     @Query(
         value = """
+            SELECT * FROM release_history
+            WHERE id = :id
+            LIMIT 1
+            """
+    )
+    suspend fun getReleaseHistoryById(id: Long): ReleaseHistoryEntity?
+
+    @Query(
+        value = """
             SELECT COUNT(*) FROM release_history
             WHERE roll_id = :rollId
             """
     )
     fun getReleaseHistoryCount(rollId: Long): Flow<Int>
 
-    @Query("DELETE FROM release_history WHERE id = :releaseHistoryId")
-    suspend fun deleteReleaseHistory(releaseHistoryId: Long)
+    @Transaction
+    suspend fun deleteReleaseHistories(releaseHistoryIds: List<Long>) {
+        releaseHistoryIds.forEach { id ->
+            deleteReleaseHistoryTransaction(id)
+        }
+    }
+
+    @Transaction
+    suspend fun deleteReleaseHistoryTransaction(id: Long) {
+        val releaseHistory = getReleaseHistoryById(id) ?: return
+        val remainingLength = getFabricRollRemainingLength(releaseHistory.rollId)
+
+        deleteReleaseHistory(id)
+        updateFabricRollRemainingLength(
+            releaseHistory.rollId,
+            remainingLength + releaseHistory.quantity
+        )
+    }
+
+    @Query("DELETE FROM release_history WHERE id = :id")
+    suspend fun deleteReleaseHistory(id: Long)
 
     @Transaction
     suspend fun releaseFabricRollTransaction(
         releaseHistory: ReleaseHistoryEntity,
         rollId: Long,
-        newRemainingLength: Double
     ) {
+        val remainingLength = getFabricRollRemainingLength(rollId)
         insertReleaseHistory(releaseHistory)
-        updateFabricRollRemainingLength(rollId, newRemainingLength)
+        updateFabricRollRemainingLength(rollId, remainingLength - releaseHistory.quantity)
     }
+
+    @Query("SELECT remaining_length FROM fabric_rolls WHERE id = :rollId")
+    suspend fun getFabricRollRemainingLength(rollId: Long): Double
 
     @Query(
         value = """
