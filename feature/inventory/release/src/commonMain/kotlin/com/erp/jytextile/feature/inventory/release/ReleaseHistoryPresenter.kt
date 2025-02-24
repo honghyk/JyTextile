@@ -11,6 +11,7 @@ import com.erp.jytextile.core.domain.repository.ReleaseHistoryRepository
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
+import com.erp.jytextile.core.ui.model.TableItem
 import com.erp.jytextile.core.ui.model.toTableItem
 import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.collectAsRetainedState
@@ -67,6 +68,7 @@ class ReleaseHistoryPresenter(
                 )
             }
         }.collectAsRetainedState(null)
+        var selectedRows by rememberRetained { mutableStateOf(emptySet<TableItem>()) }
 
         val eventSink: CoroutineScope.(ReleaseHistoryEvent) -> Unit = { event ->
             when (event) {
@@ -91,6 +93,14 @@ class ReleaseHistoryPresenter(
                         )
                     }
                 }
+
+                is ReleaseHistoryEvent.SelectRow -> {
+                    if (selectedRows.contains(event.row)) {
+                        selectedRows = selectedRows - event.row
+                    } else {
+                        selectedRows = selectedRows + event.row
+                    }
+                }
             }
         }
 
@@ -101,6 +111,7 @@ class ReleaseHistoryPresenter(
 
             else -> ReleaseHistoryUiState.ReleaseHistories(
                 rollId = rollId,
+                selectedRows = selectedRows.toList(),
                 releaseHistoryTable = releaseHistoryTable!!,
                 eventSink = wrapEventSink(eventSink),
             )
@@ -118,6 +129,7 @@ sealed interface ReleaseHistoryUiState : CircuitUiState {
     data class ReleaseHistories(
         val rollId: Long,
         val releaseHistoryTable: ReleaseHistoryTable,
+        val selectedRows: List<TableItem>,
         override val eventSink: (ReleaseHistoryEvent) -> Unit = {},
     ) : ReleaseHistoryUiState
 }
@@ -128,4 +140,7 @@ sealed interface ReleaseHistoryEvent : CircuitUiEvent {
     data object NextPage : ReleaseHistoryEvent
     data object Remove : ReleaseHistoryEvent
     data object ModifyRoll : ReleaseHistoryEvent
+    data class SelectRow(
+        val row: TableItem
+    ) : ReleaseHistoryEvent
 }

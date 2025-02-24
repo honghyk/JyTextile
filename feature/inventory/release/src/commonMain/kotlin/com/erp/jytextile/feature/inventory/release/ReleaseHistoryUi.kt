@@ -15,6 +15,7 @@ import com.erp.jytextile.core.navigation.RollDetailScreen
 import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
+import com.erp.jytextile.core.ui.model.TableItem
 import com.slack.circuit.foundation.CircuitContent
 import com.slack.circuit.foundation.NavEvent
 import com.slack.circuit.runtime.CircuitContext
@@ -79,6 +80,8 @@ private fun ReleaseHistoryUi(
                     ReleaseHistories(
                         modifier = Modifier.weight(1f),
                         table = state.releaseHistoryTable,
+                        selectedRows = state.selectedRows,
+                        onItemClick = { state.eventSink(ReleaseHistoryEvent.SelectRow(it)) },
                         onPreviousClick = { state.eventSink(ReleaseHistoryEvent.PreviousPage) },
                         onNextClick = { state.eventSink(ReleaseHistoryEvent.NextPage) },
                         onRemoveClick = { state.eventSink(ReleaseHistoryEvent.Remove) },
@@ -92,6 +95,8 @@ private fun ReleaseHistoryUi(
 @Composable
 private fun ReleaseHistories(
     table: ReleaseHistoryTable,
+    selectedRows: List<TableItem>,
+    onItemClick: (TableItem) -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     onRemoveClick: () -> Unit,
@@ -101,7 +106,9 @@ private fun ReleaseHistories(
         modifier = modifier,
         title = "출고 이력",
         table = table,
-        onItemClick = {},
+        selectedRows = selectedRows,
+        onItemSelected = { _, item -> onItemClick(item) },
+        onItemClick = onItemClick,
         onPreviousClick = onPreviousClick,
         onNextClick = onNextClick,
     )

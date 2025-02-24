@@ -11,16 +11,22 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.erp.jytextile.core.designsystem.component.Checkbox
 import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.component.Table
 import com.erp.jytextile.core.designsystem.theme.JyTheme
 import com.erp.jytextile.core.ui.model.Table
 import com.erp.jytextile.core.ui.model.TableItem
+import com.seanproctor.datatable.DataColumn
+import com.seanproctor.datatable.TableColumnWidth
 
 @Composable
 fun TablePanel(
@@ -30,6 +36,8 @@ fun TablePanel(
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = "",
+    selectedRows: List<TableItem>? = null,
+    onItemSelected: ((Boolean, TableItem) -> Unit)? = null,
     isWrapColumnWidth: Boolean = true,
     titleActionButtons: @Composable (RowScope.() -> Unit)? = null,
 ) {
@@ -39,6 +47,8 @@ fun TablePanel(
         currentPage = table.currentPage,
         totalPage = table.totalPage,
         isWrapColumnWidth = isWrapColumnWidth,
+        selectedRows = selectedRows,
+        onItemSelected = onItemSelected,
         onItemClick = onItemClick,
         onPreviousClick = onPreviousClick,
         onNextClick = onNextClick,
@@ -57,6 +67,8 @@ fun TablePanel(
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier,
     isWrapColumnWidth: Boolean = true,
+    selectedRows: List<TableItem>? = null,
+    onItemSelected: ((Boolean, TableItem) -> Unit)? = null,
     title: @Composable () -> Unit,
     titleActionButtons: @Composable (RowScope.() -> Unit)? = null,
 ) {
@@ -74,6 +86,8 @@ fun TablePanel(
             TableContent(
                 modifier = Modifier.weight(1f),
                 table = table,
+                selectedRows = selectedRows,
+                onItemSelected = onItemSelected,
                 isWrapColumnWidth = isWrapColumnWidth,
                 onItemClick = onItemClick,
             )
@@ -122,17 +136,57 @@ private fun TableTitle(
 @Composable
 private fun TableContent(
     table: Table,
+    selectedRows: List<TableItem>?,
     onItemClick: (TableItem) -> Unit,
+    onItemSelected: ((Boolean, TableItem) -> Unit)?,
     modifier: Modifier = Modifier,
     isWrapColumnWidth: Boolean = true,
 ) {
+    val columns: List<DataColumn> by remember(table.headers) {
+        mutableStateOf(
+            buildList {
+                if (onItemSelected != null) {
+                    add(
+                        DataColumn(
+                            width = TableColumnWidth.Wrap,
+                            header = { Text("") }
+                        )
+                    )
+                }
+                addAll(table.headers.mapIndexed { index, header ->
+                    DataColumn(
+                        width = when {
+                            index == table.headers.lastIndex -> TableColumnWidth.Flex(1f)
+                            isWrapColumnWidth -> TableColumnWidth.Wrap
+                            else -> TableColumnWidth.Fraction(1.0f / table.headers.size)
+                        },
+                        header = {
+                            Text(
+                                style = JyTheme.typography.textSmall,
+                                color = JyTheme.color.tableHeading,
+                                text = header,
+                            )
+                        }
+                    )
+                })
+            }
+        )
+    }
+
     Table(
         modifier = modifier.fillMaxWidth(),
-        columns = table.headers,
+        columns = columns,
         rows = table.items,
-        isWrapColumnWidth = isWrapColumnWidth,
         onRowClick = { onItemClick(it) },
     ) { row ->
+        if (onItemSelected != null) {
+            cell {
+                Checkbox(
+                    checked = selectedRows?.contains(row) ?: false,
+                    onCheckedChange = { onItemSelected(it, row) },
+                )
+            }
+        }
         row.tableRow.forEach { cell ->
             cell {
                 Text(
