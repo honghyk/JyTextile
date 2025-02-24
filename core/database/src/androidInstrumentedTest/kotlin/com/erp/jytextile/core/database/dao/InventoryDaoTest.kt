@@ -259,4 +259,5 @@ private fun testReleaseHistory(
     quantity = quantity,
     releaseDate = Instant.fromEpochMilliseconds(millisSinceEpoch),
     destination = destination,
+    remark = "",
 )

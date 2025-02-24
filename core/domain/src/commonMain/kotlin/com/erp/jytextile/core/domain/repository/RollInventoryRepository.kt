@@ -37,5 +37,6 @@ interface RollInventoryRepository {
         lengthUnit: LengthUnit,
         buyer: String,
         releaseDate: String,
+        remark: String,
     )
 }

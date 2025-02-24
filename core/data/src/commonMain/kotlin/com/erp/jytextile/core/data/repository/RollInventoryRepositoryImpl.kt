@@ -98,6 +98,7 @@ class RollInventoryRepositoryImpl(
         lengthUnit: LengthUnit,
         buyer: String,
         releaseDate: String,
+        remark: String,
     ) {
         val roll = getRoll(rollId).firstOrNull() ?: return
         val length = if (lengthUnit == LengthUnit.METER) quantity else quantity.yardToMeter()
@@ -114,6 +115,7 @@ class RollInventoryRepositoryImpl(
                 quantity = quantity,
                 destination = buyer,
                 releaseDate = date,
+                remark = remark,
             ),
             rollId = rollId,
             newRemainingLength = roll.remainingQuantity - length

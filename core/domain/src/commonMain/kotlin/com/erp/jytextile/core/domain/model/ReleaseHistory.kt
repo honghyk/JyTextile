@@ -8,4 +8,5 @@ data class ReleaseHistory(
     val quantity: Double,
     val releaseDate: Instant,
     val destination: String,
+    val remark: String,
 )

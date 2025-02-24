@@ -75,6 +75,11 @@ private fun ReleaseFormUi(
             visualTransformation = DateVisualTransformation,
             onValueChange = { state.eventSink(ReleaseFormEvent.UpdateReleaseDate(it)) },
         )
+        FormTextField(
+            label = "Remark",
+            value = state.remark,
+            onValueChange = { state.eventSink(ReleaseFormEvent.UpdateRemark(it)) },
+        )
     }
 }
 

@@ -28,6 +28,7 @@ data class ReleaseHistoryEntity(
     val quantity: Double,
     @ColumnInfo("release_date") val releaseDate: Instant,
     val destination: String,
+    val remark: String?,
 )
 
 fun ReleaseHistoryEntity.toDomain() = ReleaseHistory(
@@ -36,4 +37,5 @@ fun ReleaseHistoryEntity.toDomain() = ReleaseHistory(
     quantity = quantity,
     releaseDate = releaseDate,
     destination = destination,
+    remark = remark.orEmpty(),
 )

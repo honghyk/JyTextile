@@ -52,6 +52,7 @@ class ReleaseFormPresenter(
         var quantity by rememberRetained { mutableStateOf("") }
         var lengthUnit by rememberRetained { mutableStateOf(LengthUnit.METER) }
         var releaseDate by rememberRetained { mutableStateOf("") }
+        var remark by rememberRetained { mutableStateOf("") }
 
         val eventSink: CoroutineScope.(ReleaseFormEvent) -> Unit = { event ->
             when (event) {
@@ -65,6 +66,7 @@ class ReleaseFormPresenter(
                                 quantity = quantity.toDouble(),
                                 lengthUnit = lengthUnit,
                                 releaseDate = releaseDate,
+                                remark = remark,
                             )
                             navigator.pop()
                         } catch (e: Exception) {
@@ -87,6 +89,8 @@ class ReleaseFormPresenter(
                         .filter { it.isDigit() }
                         .take(8)
                 }
+
+                is ReleaseFormEvent.UpdateRemark -> remark = event.remark
             }
         }
         return ReleaseFormUiState(
@@ -96,6 +100,7 @@ class ReleaseFormPresenter(
             quantity = quantity,
             lengthUnit = lengthUnit,
             releaseDate = releaseDate,
+            remark = remark,
             eventSink = wrapEventSink(eventSink),
         )
     }
@@ -109,6 +114,7 @@ data class ReleaseFormUiState(
     val quantity: String,
     val lengthUnit: LengthUnit,
     val releaseDate: String,
+    val remark: String,
     val eventSink: (ReleaseFormEvent) -> Unit,
 ) : CircuitUiState {
     val canSubmit: Boolean
@@ -122,6 +128,7 @@ sealed interface ReleaseFormEvent : CircuitUiEvent {
     data class UpdateQuantity(val quantity: String) : ReleaseFormEvent
     data class UpdateLengthUnit(val lengthUnit: LengthUnit) : ReleaseFormEvent
     data class UpdateReleaseDate(val releaseDate: String) : ReleaseFormEvent
+    data class UpdateRemark(val remark: String) : ReleaseFormEvent
     data object Submit : ReleaseFormEvent
     data object Discard : ReleaseFormEvent
 }
