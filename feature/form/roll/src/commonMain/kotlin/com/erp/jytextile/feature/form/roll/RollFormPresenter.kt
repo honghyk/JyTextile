@@ -171,12 +171,7 @@ data class RollFormUiState(
     val canSubmit: Boolean
         get() = selectedZone != null &&
                 id.isNotEmpty() &&
-                itemNo.isNotEmpty() &&
-                orderNo.isNotEmpty() &&
-                color.isNotEmpty() &&
-                factory.isNotEmpty() &&
-                finish.isNotEmpty() &&
-                quantity.isNotEmpty()
+                itemNo.isNotEmpty()
 }
 
 sealed interface RollFormEvent : CircuitUiEvent {
