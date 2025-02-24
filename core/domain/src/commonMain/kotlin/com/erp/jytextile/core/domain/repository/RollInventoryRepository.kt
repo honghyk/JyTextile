@@ -19,12 +19,12 @@ interface RollInventoryRepository {
 
     fun getFabricRollsPage(zoneId: Long): Flow<Int>
 
-    suspend fun addFabricRoll(
+    suspend fun upsertFabricRoll(
         zoneId: Long,
         rollInsertion: FabricRollInsertion,
     )
 
-    suspend fun addFabricRoll(
+    suspend fun upsertFabricRoll(
         zoneName: String,
         rollInsertion: FabricRollInsertion,
     )

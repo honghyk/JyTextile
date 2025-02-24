@@ -52,7 +52,7 @@ class RollInventoryRepositoryImpl(
         }
     }
 
-    override suspend fun addFabricRoll(
+    override suspend fun upsertFabricRoll(
         zoneId: Long,
         rollInsertion: FabricRollInsertion,
     ) {
@@ -68,17 +68,17 @@ class RollInventoryRepositoryImpl(
             originalLength = rollInsertion.quantity,
             remark = rollInsertion.remark,
         )
-        inventoryDao.insertFabricRoll(roll)
+        inventoryDao.upsertFabricRoll(roll)
     }
 
-    override suspend fun addFabricRoll(
+    override suspend fun upsertFabricRoll(
         zoneName: String,
         rollInsertion: FabricRollInsertion,
     ) {
         val zone = inventoryDao.findZoneByName(zoneName)
         val zoneId = zone?.id ?: inventoryDao.insertZone(ZoneEntity(name = zoneName))
 
-        addFabricRoll(
+        upsertFabricRoll(
             zoneId = zoneId,
             rollInsertion = rollInsertion,
         )

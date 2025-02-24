@@ -10,7 +10,9 @@ data object ZoneFormScreen : Screen
 data object ZoneInventoryScreen : Screen
 
 @Parcelize
-data object RollFormScreen : Screen
+data class RollFormScreen(
+    val rollId: Long?,
+) : Screen
 
 @Parcelize
 data class RollInventoryScreen(

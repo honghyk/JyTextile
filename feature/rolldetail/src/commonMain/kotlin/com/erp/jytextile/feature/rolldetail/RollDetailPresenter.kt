@@ -8,6 +8,7 @@ import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository
 import com.erp.jytextile.core.navigation.ReleaseFormScreen
 import com.erp.jytextile.core.navigation.RollDetailScreen
+import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.ui.model.FabricRollUiModel
 import com.erp.jytextile.core.ui.model.toUiModel
 import com.slack.circuit.overlay.LocalOverlayHost
@@ -71,6 +72,17 @@ class RollDetailPresenter(
                     }
                 }
 
+                is RollDetailEvent.Modify -> {
+                    launch {
+                        roll?.let { roll ->
+                            overlayHost.showInDialog(
+                                RollFormScreen(roll.id),
+                                navigator::goTo
+                            )
+                        }
+                    }
+                }
+
                 is RollDetailEvent.Release -> {
                     roll?.let { roll ->
                         launch {
@@ -106,5 +118,6 @@ sealed interface RollDetailUiState : CircuitUiState {
 
 sealed interface RollDetailEvent : CircuitUiEvent {
     data object Remove : RollDetailEvent
+    data object Modify : RollDetailEvent
     data object Release : RollDetailEvent
 }

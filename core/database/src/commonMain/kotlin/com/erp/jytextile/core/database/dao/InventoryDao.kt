@@ -5,6 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
+import androidx.room.Upsert
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
@@ -84,11 +86,14 @@ interface InventoryDao {
     )
     fun getFabricRollsCount(zoneId: Long): Flow<Int>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertFabricRoll(fabricRoll: FabricRollEntity): Long
+    @Upsert
+    suspend fun upsertFabricRoll(fabricRoll: FabricRollEntity): Long
 
     @Query("DELETE FROM fabric_rolls WHERE id = :rollId")
     suspend fun deleteFabricRoll(rollId: Long)
+
+    @Update
+    suspend fun updateFabricRoll(fabricRoll: FabricRollEntity)
 
     @Query("UPDATE fabric_rolls SET remaining_length = :remaining WHERE id = :rollId")
     suspend fun updateFabricRollRemainingLength(rollId: Long, remaining: Double)

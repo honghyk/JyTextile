@@ -93,7 +93,7 @@ class ZoneInventoryPresenter(
                     ZoneInventoryEvent.AddRoll -> {
                         scope.launch {
                             overlayHost.showInDialog(
-                                screen = RollFormScreen,
+                                screen = RollFormScreen(null),
                                 onGoToScreen = navigator::goTo
                             )
                         }

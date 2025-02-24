@@ -55,7 +55,12 @@ private fun RollDetailUi(
 
             is RollDetailUiState.RollDetail -> {
                 Column(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
+                    modifier = Modifier.padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 12.dp,
+                        bottom = 20.dp
+                    )
                 ) {
                     Row(
                         modifier = Modifier.align(Alignment.End),
@@ -71,11 +76,14 @@ private fun RollDetailUi(
                         JyOutlinedButton(onClick = { state.eventSink(RollDetailEvent.Remove) }) {
                             Text(maxLines = 1, text = "삭제")
                         }
+                        JyOutlinedButton(onClick = { state.eventSink(RollDetailEvent.Modify) }) {
+                            Text(maxLines = 1, text = "수정")
+                        }
                         JyButton(onClick = { state.eventSink(RollDetailEvent.Release) }) {
                             Text(maxLines = 1, text = "Roll 출고")
                         }
                     }
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
                     RollDetailGrid(
                         modifier = Modifier.fillMaxWidth(),
                         roll = state.roll,

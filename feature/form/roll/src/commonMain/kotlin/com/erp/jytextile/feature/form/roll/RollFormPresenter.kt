@@ -1,6 +1,7 @@
 package com.erp.jytextile.feature.form.roll
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +13,7 @@ import com.erp.jytextile.core.domain.repository.RollInventoryRepository
 import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
 import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.kotlin.utils.DOUBLE_REGEX_PATTERN
+import com.erp.jytextile.kotlin.utils.formatDecimal
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext
@@ -21,13 +23,14 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
 @Inject
 class RollFormPresenterFactory(
-    private val presenterFactory: (Navigator) -> RollFormPresenter,
+    private val presenterFactory: (Navigator, Long?) -> RollFormPresenter,
 ) : Presenter.Factory {
 
     override fun create(
@@ -36,7 +39,7 @@ class RollFormPresenterFactory(
         context: CircuitContext
     ): Presenter<*>? {
         return when (screen) {
-            is RollFormScreen -> presenterFactory(navigator)
+            is RollFormScreen -> presenterFactory(navigator, screen.rollId)
             else -> return null
         }
     }
@@ -45,6 +48,7 @@ class RollFormPresenterFactory(
 @Inject
 class RollFormPresenter(
     @Assisted private val navigator: Navigator,
+    @Assisted private val rollId: Long?,
     private val rollInventoryRepository: RollInventoryRepository,
     private val zoneInventoryRepository: ZoneInventoryRepository,
 ) : Presenter<RollFormUiState> {
@@ -66,13 +70,30 @@ class RollFormPresenter(
         var remark by rememberRetained { mutableStateOf("") }
         var lengthUnit by rememberRetained { mutableStateOf(LengthUnit.METER) }
 
+        LaunchedEffect(rollId) {
+            if (rollId != null) {
+                val rollToModify = rollInventoryRepository.getRoll(rollId).firstOrNull()
+                if (rollToModify != null) {
+                    selectedZone = rollToModify.zone
+                    id = rollToModify.id.toString()
+                    itemNo = rollToModify.itemNo
+                    orderNo = rollToModify.orderNo
+                    color = rollToModify.color
+                    factory = rollToModify.factory
+                    finish = rollToModify.finish
+                    quantity = rollToModify.originalQuantity.formatDecimal(1)
+                    remark = rollToModify.remark.orEmpty()
+                }
+            }
+        }
+
         val eventSink: CoroutineScope.(RollFormEvent) -> Unit = { event ->
             when (event) {
                 RollFormEvent.Discard -> navigator.pop()
                 RollFormEvent.Submit -> {
                     launch {
                         try {
-                            rollInventoryRepository.addFabricRoll(
+                            rollInventoryRepository.upsertFabricRoll(
                                 zoneId = selectedZone!!.id,
                                 rollInsertion = FabricRollInsertion(
                                     id = id.toLong(),
@@ -115,6 +136,7 @@ class RollFormPresenter(
         }
 
         return RollFormUiState(
+            isModify = rollId != null,
             zones = zones,
             selectedZone = selectedZone,
             id = id,
@@ -132,6 +154,7 @@ class RollFormPresenter(
 }
 
 data class RollFormUiState(
+    val isModify: Boolean,
     val zones: List<Zone>,
     val selectedZone: Zone?,
     val id: String,

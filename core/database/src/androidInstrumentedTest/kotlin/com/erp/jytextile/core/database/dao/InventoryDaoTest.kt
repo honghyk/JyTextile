@@ -76,7 +76,7 @@ class InventoryDaoTest {
             testFabricRoll(2, section1, "c1"),
         )
         rolls.forEach { roll ->
-            inventoryDao.insertFabricRoll(roll)
+            inventoryDao.upsertFabricRoll(roll)
         }
 
         val result = inventoryDao.getZones(10, 0).first()
@@ -95,7 +95,7 @@ class InventoryDaoTest {
             testFabricRoll(1, section1, "j3"),
         )
         rolls.forEach { roll ->
-            inventoryDao.insertFabricRoll(roll)
+            inventoryDao.upsertFabricRoll(roll)
         }
 
         val result = inventoryDao.getFabricRolls(section1, 10, 0, false).first()
@@ -115,7 +115,7 @@ class InventoryDaoTest {
             testFabricRoll(2, section1, "c1"),
         )
         rolls.forEach { roll ->
-            inventoryDao.insertFabricRoll(roll)
+            inventoryDao.upsertFabricRoll(roll)
         }
         inventoryDao.updateFabricRollRemainingLength(0, 0.0)
 
@@ -130,7 +130,7 @@ class InventoryDaoTest {
     @Test
     fun update_fabric_roll_remaining_length() = runTest {
         val sectionId = inventoryDao.insertZone(testSection("a1"))
-        inventoryDao.insertFabricRoll(testFabricRoll(0, sectionId, "code1"))
+        inventoryDao.upsertFabricRoll(testFabricRoll(0, sectionId, "code1"))
 
         inventoryDao.updateFabricRollRemainingLength(0, 10.0)
 
@@ -141,7 +141,7 @@ class InventoryDaoTest {
     @Test
     fun get_release_history_by_descending_order() = runTest {
         val sectionId = inventoryDao.insertZone(testSection("a1"))
-        val rollId = inventoryDao.insertFabricRoll(testFabricRoll(0, sectionId, "code1"))
+        val rollId = inventoryDao.upsertFabricRoll(testFabricRoll(0, sectionId, "code1"))
         val releaseHistories = listOf(
             testReleaseHistory(rollId, 1.0, 0),
             testReleaseHistory(rollId, 2.0, 3),
@@ -169,7 +169,7 @@ class InventoryDaoTest {
             testFabricRoll(id = 2, zoneId = zoneId, itemNo = "Roll"),
         )
         rolls.forEach {
-            inventoryDao.insertFabricRoll(it)
+            inventoryDao.upsertFabricRoll(it)
         }
 
         val result = inventoryDao.searchFabricRoll("1", 10, 0)
@@ -190,7 +190,7 @@ class InventoryDaoTest {
             testFabricRoll(id = 5, zoneId = zoneId, itemNo = "test", orderNo = "order1")
         )
         rolls.forEach { roll ->
-            inventoryDao.insertFabricRoll(roll)
+            inventoryDao.upsertFabricRoll(roll)
         }
 
         val result = inventoryDao.searchFabricRoll("item", 10, 0)
@@ -212,7 +212,7 @@ class InventoryDaoTest {
             testFabricRoll(id = 5, zoneId = zoneId, itemNo = "test", orderNo = "order1")
         )
         rolls.forEach { roll ->
-            inventoryDao.insertFabricRoll(roll)
+            inventoryDao.upsertFabricRoll(roll)
         }
 
         val result = inventoryDao.searchFabricRoll("1", 10, 0)

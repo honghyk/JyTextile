@@ -12,6 +12,7 @@ import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.navigation.RollDetailScreen
+import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
 import com.slack.circuit.foundation.CircuitContent
@@ -62,6 +63,13 @@ private fun ReleaseHistoryUi(
                         screen = RollDetailScreen(rollId = state.rollId),
                         onNavEvent = { event ->
                             when (event) {
+                                is NavEvent.GoTo -> {
+                                    when (event.screen) {
+                                        is RollFormScreen -> state.eventSink(ReleaseHistoryEvent.ModifyRoll)
+                                        else -> Unit
+                                    }
+                                }
+
                                 is NavEvent.Pop -> state.eventSink(ReleaseHistoryEvent.Back)
                                 else -> Unit
                             }

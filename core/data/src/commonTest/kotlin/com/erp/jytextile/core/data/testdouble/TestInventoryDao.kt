@@ -62,11 +62,41 @@ class TestInventoryDao : InventoryDao {
         offset: Int,
         filterHasRemaining: Boolean
     ): Flow<List<FabricRollEntity>> {
-        TODO("Not yet implemented")
+        return fabricRollEntitiesStateFlow.map { rolls ->
+            rolls
+                .filter { it.zoneId == zoneId }
+                .subList(
+                    fromIndex = offset,
+                    toIndex = (offset + limit).coerceAtMost(rolls.size)
+                )
+        }
     }
 
-    override suspend fun insertFabricRoll(fabricRoll: FabricRollEntity): Long {
-        TODO("Not yet implemented")
+    override fun getFabricRollWithZone(rollId: Long): Flow<FabricRollWithZoneEntity?> {
+        return combine(
+            sectionEntitiesStateFlow,
+            fabricRollEntitiesStateFlow,
+            ::Pair
+        ).map { (sections, rolls) ->
+            rolls
+                .filter { it.id == rollId }
+                .map {
+                    FabricRollWithZoneEntity(
+                        fabricRoll = it,
+                        zoneName = sections.find { section -> section.id == it.zoneId }!!.name
+                    )
+                }
+                .firstOrNull()
+        }
+    }
+
+    override suspend fun upsertFabricRoll(fabricRoll: FabricRollEntity): Long {
+        fabricRollEntitiesStateFlow.update { oldValues ->
+            (oldValues + fabricRoll)
+                .distinctBy(FabricRollEntity::id)
+                .sortedBy { it.id }
+        }
+        return fabricRoll.id
     }
 
     override suspend fun deleteFabricRoll(rollId: Long) {
@@ -97,11 +127,23 @@ class TestInventoryDao : InventoryDao {
         TODO("Not yet implemented")
     }
 
-    override fun getFabricRollWithZone(rollId: Long): Flow<FabricRollWithZoneEntity?> {
+    override fun getFabricRollsCount(zoneId: Long): Flow<Int> {
         TODO("Not yet implemented")
     }
 
-    override fun getFabricRollsCount(zoneId: Long): Flow<Int> {
+    override suspend fun getFabricRollSearchResultCount(query: String): Int {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateFabricRoll(fabricRoll: FabricRollEntity) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun searchFabricRoll(
+        query: String,
+        limit: Int,
+        offset: Int
+    ): List<FabricRollEntity> {
         TODO("Not yet implemented")
     }
 }

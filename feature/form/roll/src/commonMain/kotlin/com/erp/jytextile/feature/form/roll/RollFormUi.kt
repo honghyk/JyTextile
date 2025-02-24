@@ -35,12 +35,12 @@ private fun RollFormUi(
 ) {
     FormPanel(
         modifier = modifier.padding(top = 80.dp, bottom = 32.dp),
-        title = "신규 ROLL 추가",
+        title = if (state.isModify) "Roll 수정" else "Roll 추가",
         primaryButtonEnabled = state.canSubmit,
         onCancelButtonClick = { state.eventSink(RollFormEvent.Discard) },
         onPrimaryButtonClick = { state.eventSink(RollFormEvent.Submit) },
         primaryButtonContent = {
-            Text(maxLines = 1, text = "ROLL 추가")
+            Text(maxLines = 1, text = "확인")
         }
     ) {
         DropDownFormField(
@@ -53,6 +53,7 @@ private fun RollFormUi(
         FormTextField(
             label = "No",
             value = state.id,
+            enabled = !state.isModify,
             keyboardType = KeyboardType.Number,
             onValueChange = { state.eventSink(RollFormEvent.UpdateId(it)) },
         )
