@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
@@ -23,7 +24,9 @@ import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
@@ -56,16 +59,18 @@ class ZoneInventoryPresenter(
         val overlayHost = LocalOverlayHost.current
 
         var currentPage by rememberRetained { mutableStateOf(0) }
-        val totalPage by inventoryRepository.getZonePage(PAGE_SIZE).collectAsRetainedState(0)
 
-        val zoneTable by rememberRetained(currentPage) {
-            inventoryRepository.getZones(currentPage, pageSize = PAGE_SIZE).map { sections ->
-                ZoneTable(
-                    items = sections.map(Zone::toTableItem),
-                    currentPage = currentPage,
-                    totalPage = totalPage
-                )
-            }
+        val zoneTable by rememberRetained {
+            snapshotFlow { currentPage }
+                .flatMapLatest { inventoryRepository.getZones(it, pageSize = PAGE_SIZE) }
+                .mapLatest { zones -> zones.map(Zone::toTableItem) }
+                .map {
+                    ZoneTable(
+                        items = it,
+                        currentPage = currentPage,
+                        totalPage = -1
+                    )
+                }
         }.collectAsRetainedState(null)
 
         return when {
@@ -100,7 +105,9 @@ class ZoneInventoryPresenter(
                     }
 
                     ZoneInventoryEvent.NextPage -> {
-                        currentPage = (currentPage + 1).coerceAtMost(totalPage - 1)
+                        if (zoneTable!!.items.size == PAGE_SIZE) {
+                            currentPage += 1
+                        }
                     }
 
                     ZoneInventoryEvent.PreviousPage -> {

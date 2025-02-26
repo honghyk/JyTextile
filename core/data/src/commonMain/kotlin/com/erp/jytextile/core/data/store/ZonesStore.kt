@@ -17,7 +17,7 @@ class ZonesStore(
     private val remoteDataSource: ZoneRemoteDataSource,
 ) : Store<PagingKey, List<ZoneEntity>> by storeBuilder<PagingKey, List<ZoneWithRollCountResponse>, List<ZoneEntity>>(
     fetcher = Fetcher.of { key ->
-        remoteDataSource.getZones(key.page, key.pageSize)
+        remoteDataSource.getZones(key.page, key.pageSize * 2)
     },
     sourceOfTruth = SourceOfTruth.of(
         reader = { key ->

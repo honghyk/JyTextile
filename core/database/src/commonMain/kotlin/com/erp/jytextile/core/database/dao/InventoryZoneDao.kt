@@ -17,10 +17,10 @@ interface InventoryZoneDao : EntityDao<ZoneEntity> {
     @Query("SELECT * FROM zones WHERE name = :name LIMIT 1")
     suspend fun findByName(name: String): ZoneEntity?
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     override suspend fun insert(entity: ZoneEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     override suspend fun insert(entities: List<ZoneEntity>)
 
     @Upsert
