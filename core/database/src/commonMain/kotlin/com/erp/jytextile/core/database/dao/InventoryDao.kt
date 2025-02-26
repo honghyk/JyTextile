@@ -19,7 +19,7 @@ interface InventoryDao {
 
     @Query(
         value = """
-                SELECT zones.*, COUNT(fabric_rolls.id) AS rollCount
+                SELECT zones.*, COUNT(fabric_rolls.id) AS legacyRollCount
                 FROM zones
                 LEFT JOIN fabric_rolls ON zones.id = fabric_rolls.zone_id
                 GROUP BY zones.id
@@ -38,6 +38,9 @@ interface InventoryDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertZone(section: ZoneEntity): Long
+
+    @Upsert
+    suspend fun upsertZones(zones: List<ZoneEntity>)
 
     @Query("DELETE FROM zones WHERE id = :sectionId")
     suspend fun deleteZone(sectionId: Long)

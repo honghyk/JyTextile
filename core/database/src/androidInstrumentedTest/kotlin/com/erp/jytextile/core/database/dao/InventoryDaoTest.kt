@@ -81,7 +81,7 @@ class InventoryDaoTest {
 
         val result = inventoryDao.getZones(10, 0).first()
 
-        assertEquals(3, result.first().rollCount)
+        assertEquals(3, result.first().legacyRollCount)
     }
 
     @Test

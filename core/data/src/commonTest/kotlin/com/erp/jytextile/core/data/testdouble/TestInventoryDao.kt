@@ -46,6 +46,14 @@ class TestInventoryDao : InventoryDao {
         return section.id
     }
 
+    override suspend fun upsertZones(zones: List<ZoneEntity>) {
+        sectionEntitiesStateFlow.update { oldValues ->
+            (oldValues + zones)
+                .distinctBy(ZoneEntity::id)
+                .sortedBy { it.name }
+        }
+    }
+
     override suspend fun deleteZone(sectionId: Long) {
         sectionEntitiesStateFlow.update { entities ->
             entities.filterNot { it.id == sectionId }
@@ -160,7 +168,7 @@ private fun ZoneEntity.toSectionWithRollCountEntity(
     fabricRolls: List<FabricRollEntity>
 ) = ZoneWithRollCountEntity(
     zone = this,
-    rollCount = fabricRolls
+    legacyRollCount = fabricRolls
         .filter { it.zoneId == id }
         .size
 )
