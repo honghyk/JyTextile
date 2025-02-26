@@ -28,6 +28,7 @@ jetbrainsKotlinJvm = "2.1.0"
 ktor = "3.0.1"
 postgrestKt = "3.1.1"
 sqlite-bundled = "2.5.0-alpha13"
+store = "5.0.0"
 
 [libraries]
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
@@ -75,6 +76,7 @@ data-table-material3 = { module = "com.seanproctor:data-table-material3", versio
 postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "postgrestKt" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+store = { module = "org.mobilenativefoundation.store:store5", version.ref = "store" }
 
 # Test
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
