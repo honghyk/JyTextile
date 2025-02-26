@@ -1,6 +1,5 @@
 package com.erp.jytextile.core.database
 
-import androidx.room.AutoMigration
 import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -18,10 +17,7 @@ import kotlinx.coroutines.IO
 
 @Database(
     entities = [ZoneEntity::class, FabricRollEntity::class, ReleaseHistoryEntity::class],
-    version = 2,
-    autoMigrations = [
-        AutoMigration(from = 1, to = 2)
-    ]
+    version = 1
 )
 @TypeConverters(
     InstantConverter::class,

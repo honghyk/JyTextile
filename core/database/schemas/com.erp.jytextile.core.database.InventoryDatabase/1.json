@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "df8f8e9707ec683d823febbd83ff7d9b",
+    "identityHash": "39a47e5abd844cbdfbfb44692d4b73fc",
     "entities": [
       {
         "tableName": "zones",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `rollCount` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -19,10 +19,17 @@
             "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "rollCount",
+            "columnName": "rollCount",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
             "id"
           ]
@@ -136,7 +143,7 @@
       },
       {
         "tableName": "release_history",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `roll_id` INTEGER NOT NULL, `quantity` REAL NOT NULL, `release_date` INTEGER NOT NULL, `destination` TEXT NOT NULL, FOREIGN KEY(`roll_id`) REFERENCES `fabric_rolls`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `roll_id` INTEGER NOT NULL, `quantity` REAL NOT NULL, `release_date` INTEGER NOT NULL, `destination` TEXT NOT NULL, `remark` TEXT, FOREIGN KEY(`roll_id`) REFERENCES `fabric_rolls`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -167,6 +174,11 @@
             "columnName": "destination",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "remark",
+            "columnName": "remark",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -203,7 +215,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'df8f8e9707ec683d823febbd83ff7d9b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '39a47e5abd844cbdfbfb44692d4b73fc')"
     ]
   }
 }
