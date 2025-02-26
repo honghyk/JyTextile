@@ -2,7 +2,7 @@ package com.erp.jytextile.core.data.repository
 
 import com.erp.jytextile.core.data.store.PagingKey
 import com.erp.jytextile.core.data.store.ZonesStore
-import com.erp.jytextile.core.database.dao.InventoryDao
+import com.erp.jytextile.core.database.dao.InventoryZoneDao
 import com.erp.jytextile.core.database.model.toDomain
 import com.erp.jytextile.core.database.model.toEntity
 import com.erp.jytextile.core.domain.model.Zone
@@ -19,14 +19,14 @@ import org.mobilenativefoundation.store.store5.StoreReadResponse
 
 @Inject
 class ZoneInventoryRepositoryImpl(
-    private val inventoryDao: InventoryDao,
+    private val inventoryDao: InventoryZoneDao,
     private val zoneRemoteDataSource: ZoneRemoteDataSource,
     private val zonesStore: ZonesStore,
 ) : ZoneInventoryRepository {
 
     override suspend fun addZone(name: String) {
         zoneRemoteDataSource.upsert(ZoneInsertRequest(name)).also {
-            inventoryDao.insertZone(it.toDomain().toEntity())
+            inventoryDao.insert(it.toDomain().toEntity())
         }
     }
 
@@ -44,5 +44,10 @@ class ZoneInventoryRepositoryImpl(
 
     override fun getZonesCount(): Flow<Int> {
         TODO("Implement synchronization with the local database")
+    }
+
+    override suspend fun deleteZones(zoneIds: List<Long>) {
+        zoneRemoteDataSource.delete(zoneIds)
+        inventoryDao.delete(zoneIds)
     }
 }

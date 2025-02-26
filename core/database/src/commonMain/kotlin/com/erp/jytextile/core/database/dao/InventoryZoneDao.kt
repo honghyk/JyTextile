@@ -32,6 +32,9 @@ interface InventoryZoneDao : EntityDao<ZoneEntity> {
     @Query("DELETE FROM zones WHERE id = :id")
     override suspend fun delete(id: Long)
 
+    @Query("DELETE FROM zones WHERE id IN (:ids)")
+    override suspend fun delete(ids: List<Long>)
+
     @Query(
         value = """
             DELETE FROM zones

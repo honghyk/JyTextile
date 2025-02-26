@@ -23,6 +23,8 @@ interface ZoneRemoteDataSource {
 
     suspend fun delete(zoneId: Long)
 
+    suspend fun delete(zoneIds: List<Long>)
+
     suspend fun getZoneCount(): Int
 }
 
@@ -67,6 +69,16 @@ class ZoneRemoteDataSourceImpl(
             .from(Tables.ZONES)
             .delete {
                 filter { ZoneResponse::id eq zoneId }
+            }
+    }
+
+    override suspend fun delete(zoneIds: List<Long>) {
+        client
+            .from(Tables.ZONES)
+            .delete {
+                filter {
+                    isIn("id", zoneIds)
+                }
             }
     }
 

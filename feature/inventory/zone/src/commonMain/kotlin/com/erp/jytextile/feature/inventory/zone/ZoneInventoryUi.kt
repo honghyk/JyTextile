@@ -54,7 +54,7 @@ fun ZoneInventoryUi(
                     onZoneSelected = { state.eventSink(ZoneInventoryEvent.SelectRow(it)) },
                     onAddRollClick = { state.eventSink(ZoneInventoryEvent.AddRoll) },
                     onAddZoneClick = { state.eventSink(ZoneInventoryEvent.AddZone) },
-                    onRemoveZoneClick = {},
+                    onRemoveZoneClick = { state.eventSink(ZoneInventoryEvent.RemoveZone) },
                     onPreviousClick = { state.eventSink(ZoneInventoryEvent.PreviousPage) },
                     onNextClick = { state.eventSink(ZoneInventoryEvent.NextPage) },
                 )

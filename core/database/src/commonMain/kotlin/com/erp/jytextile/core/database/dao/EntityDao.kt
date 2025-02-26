@@ -14,5 +14,7 @@ interface EntityDao<E : LocalEntity> {
 
     suspend fun delete(id: Long)
 
+    suspend fun delete(ids: List<Long>)
+
     suspend fun deleteAll()
 }

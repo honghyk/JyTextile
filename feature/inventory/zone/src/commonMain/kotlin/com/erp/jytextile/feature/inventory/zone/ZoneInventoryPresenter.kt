@@ -106,6 +106,17 @@ class ZoneInventoryPresenter(
                         }
                     }
 
+                    ZoneInventoryEvent.RemoveZone -> {
+                        scope.launch {
+                            try {
+                                inventoryRepository.deleteZones(selectedRows.map { it.id })
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            selectedRows = emptySet()
+                        }
+                    }
+
                     ZoneInventoryEvent.AddRoll -> {
                         scope.launch {
                             overlayHost.showInDialog(
@@ -146,6 +157,7 @@ sealed interface ZoneInventoryUiState : CircuitUiState {
 sealed interface ZoneInventoryEvent : CircuitUiEvent {
     data class ToRolls(val zoneId: Long) : ZoneInventoryEvent
     data object AddZone : ZoneInventoryEvent
+    data object RemoveZone : ZoneInventoryEvent
     data object AddRoll : ZoneInventoryEvent
     data class SelectRow(val row: TableItem) : ZoneInventoryEvent
     data object PreviousPage : ZoneInventoryEvent
