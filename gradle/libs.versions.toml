@@ -10,6 +10,7 @@ androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
 androidx-test-core = "1.6.1"
 androidx-test-junit = "1.2.1"
+buildConfig = "5.5.1"
 compose = "2025.01.01"
 compose-multiplatform = "1.7.0"
 circuit = "0.26.0"
@@ -24,6 +25,8 @@ ksp = "2.1.0-1.0.29"
 androidx-room = "2.7.0-alpha13"
 androidx-test-runner = "1.6.2"
 jetbrainsKotlinJvm = "2.1.0"
+ktor = "3.0.1"
+postgrestKt = "3.1.1"
 sqlite-bundled = "2.5.0-alpha13"
 
 [libraries]
@@ -68,6 +71,11 @@ circuit-overlay = { module = "com.slack.circuit:circuit-overlay", version.ref = 
 # Table ui
 data-table-material3 = { module = "com.seanproctor:data-table-material3", version.ref = "dataTableMaterial3" }
 
+# remote database
+postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "postgrestKt" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+
 # Test
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
@@ -94,6 +102,8 @@ kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "androidx-room" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 
 jytextile-erp-kotlin-multiplatform = { id = "app.jytextile.erp.kotlin.multiplatform" }
 jytextile-erp-kotlin-multiplatform-compose = { id = "app.jytextile.erp.kotlin.multiplatform.compose" }

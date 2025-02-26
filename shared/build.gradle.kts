@@ -17,6 +17,7 @@ kotlin {
             api(projects.core.domain)
             api(projects.core.data)
             api(projects.core.database)
+            api(projects.core.network)
             api(projects.feature.root)
             api(projects.feature.inventory.zone)
             api(projects.feature.inventory.roll)
