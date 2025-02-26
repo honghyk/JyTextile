@@ -279,6 +279,6 @@ private const val BoxInDuration = 50
 private const val BoxOutDuration = 100
 private const val CheckAnimationDuration = 100
 
-private val CheckboxSize = 12.dp
+private val CheckboxSize = 16.dp
 private val StrokeWidth = 1.dp
 private val RadiusSize = 2.dp

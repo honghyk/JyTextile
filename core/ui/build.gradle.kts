@@ -21,8 +21,6 @@ kotlin {
             implementation(compose.material3)
 
             implementation(libs.kotlinx.datetime)
-
-            implementation(libs.data.table.material3)
         }
     }
 }

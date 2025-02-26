@@ -1,7 +1,9 @@
 package com.erp.jytextile.core.ui.model
 
+import androidx.compose.runtime.Stable
 import com.erp.jytextile.core.domain.model.Zone
 
+@Stable
 data class ZoneTable(
     override val headers: List<String> = listOf(
         "Name",
@@ -12,6 +14,7 @@ data class ZoneTable(
     override val totalPage: Int,
 ) : Table
 
+@Stable
 data class ZoneTableItem(
     override val id: Long,
     val name: String,

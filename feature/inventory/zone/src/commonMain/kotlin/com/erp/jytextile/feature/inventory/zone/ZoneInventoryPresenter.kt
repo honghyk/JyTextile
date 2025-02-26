@@ -13,6 +13,7 @@ import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.navigation.RollInventoryScreen
 import com.erp.jytextile.core.navigation.ZoneFormScreen
 import com.erp.jytextile.core.navigation.ZoneInventoryScreen
+import com.erp.jytextile.core.ui.model.TableItem
 import com.erp.jytextile.core.ui.model.ZoneTable
 import com.erp.jytextile.core.ui.model.toTableItem
 import com.slack.circuit.overlay.LocalOverlayHost
@@ -59,6 +60,7 @@ class ZoneInventoryPresenter(
         val overlayHost = LocalOverlayHost.current
 
         var currentPage by rememberRetained { mutableStateOf(0) }
+        var selectedRows by rememberRetained(currentPage) { mutableStateOf(emptySet<TableItem>()) }
 
         val zoneTable by rememberRetained {
             snapshotFlow { currentPage }
@@ -78,12 +80,21 @@ class ZoneInventoryPresenter(
 
             else -> ZoneInventoryUiState.Zones(
                 zoneTable = zoneTable!!,
+                selectedRows = selectedRows.toList(),
             ) { event ->
                 when (event) {
                     is ZoneInventoryEvent.ToRolls -> {
                         navigator.goTo(
                             screen = RollInventoryScreen(event.zoneId)
                         )
+                    }
+
+                    is ZoneInventoryEvent.SelectRow -> {
+                        if (selectedRows.contains(event.row)) {
+                            selectedRows = selectedRows - event.row
+                        } else {
+                            selectedRows = selectedRows + event.row
+                        }
                     }
 
                     ZoneInventoryEvent.AddZone -> {
@@ -127,6 +138,7 @@ sealed interface ZoneInventoryUiState : CircuitUiState {
 
     data class Zones(
         val zoneTable: ZoneTable,
+        val selectedRows: List<TableItem>,
         val eventSink: (ZoneInventoryEvent) -> Unit = {},
     ) : ZoneInventoryUiState
 }
@@ -135,6 +147,7 @@ sealed interface ZoneInventoryEvent : CircuitUiEvent {
     data class ToRolls(val zoneId: Long) : ZoneInventoryEvent
     data object AddZone : ZoneInventoryEvent
     data object AddRoll : ZoneInventoryEvent
+    data class SelectRow(val row: TableItem) : ZoneInventoryEvent
     data object PreviousPage : ZoneInventoryEvent
     data object NextPage : ZoneInventoryEvent
 }

@@ -11,22 +11,17 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.erp.jytextile.core.designsystem.component.Checkbox
 import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.component.Table
 import com.erp.jytextile.core.designsystem.theme.JyTheme
 import com.erp.jytextile.core.ui.model.Table
 import com.erp.jytextile.core.ui.model.TableItem
-import com.seanproctor.datatable.DataColumn
-import com.seanproctor.datatable.TableColumnWidth
 
 @Composable
 fun TablePanel(
@@ -38,7 +33,6 @@ fun TablePanel(
     title: String = "",
     selectedRows: List<TableItem>? = null,
     onItemSelected: ((Boolean, TableItem) -> Unit)? = null,
-    isWrapColumnWidth: Boolean = true,
     titleActionButtons: @Composable (RowScope.() -> Unit)? = null,
 ) {
     TablePanel(
@@ -46,7 +40,6 @@ fun TablePanel(
         table = table,
         currentPage = table.currentPage,
         totalPage = table.totalPage,
-        isWrapColumnWidth = isWrapColumnWidth,
         selectedRows = selectedRows,
         onItemSelected = onItemSelected,
         onItemClick = onItemClick,
@@ -66,7 +59,6 @@ fun TablePanel(
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isWrapColumnWidth: Boolean = true,
     selectedRows: List<TableItem>? = null,
     onItemSelected: ((Boolean, TableItem) -> Unit)? = null,
     title: @Composable () -> Unit,
@@ -87,9 +79,8 @@ fun TablePanel(
                 modifier = Modifier.weight(1f),
                 table = table,
                 selectedRows = selectedRows,
-                onItemSelected = onItemSelected,
-                isWrapColumnWidth = isWrapColumnWidth,
                 onItemClick = onItemClick,
+                onItemSelected = onItemSelected,
             )
             TableFooter(
                 modifier = Modifier.fillMaxWidth(),
@@ -139,63 +130,43 @@ private fun TableContent(
     selectedRows: List<TableItem>?,
     onItemClick: (TableItem) -> Unit,
     onItemSelected: ((Boolean, TableItem) -> Unit)?,
-    modifier: Modifier = Modifier,
-    isWrapColumnWidth: Boolean = true,
+    modifier: Modifier = Modifier
 ) {
-    val columns: List<DataColumn> by remember(table.headers) {
-        mutableStateOf(
-            buildList {
-                if (onItemSelected != null) {
-                    add(
-                        DataColumn(
-                            width = TableColumnWidth.Wrap,
-                            header = { Text("") }
-                        )
-                    )
-                }
-                addAll(table.headers.mapIndexed { index, header ->
-                    DataColumn(
-                        width = when {
-                            index == table.headers.lastIndex -> TableColumnWidth.Flex(1f)
-                            isWrapColumnWidth -> TableColumnWidth.Wrap
-                            else -> TableColumnWidth.Fraction(1.0f / table.headers.size)
-                        },
-                        header = {
-                            Text(
-                                style = JyTheme.typography.textSmall,
-                                color = JyTheme.color.tableHeading,
-                                text = header,
-                            )
-                        }
-                    )
-                })
-            }
-        )
+    val tableHeaders = remember(table.headers, onItemSelected) {
+        if (onItemSelected == null) table.headers else listOf("") + table.headers
     }
-
+    val tableRows = remember(table.items, onItemSelected) {
+        table.items.map {
+            if (onItemSelected == null) it.tableRow else listOf("") + it.tableRow
+        }
+    }
     Table(
-        modifier = modifier.fillMaxWidth(),
-        columns = columns,
-        rows = table.items,
-        onRowClick = { onItemClick(it) },
-    ) { row ->
-        if (onItemSelected != null) {
-            cell {
-                Checkbox(
-                    checked = selectedRows?.contains(row) ?: false,
-                    onCheckedChange = { onItemSelected(it, row) },
+        modifier = modifier,
+        headers = tableHeaders,
+        rows = tableRows,
+        onRowClick = { onItemClick(table.items[it]) },
+        headerCellContent = { _, header ->
+            TableCell(
+                modifier = Modifier,
+                value = header,
+            )
+        },
+        rowCellContent = { row, column, cell ->
+            if (onItemSelected != null && column == 0) {
+                val selected = selectedRows?.contains(table.items[row]) ?: false
+                CheckBoxCell(
+                    modifier = Modifier,
+                    checked = selected,
+                    onCheckChange = { onItemSelected(!selected, table.items[row]) },
+                )
+            } else {
+                TableCell(
+                    modifier = Modifier,
+                    value = cell,
                 )
             }
         }
-        row.tableRow.forEach { cell ->
-            cell {
-                Text(
-                    style = JyTheme.typography.textSmall,
-                    text = cell,
-                )
-            }
-        }
-    }
+    )
 }
 
 @Composable
@@ -206,36 +177,34 @@ private fun TableFooter(
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    if (totalPage > 0) {
-        Row(
-            modifier = modifier
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 8.dp,
-                    bottom = 12.dp,
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            JyOutlinedButton(onClick = onPreviousClick) {
-                Text(
-                    maxLines = 1,
-                    text = "이전"
-                )
-            }
+    Row(
+        modifier = modifier
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 8.dp,
+                bottom = 12.dp,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        JyOutlinedButton(onClick = onPreviousClick) {
             Text(
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                style = JyTheme.typography.textSmall,
                 maxLines = 1,
-                text = "페이지 $currentPage of $totalPage"
+                text = "이전"
             )
-            JyOutlinedButton(onClick = onNextClick) {
-                Text(
-                    maxLines = 1,
-                    text = "다음"
-                )
-            }
+        }
+        Text(
+            modifier = Modifier.weight(1f),
+            textAlign = TextAlign.Center,
+            style = JyTheme.typography.textSmall,
+            maxLines = 1,
+            text = if (totalPage > 0) "페이지 $currentPage of $totalPage" else "",
+        )
+        JyOutlinedButton(onClick = onNextClick) {
+            Text(
+                maxLines = 1,
+                text = "다음"
+            )
         }
     }
 }

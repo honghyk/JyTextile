@@ -11,6 +11,7 @@ import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.ZoneInventoryScreen
 import com.erp.jytextile.core.ui.TablePanel
+import com.erp.jytextile.core.ui.model.TableItem
 import com.erp.jytextile.core.ui.model.ZoneTable
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
@@ -48,9 +49,12 @@ fun ZoneInventoryUi(
                 ZoneInventoryPanel(
                     modifier = Modifier.fillMaxSize(),
                     table = state.zoneTable,
+                    selectedRows = state.selectedRows,
                     onZoneClick = { state.eventSink(ZoneInventoryEvent.ToRolls(it)) },
+                    onZoneSelected = { state.eventSink(ZoneInventoryEvent.SelectRow(it)) },
                     onAddRollClick = { state.eventSink(ZoneInventoryEvent.AddRoll) },
                     onAddZoneClick = { state.eventSink(ZoneInventoryEvent.AddZone) },
+                    onRemoveZoneClick = {},
                     onPreviousClick = { state.eventSink(ZoneInventoryEvent.PreviousPage) },
                     onNextClick = { state.eventSink(ZoneInventoryEvent.NextPage) },
                 )
@@ -62,9 +66,12 @@ fun ZoneInventoryUi(
 @Composable
 private fun ZoneInventoryPanel(
     table: ZoneTable,
+    selectedRows: List<TableItem>,
     onZoneClick: (Long) -> Unit,
+    onZoneSelected: (TableItem) -> Unit,
     onAddRollClick: () -> Unit,
     onAddZoneClick: () -> Unit,
+    onRemoveZoneClick: () -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -73,22 +80,24 @@ private fun ZoneInventoryPanel(
         modifier = modifier,
         title = "Zones",
         table = table,
-        isWrapColumnWidth = false,
+        selectedRows = selectedRows,
+        onItemSelected = { _, item -> onZoneSelected(item) },
         onPreviousClick = onPreviousClick,
         onNextClick = onNextClick,
         onItemClick = { onZoneClick(it.id) },
     ) {
-        JyOutlinedButton(onClick = onAddZoneClick) {
-            Text(
-                maxLines = 1,
-                text = "Zone 추가"
-            )
-        }
-        JyButton(onClick = onAddRollClick) {
-            Text(
-                maxLines = 1,
-                text = "Roll 입고"
-            )
-        }
+        JyOutlinedButton(
+            onClick = onAddZoneClick,
+            content = { Text(maxLines = 1, text = "Zone 추가") }
+        )
+        JyOutlinedButton(
+            onClick = onRemoveZoneClick,
+            enabled = selectedRows.isNotEmpty(),
+            content = { Text(maxLines = 1, text = "Zone 삭제") }
+        )
+        JyButton(
+            onClick = onAddRollClick,
+            content = { Text(maxLines = 1, text = "Roll 입고") }
+        )
     }
 }
