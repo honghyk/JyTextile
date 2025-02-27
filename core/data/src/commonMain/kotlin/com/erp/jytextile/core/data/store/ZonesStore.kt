@@ -26,9 +26,5 @@ class ZonesStore(
             }
             localDataSource.upsert(response)
         },
-        delete = { key ->
-            localDataSource.deletePage(page = key.page, pageSize = key.pageSize)
-        },
-        deleteAll = { localDataSource.deleteAll() },
     )
 ).build()

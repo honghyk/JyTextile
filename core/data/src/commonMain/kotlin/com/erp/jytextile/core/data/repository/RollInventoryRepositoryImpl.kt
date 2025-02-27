@@ -1,6 +1,7 @@
 package com.erp.jytextile.core.data.repository
 
 import com.erp.jytextile.core.data.datasource.remote.FabricRollRemoteDataSource
+import com.erp.jytextile.core.data.store.FabricRollStore
 import com.erp.jytextile.core.data.store.FabricRollsStore
 import com.erp.jytextile.core.data.store.PagingKey
 import com.erp.jytextile.core.database.dao.InventoryDao
@@ -27,6 +28,7 @@ class RollInventoryRepositoryImpl(
     private val inventoryDao: InventoryDao,
     private val fabricRollLocalDataSource: FabricRollLocalDataSource,
     private val fabricRollRemoteDataSource: FabricRollRemoteDataSource,
+    private val fabricRollStore: FabricRollStore,
     private val fabricRollsStore: FabricRollsStore,
 ) : RollInventoryRepository {
 
@@ -48,9 +50,11 @@ class RollInventoryRepositoryImpl(
     }
 
     override fun getRoll(rollId: Long): Flow<FabricRoll> {
-        return inventoryDao.getFabricRollWithZone(rollId)
-            .filterNotNull()
-            .map(FabricRollWithZoneEntity::toDomain)
+        return fabricRollStore
+            .stream(StoreReadRequest.cached(rollId, true))
+            .filter { it is StoreReadResponse.Data }
+            .map { it.requireData() }
+            .distinctUntilChanged()
     }
 
     override suspend fun upsertFabricRoll(fabricRoll: FabricRoll) {
