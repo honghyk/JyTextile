@@ -63,7 +63,4 @@ interface RollInventoryDao : EntityDao<FabricRollEntity> {
 
     @Query("DELETE FROM fabric_rolls")
     override suspend fun deleteAll()
-
-    @Query("SELECT * FROM fabric_rolls")
-    fun selectAll(): Flow<List<FabricRollEntity>>
 }
