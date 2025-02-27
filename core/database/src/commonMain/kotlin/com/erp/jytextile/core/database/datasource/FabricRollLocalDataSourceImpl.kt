@@ -31,16 +31,16 @@ class FabricRollLocalDataSourceImpl(
         return rollInventoryDao.getFabricRoll(rollId).map(FabricRollWithZoneEntity::toDomain)
     }
 
-    override suspend fun upsert(fabricRoll: FabricRoll) {
-        rollInventoryDao.upsert(fabricRoll.toEntity())
+    override suspend fun upsert(entity: FabricRoll): Long {
+        return rollInventoryDao.upsert(entity.toEntity())
     }
 
-    override suspend fun upsert(fabricRolls: List<FabricRoll>) {
-        rollInventoryDao.upsert(fabricRolls.map(FabricRoll::toEntity))
+    override suspend fun upsert(entities: List<FabricRoll>) {
+        rollInventoryDao.upsert(entities.map(FabricRoll::toEntity))
     }
 
-    override suspend fun delete(rollId: Long) {
-        rollInventoryDao.delete(rollId)
+    override suspend fun delete(id: Long) {
+        rollInventoryDao.delete(id)
     }
 
     override suspend fun deleteByZoneId(zoneId: Long) {

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e1429a58215516e16063d9fb7b0153ff",
+    "identityHash": "410c5001cb28475768ecab562d15c6b5",
     "entities": [
       {
         "tableName": "zones",
@@ -47,7 +47,7 @@
       },
       {
         "tableName": "fabric_rolls",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `zone_id` INTEGER NOT NULL, `itemNo` TEXT NOT NULL, `orderNo` TEXT NOT NULL, `color` TEXT NOT NULL, `factory` TEXT NOT NULL, `finish` TEXT NOT NULL, `remaining_length` REAL NOT NULL, `original_length` REAL NOT NULL, `remark` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`zone_id`) REFERENCES `zones`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `zone_id` INTEGER NOT NULL, `itemNo` TEXT NOT NULL, `orderNo` TEXT NOT NULL, `color` TEXT NOT NULL, `factory` TEXT NOT NULL, `finish` TEXT NOT NULL, `remaining_length` REAL NOT NULL, `original_length` REAL NOT NULL, `remark` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`zone_id`) REFERENCES `zones`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -129,7 +129,7 @@
         "foreignKeys": [
           {
             "table": "zones",
-            "onDelete": "NO ACTION",
+            "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
               "zone_id"
@@ -214,7 +214,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e1429a58215516e16063d9fb7b0153ff')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '410c5001cb28475768ecab562d15c6b5')"
     ]
   }
 }

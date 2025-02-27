@@ -8,5 +8,5 @@ interface EntityLocalDataSource<E: Entity> {
 
     suspend fun upsert(entities: List<E>)
 
-    suspend fun delete(entity: E)
+    suspend fun delete(id: Long)
 }

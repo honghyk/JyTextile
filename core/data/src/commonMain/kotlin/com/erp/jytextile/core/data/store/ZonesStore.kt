@@ -18,7 +18,7 @@ class ZonesStore(
     private val remoteDataSource: ZoneRemoteDataSource,
 ) : Store<PagingKey, List<Zone>> by storeBuilder(
     fetcher = Fetcher.of { key ->
-        remoteDataSource.getZones(key.page, key.pageSize)
+        remoteDataSource.getZones(key.page, key.pageSize * 2)
     },
     sourceOfTruth = SourceOfTruth.of<PagingKey, List<Zone>, List<Zone>>(
         reader = { key ->
@@ -27,7 +27,12 @@ class ZonesStore(
         writer = { key, response ->
             syncerForEntity(localDataSource)
                 .sync(
-                    currentValues = localDataSource.getZones(key.page, key.pageSize).first(),
+                    currentValues = localDataSource
+                        .getZones(
+                            page = key.page,
+                            pageSize = key.pageSize * 2
+                        )
+                        .first(),
                     networkValues = response,
                 )
         },

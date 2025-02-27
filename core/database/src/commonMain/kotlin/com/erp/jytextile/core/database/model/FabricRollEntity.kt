@@ -15,6 +15,7 @@ import com.erp.jytextile.core.domain.model.Zone
             entity = ZoneEntity::class,
             parentColumns = ["id"],
             childColumns = ["zone_id"],
+            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [

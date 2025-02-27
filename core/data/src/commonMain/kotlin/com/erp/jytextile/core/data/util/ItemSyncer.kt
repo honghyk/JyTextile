@@ -6,7 +6,7 @@ import com.erp.jytextile.core.domain.model.Entity
 
 class ItemSyncer<T : Entity>(
     private val upsertEntity: suspend (T) -> Long,
-    private val deleteEntity: suspend (T) -> Unit,
+    private val deleteEntity: suspend (Long) -> Unit,
 ) {
     private val logger by lazy { Logger.withTag("ItemSyncer") }
 
@@ -39,7 +39,7 @@ class ItemSyncer<T : Entity>(
         }
 
         currentLocalEntities.forEach {
-            deleteEntity(it)
+            deleteEntity(it.id)
             logger.v { "Deleted entity: ${it.id}" }
             removed += it
         }

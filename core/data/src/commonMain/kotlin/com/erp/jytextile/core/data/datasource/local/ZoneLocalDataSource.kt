@@ -14,7 +14,7 @@ interface ZoneLocalDataSource: EntityLocalDataSource<Zone> {
 
     override suspend fun upsert(entities: List<Zone>)
 
-    override suspend fun delete(entity: Zone)
+    override suspend fun delete(id: Long)
 
     suspend fun delete(zoneIds: List<Long>)
 

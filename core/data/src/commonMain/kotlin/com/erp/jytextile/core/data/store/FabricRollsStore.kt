@@ -4,7 +4,9 @@ import com.erp.jytextile.core.data.datasource.local.FabricRollLocalDataSource
 import com.erp.jytextile.core.data.datasource.remote.FabricRollRemoteDataSource
 import com.erp.jytextile.core.data.util.PagingKey
 import com.erp.jytextile.core.data.util.storeBuilder
+import com.erp.jytextile.core.data.util.syncerForEntity
 import com.erp.jytextile.core.domain.model.FabricRoll
+import kotlinx.coroutines.flow.first
 import me.tatarka.inject.annotations.Inject
 import org.mobilenativefoundation.store.store5.Fetcher
 import org.mobilenativefoundation.store.store5.SourceOfTruth
@@ -31,10 +33,17 @@ class FabricRollsStore(
             )
         },
         writer = { (zoneId, pagingKey), response ->
-            if (pagingKey.page == 0) {
-                localDataSource.deleteByZoneId(zoneId)
-            }
-            localDataSource.upsert(response)
+            syncerForEntity(localDataSource)
+                .sync(
+                    currentValues = localDataSource
+                        .getFabricRolls(
+                            zoneId = zoneId,
+                            page = pagingKey.page,
+                            pageSize = pagingKey.pageSize * 2
+                        )
+                        .first(),
+                    networkValues = response
+                )
         }
     )
 ).build()
