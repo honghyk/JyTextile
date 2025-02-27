@@ -20,7 +20,7 @@ interface InventoryDao {
 
     @Query(
         value = """
-            SELECT * FROM release_history
+            SELECT * FROM release_histories
             WHERE roll_id = :rollId
             ORDER BY release_date DESC
             LIMIT :limit 
@@ -35,7 +35,7 @@ interface InventoryDao {
 
     @Query(
         value = """
-            SELECT * FROM release_history
+            SELECT * FROM release_histories
             WHERE id = :id
             LIMIT 1
             """
@@ -44,7 +44,7 @@ interface InventoryDao {
 
     @Query(
         value = """
-            SELECT COUNT(*) FROM release_history
+            SELECT COUNT(*) FROM release_histories
             WHERE roll_id = :rollId
             """
     )
@@ -69,7 +69,7 @@ interface InventoryDao {
         )
     }
 
-    @Query("DELETE FROM release_history WHERE id = :id")
+    @Query("DELETE FROM release_histories WHERE id = :id")
     suspend fun deleteReleaseHistory(id: Long)
 
     @Transaction

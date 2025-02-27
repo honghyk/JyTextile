@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f163828a1fd828604d5ca68f6b29d58b",
+    "identityHash": "31f47d9c609dff19de89990bf899b139",
     "entities": [
       {
         "tableName": "zones",
@@ -142,8 +142,8 @@
         ]
       },
       {
-        "tableName": "release_history",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `roll_id` INTEGER NOT NULL, `quantity` REAL NOT NULL, `release_date` INTEGER NOT NULL, `destination` TEXT NOT NULL, `remark` TEXT, FOREIGN KEY(`roll_id`) REFERENCES `fabric_rolls`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "release_histories",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `roll_id` INTEGER NOT NULL, `quantity` REAL NOT NULL, `release_date` INTEGER NOT NULL, `buyer` TEXT NOT NULL, `remark` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`roll_id`) REFERENCES `fabric_rolls`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -170,8 +170,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "destination",
-            "columnName": "destination",
+            "fieldPath": "buyer",
+            "columnName": "buyer",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -182,26 +182,26 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
             "id"
           ]
         },
         "indices": [
           {
-            "name": "index_release_history_roll_id",
+            "name": "index_release_histories_roll_id",
             "unique": false,
             "columnNames": [
               "roll_id"
             ],
             "orders": [],
-            "createSql": "CREATE INDEX IF NOT EXISTS `index_release_history_roll_id` ON `${TABLE_NAME}` (`roll_id`)"
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_release_histories_roll_id` ON `${TABLE_NAME}` (`roll_id`)"
           }
         ],
         "foreignKeys": [
           {
             "table": "fabric_rolls",
-            "onDelete": "CASCADE",
+            "onDelete": "NO ACTION",
             "onUpdate": "NO ACTION",
             "columns": [
               "roll_id"
@@ -215,7 +215,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f163828a1fd828604d5ca68f6b29d58b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '31f47d9c609dff19de89990bf899b139')"
     ]
   }
 }
