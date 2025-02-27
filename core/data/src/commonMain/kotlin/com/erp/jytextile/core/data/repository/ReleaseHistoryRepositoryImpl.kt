@@ -1,38 +1,30 @@
 package com.erp.jytextile.core.data.repository
 
-import com.erp.jytextile.core.database.dao.InventoryDao
-import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
-import com.erp.jytextile.core.database.model.toDomain
+import com.erp.jytextile.core.data.datasource.remote.ReleaseHistoryRemoteDataSource
+import com.erp.jytextile.core.data.store.ReleaseHistoriesStore
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.repository.ReleaseHistoryRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
+import org.mobilenativefoundation.store.store5.StoreReadRequest
+import org.mobilenativefoundation.store.store5.StoreReadResponse
 
 @Inject
 class ReleaseHistoryRepositoryImpl(
-    private val inventoryDao: InventoryDao,
-): ReleaseHistoryRepository {
+    private val releaseHistoryRemoteDataSource: ReleaseHistoryRemoteDataSource,
+    private val releaseHistoryStore: ReleaseHistoriesStore,
+) : ReleaseHistoryRepository {
 
-    override fun getReleaseHistories(rollId: Long, page: Int): Flow<List<ReleaseHistory>> {
-        return inventoryDao.getReleaseHistory(
-            rollId = rollId,
-            limit = PAGE_SIZE,
-            offset = page * PAGE_SIZE,
-        ).map { histories ->
-            histories.map(ReleaseHistoryEntity::toDomain)
-        }
-    }
-
-    override fun getReleaseHistoriesPage(rollId: Long): Flow<Int> {
-        return inventoryDao.getReleaseHistoryCount(rollId).map { count ->
-            (count + PAGE_SIZE - 1) / PAGE_SIZE
-        }
+    override fun getReleaseHistories(rollId: Long): Flow<List<ReleaseHistory>> {
+        return releaseHistoryStore
+            .stream(StoreReadRequest.cached(rollId, true))
+            .filter { it is StoreReadResponse.Data }
+            .map { it.requireData() }
     }
 
     override suspend fun removeReleaseHistories(ids: List<Long>) {
-        inventoryDao.deleteReleaseHistories(ids)
+        releaseHistoryRemoteDataSource.deleteReleaseHistories(ids)
     }
 }
-
-private const val PAGE_SIZE = 20

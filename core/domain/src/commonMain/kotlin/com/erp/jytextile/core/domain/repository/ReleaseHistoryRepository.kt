@@ -7,10 +7,7 @@ interface ReleaseHistoryRepository {
 
     fun getReleaseHistories(
         rollId: Long,
-        page: Int,
     ): Flow<List<ReleaseHistory>>
-
-    fun getReleaseHistoriesPage(rollId: Long): Flow<Int>
 
     suspend fun removeReleaseHistories(ids: List<Long>)
 }

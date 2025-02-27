@@ -20,8 +20,8 @@ data class ReleaseHistoryTable(
         "REMARK",
     ),
     override val items: List<ReleaseHistoryTableItem> = emptyList(),
-    override val currentPage: Int,
-    override val totalPage: Int,
+    override val currentPage: Int = -1,
+    override val totalPage: Int = -1,
 ) : Table
 
 data class ReleaseHistoryTableItem(

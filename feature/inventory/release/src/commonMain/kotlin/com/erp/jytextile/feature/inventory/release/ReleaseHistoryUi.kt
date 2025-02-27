@@ -14,7 +14,6 @@ import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.navigation.RollDetailScreen
-import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
 import com.erp.jytextile.core.ui.model.TableItem
@@ -66,13 +65,6 @@ private fun ReleaseHistoryUi(
                         screen = RollDetailScreen(rollId = state.rollId),
                         onNavEvent = { event ->
                             when (event) {
-                                is NavEvent.GoTo -> {
-                                    when (event.screen) {
-                                        is RollFormScreen -> state.eventSink(ReleaseHistoryEvent.ModifyRoll)
-                                        else -> Unit
-                                    }
-                                }
-
                                 is NavEvent.Pop -> state.eventSink(ReleaseHistoryEvent.Back)
                                 else -> Unit
                             }
@@ -84,8 +76,6 @@ private fun ReleaseHistoryUi(
                         table = state.releaseHistoryTable,
                         selectedRows = state.selectedRows,
                         onItemClick = { state.eventSink(ReleaseHistoryEvent.SelectRow(it)) },
-                        onPreviousClick = { state.eventSink(ReleaseHistoryEvent.PreviousPage) },
-                        onNextClick = { state.eventSink(ReleaseHistoryEvent.NextPage) },
                         onRemoveClick = { state.eventSink(ReleaseHistoryEvent.Remove) },
                     )
                 }
@@ -99,8 +89,6 @@ private fun ReleaseHistories(
     table: ReleaseHistoryTable,
     selectedRows: List<TableItem>,
     onItemClick: (TableItem) -> Unit,
-    onPreviousClick: () -> Unit,
-    onNextClick: () -> Unit,
     onRemoveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -111,8 +99,8 @@ private fun ReleaseHistories(
         selectedRows = selectedRows,
         onItemSelected = { _, item -> onItemClick(item) },
         onItemClick = onItemClick,
-        onPreviousClick = onPreviousClick,
-        onNextClick = onNextClick,
+        onPreviousClick = {},
+        onNextClick = {},
         titleActionButtons = {
             JyOutlinedButton(
                 enabled = selectedRows.isNotEmpty(),
