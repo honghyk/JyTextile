@@ -2,9 +2,9 @@ package com.erp.jytextile.core.data.repository
 
 import com.erp.jytextile.core.data.datasource.remote.ZoneRemoteDataSource
 import com.erp.jytextile.core.data.store.ZonesStore
-import com.erp.jytextile.core.data.testdouble.TestInventoryZoneDao
+import com.erp.jytextile.core.data.testdouble.TestZoneLocalDataSource
 import com.erp.jytextile.core.data.testdouble.TestZoneRemoteDataSource
-import com.erp.jytextile.core.database.dao.InventoryZoneDao
+import com.erp.jytextile.core.database.datasource.ZoneLocalDataSource
 import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -14,19 +14,19 @@ import kotlin.test.assertEquals
 
 class ZoneInventoryRepositoryTest {
 
-    private lateinit var testZoneInventoryDao: InventoryZoneDao
+    private lateinit var testZoneLocalDataSource: ZoneLocalDataSource
     private lateinit var testZoneRemoteDataSource: ZoneRemoteDataSource
     private lateinit var testInventoryRepository: ZoneInventoryRepository
 
     @BeforeTest
     fun setUp() {
-        testZoneInventoryDao = TestInventoryZoneDao()
+        testZoneLocalDataSource = TestZoneLocalDataSource()
         testZoneRemoteDataSource = TestZoneRemoteDataSource()
 
         testInventoryRepository = ZoneInventoryRepositoryImpl(
-            testZoneInventoryDao,
+            testZoneLocalDataSource,
             testZoneRemoteDataSource,
-            ZonesStore(testZoneInventoryDao, testZoneRemoteDataSource)
+            ZonesStore(testZoneLocalDataSource, testZoneRemoteDataSource)
         )
     }
 

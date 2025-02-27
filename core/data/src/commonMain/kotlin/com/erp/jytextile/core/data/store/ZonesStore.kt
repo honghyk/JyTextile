@@ -1,9 +1,7 @@
 package com.erp.jytextile.core.data.store
 
 import com.erp.jytextile.core.data.datasource.remote.ZoneRemoteDataSource
-import com.erp.jytextile.core.database.dao.InventoryZoneDao
-import com.erp.jytextile.core.database.model.ZoneEntity
-import com.erp.jytextile.core.database.model.toEntity
+import com.erp.jytextile.core.database.datasource.ZoneLocalDataSource
 import com.erp.jytextile.core.domain.model.Zone
 import me.tatarka.inject.annotations.Inject
 import org.mobilenativefoundation.store.store5.Fetcher
@@ -12,25 +10,25 @@ import org.mobilenativefoundation.store.store5.Store
 
 @Inject
 class ZonesStore(
-    private val dao: InventoryZoneDao,
+    private val localDataSource: ZoneLocalDataSource,
     private val remoteDataSource: ZoneRemoteDataSource,
-) : Store<PagingKey, List<ZoneEntity>> by storeBuilder<PagingKey, List<Zone>, List<ZoneEntity>>(
+) : Store<PagingKey, List<Zone>> by storeBuilder(
     fetcher = Fetcher.of { key ->
         remoteDataSource.getZones(key.page, key.pageSize * 2)
     },
-    sourceOfTruth = SourceOfTruth.of(
+    sourceOfTruth = SourceOfTruth.of<PagingKey, List<Zone>, List<Zone>>(
         reader = { key ->
-            dao.getZones(offset = key.offset, limit = key.pageSize)
+            localDataSource.getZones(page = key.page, pageSize = key.pageSize)
         },
         writer = { key, response ->
             if (key.page == 0) {
-                dao.deleteAll()
+                localDataSource.deleteAll()
             }
-            dao.upsert(response.map { it.toEntity() })
+            localDataSource.upsert(response)
         },
         delete = { key ->
-            dao.deletePage(offset = key.offset, limit = key.pageSize)
+            localDataSource.deletePage(page = key.page, pageSize = key.pageSize)
         },
-        deleteAll = { dao.deleteAll() },
+        deleteAll = { localDataSource.deleteAll() },
     )
 ).build()
