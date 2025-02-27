@@ -11,46 +11,16 @@ import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
 import com.erp.jytextile.core.database.model.ZoneEntity
-import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface InventoryDao {
-
-    @Query(
-        value = """
-                SELECT zones.*, COUNT(fabric_rolls.id) AS legacyRollCount
-                FROM zones
-                LEFT JOIN fabric_rolls ON zones.id = fabric_rolls.zone_id
-                GROUP BY zones.id
-                ORDER BY zones.name ASC
-                LIMIT :limit
-                OFFSET :offset
-            """
-    )
-    fun getZones(
-        limit: Int,
-        offset: Int,
-    ): Flow<List<ZoneWithRollCountEntity>>
 
     @Query("SELECT * FROM zones WHERE name = :name LIMIT 1")
     suspend fun findZoneByName(name: String): ZoneEntity?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertZone(section: ZoneEntity): Long
-
-    @Upsert
-    suspend fun upsertZones(zones: List<ZoneEntity>)
-
-    @Query("DELETE FROM zones WHERE id = :sectionId")
-    suspend fun deleteZone(sectionId: Long)
-
-    @Query(
-        value = """
-            SELECT COUNT(*) FROM zones
-            """
-    )
-    fun getZonesCount(): Flow<Int>
 
     @Query(
         value = """

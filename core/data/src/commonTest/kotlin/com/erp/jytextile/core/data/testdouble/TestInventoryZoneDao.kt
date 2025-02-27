@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.update
 
 class TestInventoryZoneDao : TestEntityDao<ZoneEntity>(), InventoryZoneDao {
 
-    override val ignoreOnConflict: Boolean = true
+    override val ignoreOnConflict: Boolean = false
 
     override fun getZones(offset: Int, limit: Int): Flow<List<ZoneEntity>> {
         return entities

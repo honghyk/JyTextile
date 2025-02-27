@@ -5,7 +5,6 @@ import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
 import com.erp.jytextile.core.database.model.ZoneEntity
-import com.erp.jytextile.core.database.model.ZoneWithRollCountEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -18,21 +17,6 @@ class TestInventoryDao : InventoryDao {
 
     private val fabricRollEntitiesStateFlow = MutableStateFlow<List<FabricRollEntity>>(emptyList())
 
-    override fun getZones(limit: Int, offset: Int): Flow<List<ZoneWithRollCountEntity>> {
-        return combine(
-            sectionEntitiesStateFlow,
-            fabricRollEntitiesStateFlow,
-            ::Pair
-        ).map { (sections, rolls) ->
-            sections.subList(
-                fromIndex = offset,
-                toIndex = (offset + limit).coerceAtMost(sections.size)
-            ).map {
-                it.toSectionWithRollCountEntity(rolls)
-            }
-        }
-    }
-
     override suspend fun findZoneByName(name: String): ZoneEntity? {
         TODO("Not yet implemented")
     }
@@ -44,24 +28,6 @@ class TestInventoryDao : InventoryDao {
                 .sortedBy { it.name }
         }
         return section.id
-    }
-
-    override suspend fun upsertZones(zones: List<ZoneEntity>) {
-        sectionEntitiesStateFlow.update { oldValues ->
-            (oldValues + zones)
-                .distinctBy(ZoneEntity::id)
-                .sortedBy { it.name }
-        }
-    }
-
-    override suspend fun deleteZone(sectionId: Long) {
-        sectionEntitiesStateFlow.update { entities ->
-            entities.filterNot { it.id == sectionId }
-        }
-    }
-
-    override fun getZonesCount(): Flow<Int> {
-        return sectionEntitiesStateFlow.map { it.size }
     }
 
     override fun getFabricRolls(
@@ -135,7 +101,7 @@ class TestInventoryDao : InventoryDao {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteReleaseHistory(releaseHistoryId: Long) {
+    override suspend fun deleteReleaseHistory(id: Long) {
         TODO("Not yet implemented")
     }
 
@@ -163,12 +129,3 @@ class TestInventoryDao : InventoryDao {
         TODO("Not yet implemented")
     }
 }
-
-private fun ZoneEntity.toSectionWithRollCountEntity(
-    fabricRolls: List<FabricRollEntity>
-) = ZoneWithRollCountEntity(
-    zone = this,
-    legacyRollCount = fabricRolls
-        .filter { it.zoneId == id }
-        .size
-)

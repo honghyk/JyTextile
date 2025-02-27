@@ -1,9 +1,12 @@
 package com.erp.jytextile.core.data.repository
 
-import com.erp.jytextile.core.data.testdouble.TestInventoryDao
-import com.erp.jytextile.core.database.dao.InventoryDao
-import com.erp.jytextile.core.database.model.ZoneEntity
+import com.erp.jytextile.core.data.store.ZonesStore
+import com.erp.jytextile.core.data.testdouble.TestInventoryZoneDao
+import com.erp.jytextile.core.data.testdouble.TestZoneRemoteDataSource
+import com.erp.jytextile.core.database.dao.InventoryZoneDao
 import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
+import com.erp.jytextile.core.network.ZoneRemoteDataSource
+import com.erp.jytextile.core.network.model.ZoneInsertRequest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -12,36 +15,41 @@ import kotlin.test.assertEquals
 
 class ZoneInventoryRepositoryTest {
 
-    private lateinit var testInventoryDao: InventoryDao
+    private lateinit var testZoneInventoryDao: InventoryZoneDao
+    private lateinit var testZoneRemoteDataSource: ZoneRemoteDataSource
     private lateinit var testInventoryRepository: ZoneInventoryRepository
 
     @BeforeTest
     fun setUp() {
-        testInventoryDao = TestInventoryDao()
-        testInventoryRepository = ZoneInventoryRepositoryImpl(testInventoryDao)
+        testZoneInventoryDao = TestInventoryZoneDao()
+        testZoneRemoteDataSource = TestZoneRemoteDataSource()
+
+        testInventoryRepository = ZoneInventoryRepositoryImpl(
+            testZoneInventoryDao,
+            testZoneRemoteDataSource,
+            ZonesStore(testZoneInventoryDao, testZoneRemoteDataSource)
+        )
     }
 
     @Test
-    fun get_section_page_count_is_exactly_divisible_by_page_size() = runTest {
-        insertSections(20)
+    fun get_zones_returns_empty_list_when_no_zones_exist() = runTest {
+        val result = testInventoryRepository.getZones(0, 10).first()
 
-        val result = testInventoryRepository.getZonePage(20).first()
-
-        assertEquals(1, result)
+        assertEquals(emptyList(), result)
     }
 
     @Test
-    fun get_section_page_count_is_not_exactly_divisible_by_page_size() = runTest {
-        insertSections(50)
+    fun get_zones_returns_zones_when_zones_exist() = runTest {
+        inertZones(30)
 
-        val result = testInventoryRepository.getZonePage(20).first()
+        val result = testInventoryRepository.getZones(1, 10).first()
 
-        assertEquals(3, result)
+        assertEquals(10, result.size)
     }
 
-    private suspend fun insertSections(count: Int) {
+    private suspend fun inertZones(count: Int) {
         repeat(count) {
-            testInventoryDao.insertZone(ZoneEntity(id = it.toLong(), name = "Section $it"))
+            testZoneRemoteDataSource.upsert(ZoneInsertRequest(name = "Zone $it"))
         }
     }
 }

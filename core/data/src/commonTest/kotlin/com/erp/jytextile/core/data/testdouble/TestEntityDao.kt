@@ -50,6 +50,12 @@ abstract class TestEntityDao<E : LocalEntity> : EntityDao<E> {
         }
     }
 
+    override suspend fun delete(ids: List<Long>) {
+        entities.update { oldValues ->
+            oldValues.filterNot { it.id in ids }
+        }
+    }
+
     override suspend fun deleteAll() {
         entities.value = emptyList()
     }

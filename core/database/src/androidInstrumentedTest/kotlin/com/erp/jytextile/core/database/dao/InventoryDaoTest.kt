@@ -33,58 +33,6 @@ class InventoryDaoTest {
     fun closeDb() = db.close()
 
     @Test
-    fun get_sections_by_ascending_order() = runTest {
-        val sections = listOf(
-            testSection("a1"),
-            testSection("c1"),
-            testSection("a2"),
-            testSection("d1"),
-        )
-        sections.forEach { section ->
-            inventoryDao.insertZone(section)
-        }
-
-        val result = inventoryDao.getZones(10, 0).first()
-
-        assertEquals(
-            listOf("a1", "a2", "c1", "d1"),
-            result.map { it.zone.name },
-        )
-    }
-
-    @Test
-    fun get_sections_count() = runTest {
-        val sections = listOf(
-            testSection("a1"),
-            testSection("a2"),
-        )
-        sections.forEach { section ->
-            inventoryDao.insertZone(section)
-        }
-
-        val result = inventoryDao.getZonesCount().first()
-
-        assertEquals(2, result)
-    }
-
-    @Test
-    fun get_sections_with_roll_count() = runTest {
-        val section1 = inventoryDao.insertZone(testSection("a1"))
-        val rolls = listOf(
-            testFabricRoll(0, section1, "a1"),
-            testFabricRoll(1, section1, "j3"),
-            testFabricRoll(2, section1, "c1"),
-        )
-        rolls.forEach { roll ->
-            inventoryDao.upsertFabricRoll(roll)
-        }
-
-        val result = inventoryDao.getZones(10, 0).first()
-
-        assertEquals(3, result.first().legacyRollCount)
-    }
-
-    @Test
     fun get_fabric_rolls_by_ascending_id() = runTest {
         val section1 = inventoryDao.insertZone(testSection("a1"))
         val section2 = inventoryDao.insertZone(testSection("a2"))

@@ -1,7 +1,6 @@
 package com.erp.jytextile.core.database.model
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -16,17 +15,6 @@ data class ZoneEntity(
     val name: String,
     @ColumnInfo(defaultValue = "0") val rollCount: Int = 0,
 ) : LocalEntity
-
-data class ZoneWithRollCountEntity(
-    @Embedded val zone: ZoneEntity,
-    val legacyRollCount: Int,
-)
-
-fun ZoneWithRollCountEntity.toDomain() = Zone(
-    id = zone.id,
-    name = zone.name,
-    rollCount = legacyRollCount,
-)
 
 fun ZoneEntity.toDomain() = Zone(
     id = id,
