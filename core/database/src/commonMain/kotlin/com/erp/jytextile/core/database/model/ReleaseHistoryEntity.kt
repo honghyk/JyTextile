@@ -9,7 +9,7 @@ import com.erp.jytextile.core.domain.model.ReleaseHistory
 import kotlinx.datetime.Instant
 
 @Entity(
-    tableName = "release_history",
+    tableName = "release_histories",
     foreignKeys = [
         ForeignKey(
             entity = FabricRollEntity::class,
@@ -26,7 +26,7 @@ data class ReleaseHistoryEntity(
     @ColumnInfo("roll_id") val rollId: Long,
     val quantity: Double,
     @ColumnInfo("release_date") val releaseDate: Instant,
-    val destination: String,
+    val buyer: String,
     val remark: String?,
 )
 
@@ -35,6 +35,6 @@ fun ReleaseHistoryEntity.toDomain() = ReleaseHistory(
     rollId = rollId,
     quantity = quantity,
     releaseDate = releaseDate,
-    destination = destination,
+    buyer = buyer,
     remark = remark.orEmpty(),
 )

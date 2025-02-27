@@ -7,6 +7,6 @@ data class ReleaseHistory(
     val rollId: Long,
     val quantity: Double,
     val releaseDate: Instant,
-    val destination: String,
+    val buyer: String,
     val remark: String,
 )

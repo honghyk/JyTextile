@@ -88,7 +88,7 @@ class RollInventoryRepositoryImpl(
             releaseHistory = ReleaseHistoryEntity(
                 rollId = rollId,
                 quantity = quantity,
-                destination = buyer,
+                buyer = buyer,
                 releaseDate = date,
                 remark = remark,
             ),

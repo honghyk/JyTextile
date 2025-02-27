@@ -43,7 +43,7 @@ data class ReleaseHistoryTableItem(
 
 fun ReleaseHistory.toTableItem() = ReleaseHistoryTableItem(
     id = id,
-    buyer = destination,
+    buyer = buyer,
     qtyInMeter = quantity.formatDecimal(1),
     qtyInYard = quantity.meterToYard().formatDecimal(1),
     releaseDate = releaseDate.toLocalDateTime(TimeZone.currentSystemDefault()).format(
