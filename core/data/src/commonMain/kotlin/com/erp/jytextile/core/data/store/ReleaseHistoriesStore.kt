@@ -1,7 +1,7 @@
 package com.erp.jytextile.core.data.store
 
+import com.erp.jytextile.core.data.datasource.local.ReleaseHistoryLocalDataSource
 import com.erp.jytextile.core.data.datasource.remote.ReleaseHistoryRemoteDataSource
-import com.erp.jytextile.core.database.datasource.ReleaseHistoryLocalDataSource
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import me.tatarka.inject.annotations.Inject
 import org.mobilenativefoundation.store.store5.Fetcher

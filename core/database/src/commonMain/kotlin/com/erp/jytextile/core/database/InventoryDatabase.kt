@@ -6,7 +6,6 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.TypeConverters
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.dao.InventoryZoneDao
 import com.erp.jytextile.core.database.dao.ReleaseHistoryDao
 import com.erp.jytextile.core.database.dao.RollInventoryDao
@@ -26,7 +25,6 @@ import kotlinx.coroutines.IO
 )
 @ConstructedBy(InventoryDatabaseConstructor::class)
 abstract class InventoryDatabase : RoomDatabase() {
-    abstract fun inventoryDao(): InventoryDao
     abstract fun inventoryZoneDao(): InventoryZoneDao
     abstract fun rollInventoryDao(): RollInventoryDao
     abstract fun releaseHistoryDao(): ReleaseHistoryDao

@@ -1,6 +1,6 @@
 package com.erp.jytextile.core.data.testdouble
 
-import com.erp.jytextile.core.database.datasource.ZoneLocalDataSource
+import com.erp.jytextile.core.data.datasource.local.ZoneLocalDataSource
 import com.erp.jytextile.core.domain.model.Zone
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

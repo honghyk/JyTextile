@@ -1,7 +1,7 @@
 package com.erp.jytextile.core.data.repository
 
+import com.erp.jytextile.core.data.datasource.local.FabricRollLocalDataSource
 import com.erp.jytextile.core.data.datasource.remote.FabricRollRemoteDataSource
-import com.erp.jytextile.core.database.datasource.FabricRollLocalDataSource
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.SearchRepository
 import kotlinx.coroutines.flow.Flow

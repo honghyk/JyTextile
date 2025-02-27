@@ -1,5 +1,6 @@
 package com.erp.jytextile.core.database.datasource
 
+import com.erp.jytextile.core.data.datasource.local.ZoneLocalDataSource
 import com.erp.jytextile.core.database.dao.InventoryZoneDao
 import com.erp.jytextile.core.database.model.ZoneEntity
 import com.erp.jytextile.core.database.model.toDomain
@@ -8,26 +9,6 @@ import com.erp.jytextile.core.domain.model.Zone
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
-
-interface ZoneLocalDataSource {
-
-    fun getZones(
-        page: Int,
-        pageSize: Int,
-    ): Flow<List<Zone>>
-
-    suspend fun upsert(zone: Zone)
-
-    suspend fun upsert(zones: List<Zone>)
-
-    suspend fun delete(zoneId: Long)
-
-    suspend fun delete(zoneIds: List<Long>)
-
-    suspend fun deleteAll()
-
-    suspend fun deletePage(page: Int, pageSize: Int)
-}
 
 @Inject
 class ZoneLocalDataSourceImpl(

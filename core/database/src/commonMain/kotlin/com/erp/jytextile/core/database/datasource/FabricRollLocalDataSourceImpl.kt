@@ -1,5 +1,6 @@
 package com.erp.jytextile.core.database.datasource
 
+import com.erp.jytextile.core.data.datasource.local.FabricRollLocalDataSource
 import com.erp.jytextile.core.database.dao.RollInventoryDao
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
@@ -9,23 +10,6 @@ import com.erp.jytextile.core.domain.model.FabricRoll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Inject
-
-interface FabricRollLocalDataSource {
-
-    fun getFabricRolls(zoneId: Long, page: Int, pageSize: Int): Flow<List<FabricRoll>>
-
-    fun getFabricRoll(rollId: Long): Flow<FabricRoll>
-
-    suspend fun upsert(fabricRoll: FabricRoll)
-
-    suspend fun upsert(fabricRolls: List<FabricRoll>)
-
-    suspend fun delete(rollId: Long)
-
-    suspend fun deleteByZoneId(zoneId: Long)
-
-    suspend fun search(query: String): List<FabricRoll>
-}
 
 @Inject
 class FabricRollLocalDataSourceImpl(

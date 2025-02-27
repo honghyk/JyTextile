@@ -1,7 +1,7 @@
 package com.erp.jytextile.core.data.store
 
+import com.erp.jytextile.core.data.datasource.local.ZoneLocalDataSource
 import com.erp.jytextile.core.data.datasource.remote.ZoneRemoteDataSource
-import com.erp.jytextile.core.database.datasource.ZoneLocalDataSource
 import com.erp.jytextile.core.domain.model.Zone
 import me.tatarka.inject.annotations.Inject
 import org.mobilenativefoundation.store.store5.Fetcher

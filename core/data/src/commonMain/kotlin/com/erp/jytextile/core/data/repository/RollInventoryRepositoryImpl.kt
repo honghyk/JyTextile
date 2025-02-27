@@ -1,11 +1,11 @@
 package com.erp.jytextile.core.data.repository
 
+import com.erp.jytextile.core.data.datasource.local.FabricRollLocalDataSource
+import com.erp.jytextile.core.data.datasource.local.ReleaseHistoryLocalDataSource
 import com.erp.jytextile.core.data.datasource.remote.FabricRollRemoteDataSource
 import com.erp.jytextile.core.data.store.FabricRollStore
 import com.erp.jytextile.core.data.store.FabricRollsStore
 import com.erp.jytextile.core.data.store.PagingKey
-import com.erp.jytextile.core.database.datasource.FabricRollLocalDataSource
-import com.erp.jytextile.core.database.datasource.ReleaseHistoryLocalDataSource
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository
