@@ -10,6 +10,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.kotlinUtils)
+
+            implementation(libs.kotlinx.datetime)
         }
     }
 }

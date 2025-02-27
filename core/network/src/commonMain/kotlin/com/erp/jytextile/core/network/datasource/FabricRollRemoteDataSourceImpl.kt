@@ -4,12 +4,14 @@ import com.erp.jytextile.core.data.datasource.remote.FabricRollRemoteDataSource
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.network.Tables
 import com.erp.jytextile.core.network.model.FabricRollResponse
+import com.erp.jytextile.core.network.model.ReleaseFabricRollRequest
 import com.erp.jytextile.core.network.model.toDomain
 import com.erp.jytextile.core.network.model.toRequest
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Order
+import kotlinx.datetime.Instant
 import me.tatarka.inject.annotations.Inject
 
 @Inject
@@ -76,6 +78,26 @@ class FabricRollRemoteDataSourceImpl(
             .delete {
                 filter { eq("zone_id", zoneId) }
             }
+    }
+
+    override suspend fun releaseFabricRoll(
+        rollId: Long,
+        quantity: Double,
+        buyer: String,
+        remark: String,
+        releaseAt: Instant
+    ) {
+        client
+            .from(Tables.RELEASE_HISTORIES)
+            .insert(
+                ReleaseFabricRollRequest(
+                    rollId = rollId,
+                    quantity = quantity,
+                    buyer = buyer,
+                    remark = remark.ifEmpty { null },
+                    releaseAt = releaseAt,
+                )
+            )
     }
 
     private val fabricRollQuery = """

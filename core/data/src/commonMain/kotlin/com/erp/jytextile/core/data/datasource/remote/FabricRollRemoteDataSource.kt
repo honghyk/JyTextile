@@ -1,6 +1,7 @@
 package com.erp.jytextile.core.data.datasource.remote
 
 import com.erp.jytextile.core.domain.model.FabricRoll
+import kotlinx.datetime.Instant
 
 interface FabricRollRemoteDataSource {
 
@@ -19,4 +20,12 @@ interface FabricRollRemoteDataSource {
     suspend fun delete(rollId: Long)
 
     suspend fun deleteByZoneId(zoneId: Long)
+
+    suspend fun releaseFabricRoll(
+        rollId: Long,
+        quantity: Double,
+        buyer: String,
+        remark: String,
+        releaseAt: Instant,
+    )
 }

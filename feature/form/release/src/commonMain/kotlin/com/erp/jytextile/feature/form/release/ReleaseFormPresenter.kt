@@ -18,6 +18,11 @@ import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format
+import kotlinx.datetime.toLocalDateTime
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
@@ -51,7 +56,14 @@ class ReleaseFormPresenter(
         var buyer by rememberRetained { mutableStateOf("") }
         var quantity by rememberRetained { mutableStateOf("") }
         var lengthUnit by rememberRetained { mutableStateOf(LengthUnit.METER) }
-        var releaseDate by rememberRetained { mutableStateOf("") }
+        var releaseDate by rememberRetained {
+            mutableStateOf(
+                Clock.System.now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .date
+                    .format(LocalDate.Formats.ISO_BASIC)
+            )
+        }
         var remark by rememberRetained { mutableStateOf("") }
 
         val eventSink: CoroutineScope.(ReleaseFormEvent) -> Unit = { event ->
