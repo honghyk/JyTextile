@@ -5,6 +5,7 @@ import com.erp.jytextile.core.data.store.FabricRollStore
 import com.erp.jytextile.core.data.store.FabricRollsStore
 import com.erp.jytextile.core.data.store.PagingKey
 import com.erp.jytextile.core.database.datasource.FabricRollLocalDataSource
+import com.erp.jytextile.core.database.datasource.ReleaseHistoryLocalDataSource
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository
@@ -25,6 +26,7 @@ import org.mobilenativefoundation.store.store5.impl.extensions.get
 class RollInventoryRepositoryImpl(
     private val fabricRollLocalDataSource: FabricRollLocalDataSource,
     private val fabricRollRemoteDataSource: FabricRollRemoteDataSource,
+    private val releaseHistoryLocalDataSource: ReleaseHistoryLocalDataSource,
     private val fabricRollStore: FabricRollStore,
     private val fabricRollsStore: FabricRollsStore,
 ) : RollInventoryRepository {
@@ -81,17 +83,13 @@ class RollInventoryRepositoryImpl(
             .parse(releaseDate, LocalDate.Formats.ISO_BASIC)
             .atStartOfDayIn(TimeZone.UTC)
 
-        fabricRollRemoteDataSource.releaseFabricRoll(
+        val result = fabricRollRemoteDataSource.releaseFabricRoll(
             rollId = rollId,
             quantity = length,
             buyer = buyer,
             releaseAt = date,
             remark = remark,
         )
-        fabricRollLocalDataSource.upsert(
-            roll.copy(
-                remainingQuantity = roll.originalQuantity - length
-            )
-        )
+        releaseHistoryLocalDataSource.insertReleaseHistory(result)
     }
 }

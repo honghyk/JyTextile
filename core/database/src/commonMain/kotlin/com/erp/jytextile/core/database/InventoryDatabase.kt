@@ -8,6 +8,7 @@ import androidx.room.TypeConverters
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.dao.InventoryZoneDao
+import com.erp.jytextile.core.database.dao.ReleaseHistoryDao
 import com.erp.jytextile.core.database.dao.RollInventoryDao
 import com.erp.jytextile.core.database.model.FabricRollEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
@@ -28,6 +29,7 @@ abstract class InventoryDatabase : RoomDatabase() {
     abstract fun inventoryDao(): InventoryDao
     abstract fun inventoryZoneDao(): InventoryZoneDao
     abstract fun rollInventoryDao(): RollInventoryDao
+    abstract fun releaseHistoryDao(): ReleaseHistoryDao
 }
 
 @Suppress("NO_ACTUAL_FOR_EXPECT")

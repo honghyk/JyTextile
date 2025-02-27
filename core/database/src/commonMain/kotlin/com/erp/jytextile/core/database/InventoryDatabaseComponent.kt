@@ -3,6 +3,7 @@ package com.erp.jytextile.core.database
 import com.erp.jytextile.core.base.inject.Singleton
 import com.erp.jytextile.core.database.dao.InventoryDao
 import com.erp.jytextile.core.database.dao.InventoryZoneDao
+import com.erp.jytextile.core.database.dao.ReleaseHistoryDao
 import com.erp.jytextile.core.database.dao.RollInventoryDao
 import me.tatarka.inject.annotations.Provides
 
@@ -23,4 +24,9 @@ interface InventoryDatabaseComponent : InventoryDatabasePlatformComponent {
     @Provides
     fun provideRollInventoryDao(database: InventoryDatabase): RollInventoryDao =
         database.rollInventoryDao()
+
+    @Singleton
+    @Provides
+    fun provideReleaseHistoryDao(database: InventoryDatabase): ReleaseHistoryDao =
+        database.releaseHistoryDao()
 }

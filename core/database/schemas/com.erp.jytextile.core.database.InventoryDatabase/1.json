@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "bde6d442eee3666eca59635d2257bf1c",
+    "identityHash": "31f47d9c609dff19de89990bf899b139",
     "entities": [
       {
         "tableName": "zones",
@@ -143,7 +143,7 @@
       },
       {
         "tableName": "release_histories",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `roll_id` INTEGER NOT NULL, `quantity` REAL NOT NULL, `release_date` INTEGER NOT NULL, `buyer` TEXT NOT NULL, `remark` TEXT, FOREIGN KEY(`roll_id`) REFERENCES `fabric_rolls`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `roll_id` INTEGER NOT NULL, `quantity` REAL NOT NULL, `release_date` INTEGER NOT NULL, `buyer` TEXT NOT NULL, `remark` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`roll_id`) REFERENCES `fabric_rolls`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -182,7 +182,7 @@
           }
         ],
         "primaryKey": {
-          "autoGenerate": true,
+          "autoGenerate": false,
           "columnNames": [
             "id"
           ]
@@ -215,7 +215,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bde6d442eee3666eca59635d2257bf1c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '31f47d9c609dff19de89990bf899b139')"
     ]
   }
 }

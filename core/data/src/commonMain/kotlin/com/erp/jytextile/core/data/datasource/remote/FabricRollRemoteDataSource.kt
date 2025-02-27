@@ -1,6 +1,7 @@
 package com.erp.jytextile.core.data.datasource.remote
 
 import com.erp.jytextile.core.domain.model.FabricRoll
+import com.erp.jytextile.core.domain.model.ReleaseHistory
 import kotlinx.datetime.Instant
 
 interface FabricRollRemoteDataSource {
@@ -27,5 +28,5 @@ interface FabricRollRemoteDataSource {
         buyer: String,
         remark: String,
         releaseAt: Instant,
-    )
+    ): ReleaseHistory
 }

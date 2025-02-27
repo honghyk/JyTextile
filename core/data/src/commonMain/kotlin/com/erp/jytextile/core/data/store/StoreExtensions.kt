@@ -13,7 +13,3 @@ inline fun <Key : Any, Network : Any, Output : Any> storeBuilder(
     fetcher: Fetcher<Key, Network>,
     sourceOfTruth: SourceOfTruth<Key, Network, Output>,
 ) = StoreBuilder.from(fetcher = fetcher, sourceOfTruth = sourceOfTruth)
-
-inline fun <Key : Any, Network : Any> storeBuilder(
-    fetcher: Fetcher<Key, Network>,
-) = StoreBuilder.from(fetcher = fetcher)

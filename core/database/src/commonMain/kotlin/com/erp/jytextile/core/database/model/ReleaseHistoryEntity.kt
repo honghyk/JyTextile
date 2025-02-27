@@ -22,7 +22,7 @@ import kotlinx.datetime.Instant
     ]
 )
 data class ReleaseHistoryEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @PrimaryKey val id: Long,
     @ColumnInfo("roll_id") val rollId: Long,
     val quantity: Double,
     @ColumnInfo("release_date") val releaseDate: Instant,
@@ -37,4 +37,13 @@ fun ReleaseHistoryEntity.toDomain() = ReleaseHistory(
     releaseDate = releaseDate,
     buyer = buyer,
     remark = remark.orEmpty(),
+)
+
+fun ReleaseHistory.toEntity() = ReleaseHistoryEntity(
+    id = id,
+    rollId = rollId,
+    quantity = quantity,
+    releaseDate = releaseDate,
+    buyer = buyer,
+    remark = remark,
 )

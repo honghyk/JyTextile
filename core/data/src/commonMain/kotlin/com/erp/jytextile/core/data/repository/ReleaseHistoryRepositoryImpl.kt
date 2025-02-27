@@ -2,6 +2,7 @@ package com.erp.jytextile.core.data.repository
 
 import com.erp.jytextile.core.data.datasource.remote.ReleaseHistoryRemoteDataSource
 import com.erp.jytextile.core.data.store.ReleaseHistoriesStore
+import com.erp.jytextile.core.database.datasource.ReleaseHistoryLocalDataSource
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.repository.ReleaseHistoryRepository
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +14,7 @@ import org.mobilenativefoundation.store.store5.StoreReadResponse
 
 @Inject
 class ReleaseHistoryRepositoryImpl(
+    private val releaseHistoryLocalDataSource: ReleaseHistoryLocalDataSource,
     private val releaseHistoryRemoteDataSource: ReleaseHistoryRemoteDataSource,
     private val releaseHistoryStore: ReleaseHistoriesStore,
 ) : ReleaseHistoryRepository {
@@ -26,5 +28,6 @@ class ReleaseHistoryRepositoryImpl(
 
     override suspend fun removeReleaseHistories(ids: List<Long>) {
         releaseHistoryRemoteDataSource.deleteReleaseHistories(ids)
+        releaseHistoryLocalDataSource.deleteReleaseHistories(ids)
     }
 }

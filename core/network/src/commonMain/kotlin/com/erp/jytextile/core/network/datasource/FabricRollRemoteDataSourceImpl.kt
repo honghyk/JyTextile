@@ -2,9 +2,11 @@ package com.erp.jytextile.core.network.datasource
 
 import com.erp.jytextile.core.data.datasource.remote.FabricRollRemoteDataSource
 import com.erp.jytextile.core.domain.model.FabricRoll
+import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.network.Tables
 import com.erp.jytextile.core.network.model.FabricRollResponse
 import com.erp.jytextile.core.network.model.ReleaseFabricRollRequest
+import com.erp.jytextile.core.network.model.ReleaseHistoryResponse
 import com.erp.jytextile.core.network.model.toDomain
 import com.erp.jytextile.core.network.model.toRequest
 import io.github.jan.supabase.SupabaseClient
@@ -86,8 +88,8 @@ class FabricRollRemoteDataSourceImpl(
         buyer: String,
         remark: String,
         releaseAt: Instant
-    ) {
-        client
+    ): ReleaseHistory {
+        return client
             .from(Tables.RELEASE_HISTORIES)
             .insert(
                 ReleaseFabricRollRequest(
@@ -97,7 +99,11 @@ class FabricRollRemoteDataSourceImpl(
                     remark = remark.ifEmpty { null },
                     releaseAt = releaseAt,
                 )
-            )
+            ) {
+                select()
+            }
+            .decodeSingle<ReleaseHistoryResponse>()
+            .toDomain()
     }
 
     private val fabricRollQuery = """
