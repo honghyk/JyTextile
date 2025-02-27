@@ -1,5 +1,6 @@
 package com.erp.jytextile.core.designsystem.component
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -37,9 +38,11 @@ fun Table(
     headerCellContent: @Composable TableRowScope.(Int, String) -> Unit,
     rowCellContent: @Composable TableRowScope.(Int, Int, String) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
     val tableScope = remember(rows) { TableScopeImpl() }
     Column(modifier = modifier.fillMaxWidth()) {
         tableScope.TableHeader(
+            scrollState = scrollState,
             headers = headers,
             content = headerCellContent,
         )
@@ -47,7 +50,7 @@ fun Table(
         LazyColumn(
             modifier = modifier
                 .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
+                .horizontalScroll(scrollState)
         ) {
             itemsIndexed(rows) { index, row ->
                 Column(modifier = Modifier.width(IntrinsicSize.Min)) {
@@ -65,6 +68,7 @@ fun Table(
 
 @Composable
 private fun TableScope.TableHeader(
+    scrollState: ScrollState,
     headers: List<String>,
     modifier: Modifier = Modifier,
     content: @Composable TableRowScope.(Int, String) -> Unit,
@@ -72,7 +76,7 @@ private fun TableScope.TableHeader(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
+            .horizontalScroll(scrollState)
             .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

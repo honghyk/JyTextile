@@ -1,4 +1,4 @@
-package com.erp.jytextile.core.data.store
+package com.erp.jytextile.core.data.util
 
 import org.mobilenativefoundation.store.store5.Fetcher
 import org.mobilenativefoundation.store.store5.SourceOfTruth

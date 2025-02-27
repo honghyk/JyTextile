@@ -21,23 +21,24 @@ class TestZoneLocalDataSource : ZoneLocalDataSource {
             }
     }
 
-    override suspend fun upsert(zone: Zone) {
+    override suspend fun upsert(entity: Zone): Long {
         zonesStateFlow.update { oldValues ->
-            (oldValues + listOf(zone))
+            (oldValues + listOf(entity))
+                .distinctBy { it.id }
+        }
+        return entity.id
+    }
+
+    override suspend fun upsert(entities: List<Zone>) {
+        zonesStateFlow.update { oldValues ->
+            (oldValues + entities)
                 .distinctBy { it.id }
         }
     }
 
-    override suspend fun upsert(zones: List<Zone>) {
+    override suspend fun delete(id: Long) {
         zonesStateFlow.update { oldValues ->
-            (oldValues + zones)
-                .distinctBy { it.id }
-        }
-    }
-
-    override suspend fun delete(zoneId: Long) {
-        zonesStateFlow.update { oldValues ->
-            oldValues.filterNot { it.id == zoneId }
+            oldValues.filterNot { it.id == id }
         }
     }
 

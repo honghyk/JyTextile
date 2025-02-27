@@ -5,7 +5,7 @@ import com.erp.jytextile.core.data.datasource.local.ReleaseHistoryLocalDataSourc
 import com.erp.jytextile.core.data.datasource.remote.FabricRollRemoteDataSource
 import com.erp.jytextile.core.data.store.FabricRollStore
 import com.erp.jytextile.core.data.store.FabricRollsStore
-import com.erp.jytextile.core.data.store.PagingKey
+import com.erp.jytextile.core.data.util.PagingKey
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository

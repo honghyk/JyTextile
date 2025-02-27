@@ -27,7 +27,6 @@ import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
@@ -65,10 +64,9 @@ class ZoneInventoryPresenter(
         val zoneTable by rememberRetained {
             snapshotFlow { currentPage }
                 .flatMapLatest { inventoryRepository.getZones(it, pageSize = PAGE_SIZE) }
-                .mapLatest { zones -> zones.map(Zone::toTableItem) }
-                .map {
+                .map { zones ->
                     ZoneTable(
-                        items = it,
+                        items = zones.map(Zone::toTableItem),
                         currentPage = currentPage,
                         totalPage = -1
                     )

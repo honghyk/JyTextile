@@ -3,18 +3,18 @@ package com.erp.jytextile.core.data.datasource.local
 import com.erp.jytextile.core.domain.model.Zone
 import kotlinx.coroutines.flow.Flow
 
-interface ZoneLocalDataSource {
+interface ZoneLocalDataSource: EntityLocalDataSource<Zone> {
 
     fun getZones(
         page: Int,
         pageSize: Int,
     ): Flow<List<Zone>>
 
-    suspend fun upsert(zone: Zone)
+    override suspend fun upsert(entity: Zone): Long
 
-    suspend fun upsert(zones: List<Zone>)
+    override suspend fun upsert(entities: List<Zone>)
 
-    suspend fun delete(zoneId: Long)
+    override suspend fun delete(entity: Zone)
 
     suspend fun delete(zoneIds: List<Long>)
 

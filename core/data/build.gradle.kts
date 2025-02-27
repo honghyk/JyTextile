@@ -14,6 +14,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
 
             implementation(libs.kotlininject.runtime)
+            implementation(libs.kermit)
             api(libs.store)
         }
 

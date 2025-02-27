@@ -3,7 +3,7 @@ package com.erp.jytextile.core.domain.model
 import com.erp.jytextile.kotlin.utils.yardToMeter
 
 data class FabricRoll(
-    val id: Long,
+    override val id: Long,
     val zone: Zone,
     val itemNo: String,
     val orderNo: String,
@@ -13,7 +13,7 @@ data class FabricRoll(
     val remainingQuantity: Double,
     val originalQuantity: Double,
     val remark: String,
-) {
+): Entity {
     constructor(
         id: Long,
         zoneId: Long,

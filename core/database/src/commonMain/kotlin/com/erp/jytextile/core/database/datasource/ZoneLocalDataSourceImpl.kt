@@ -24,16 +24,17 @@ class ZoneLocalDataSourceImpl(
             .map { zones -> zones.map(ZoneEntity::toDomain) }
     }
 
-    override suspend fun upsert(zone: Zone) {
+    override suspend fun upsert(zone: Zone): Long {
         inventoryZoneDao.upsert(zone.toEntity())
+        return zone.id
     }
 
     override suspend fun upsert(zones: List<Zone>) {
         inventoryZoneDao.upsert(zones.map { it.toEntity() })
     }
 
-    override suspend fun delete(zoneId: Long) {
-        inventoryZoneDao.delete(zoneId)
+    override suspend fun delete(entity: Zone) {
+        inventoryZoneDao.delete(entity.id)
     }
 
     override suspend fun delete(zoneIds: List<Long>) {
