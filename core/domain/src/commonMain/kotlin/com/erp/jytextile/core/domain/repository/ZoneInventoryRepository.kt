@@ -12,7 +12,5 @@ interface ZoneInventoryRepository {
         pageSize: Int,
     ): Flow<List<Zone>>
 
-    fun getZonesCount(): Flow<Int>
-
     suspend fun deleteZones(zoneIds: List<Long>)
 }

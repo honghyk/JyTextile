@@ -5,68 +5,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
-import androidx.room.Upsert
 import com.erp.jytextile.core.database.model.FabricRollEntity
-import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
-import com.erp.jytextile.core.database.model.ZoneEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface InventoryDao {
-
-    @Query("SELECT * FROM zones WHERE name = :name LIMIT 1")
-    suspend fun findZoneByName(name: String): ZoneEntity?
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertZone(section: ZoneEntity): Long
-
-    @Query(
-        value = """
-            SELECT * FROM fabric_rolls
-            WHERE zone_id = :zoneId
-            AND (:filterHasRemaining = 0 OR remaining_length > 0)
-            ORDER BY id ASC
-            LIMIT :limit 
-            OFFSET :offset
-            """
-    )
-    fun getFabricRolls(
-        zoneId: Long,
-        limit: Int,
-        offset: Int,
-        filterHasRemaining: Boolean,
-    ): Flow<List<FabricRollEntity>>
-
-
-    @Query(
-        """
-        SELECT fabric_rolls.*, zones.name AS zone_name
-        FROM fabric_rolls
-        INNER JOIN zones ON fabric_rolls.zone_id = zones.id
-        WHERE fabric_rolls.id = :rollId
-        LIMIT 1
-        """
-    )
-    fun getFabricRollWithZone(rollId: Long): Flow<FabricRollWithZoneEntity?>
-
-    @Query(
-        value = """
-            SELECT COUNT(*) FROM fabric_rolls
-            WHERE zone_id = :zoneId
-            """
-    )
-    fun getFabricRollsCount(zoneId: Long): Flow<Int>
-
-    @Upsert
-    suspend fun upsertFabricRoll(fabricRoll: FabricRollEntity): Long
-
-    @Query("DELETE FROM fabric_rolls WHERE id = :rollId")
-    suspend fun deleteFabricRoll(rollId: Long)
-
-    @Update
-    suspend fun updateFabricRoll(fabricRoll: FabricRollEntity)
 
     @Query("UPDATE fabric_rolls SET remaining_length = :remaining WHERE id = :rollId")
     suspend fun updateFabricRollRemainingLength(rollId: Long, remaining: Double)

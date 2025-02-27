@@ -36,10 +36,6 @@ class ZoneInventoryRepositoryImpl(
             .map { it.requireData() }
     }
 
-    override fun getZonesCount(): Flow<Int> {
-        TODO("Implement synchronization with the local database")
-    }
-
     override suspend fun deleteZones(zoneIds: List<Long>) {
         zoneRemoteDataSource.delete(zoneIds)
         zoneLocalDataSource.delete(zoneIds)
