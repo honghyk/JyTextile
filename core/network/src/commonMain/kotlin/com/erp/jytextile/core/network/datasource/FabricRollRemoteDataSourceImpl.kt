@@ -106,6 +106,23 @@ class FabricRollRemoteDataSourceImpl(
             .toDomain()
     }
 
+    override suspend fun search(query: String): List<FabricRoll> {
+        return client
+            .from(Tables.FABRIC_ROLLS)
+            .select(Columns.raw(fabricRollQuery)) {
+                filter {
+                    or {
+                        like("id_text", "%$query%")
+                        like("order_no", "%$query%")
+                        like("item_no", "%$query%")
+                    }
+                }
+                order("id", Order.ASCENDING)
+            }
+            .decodeList<FabricRollResponse>()
+            .map { it.toDomain() }
+    }
+
     private val fabricRollQuery = """
                     id,
                     ${Tables.ZONES}(id, name),

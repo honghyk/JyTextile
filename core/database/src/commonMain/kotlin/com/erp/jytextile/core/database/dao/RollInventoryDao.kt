@@ -63,4 +63,15 @@ interface RollInventoryDao : EntityDao<FabricRollEntity> {
 
     @Query("DELETE FROM fabric_rolls")
     override suspend fun deleteAll()
+
+    @Query(
+        value = """
+            SELECT * FROM fabric_rolls 
+            WHERE (CAST(id AS TEXT) LIKE :query AND :query GLOB '[0-9]*') 
+            OR itemNo LIKE '%' || :query || '%' 
+            OR orderNo LIKE '%' || :query || '%'
+            ORDER BY id ASC
+            """
+    )
+    fun search(query: String): Flow<List<FabricRollEntity>>
 }

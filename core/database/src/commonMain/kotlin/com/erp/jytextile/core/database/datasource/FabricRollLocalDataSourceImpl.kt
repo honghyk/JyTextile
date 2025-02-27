@@ -23,6 +23,8 @@ interface FabricRollLocalDataSource {
     suspend fun delete(rollId: Long)
 
     suspend fun deleteByZoneId(zoneId: Long)
+
+    suspend fun search(query: String): List<FabricRoll>
 }
 
 @Inject
@@ -59,5 +61,9 @@ class FabricRollLocalDataSourceImpl(
 
     override suspend fun deleteByZoneId(zoneId: Long) {
         rollInventoryDao.deleteByZoneId(zoneId)
+    }
+
+    override fun search(query: String): Flow<List<FabricRoll>> {
+        return rollInventoryDao.search(query).map { rolls -> rolls.map(FabricRollEntity::toDomain) }
     }
 }

@@ -29,4 +29,6 @@ interface FabricRollRemoteDataSource {
         remark: String,
         releaseAt: Instant,
     ): ReleaseHistory
+
+    suspend fun search(query: String): List<FabricRoll>
 }
