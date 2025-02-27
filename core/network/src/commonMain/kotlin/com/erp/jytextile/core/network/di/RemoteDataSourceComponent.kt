@@ -1,8 +1,10 @@
 package com.erp.jytextile.core.network.di
 
 import com.erp.jytextile.core.base.inject.Singleton
+import com.erp.jytextile.core.data.datasource.remote.FabricRollRemoteDataSource
 import com.erp.jytextile.core.data.datasource.remote.ZoneRemoteDataSource
 import com.erp.jytextile.core.network.BuildConfig
+import com.erp.jytextile.core.network.datasource.FabricRollRemoteDataSourceImpl
 import com.erp.jytextile.core.network.datasource.ZoneRemoteDataSourceImpl
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
@@ -25,4 +27,8 @@ interface RemoteDataSourceComponent {
     @Singleton
     @Provides
     fun bindsZoneRemoteDataSource(impl: ZoneRemoteDataSourceImpl): ZoneRemoteDataSource = impl
+
+    @Singleton
+    @Provides
+    fun bindsFabricRollRemoteDataSource(impl: FabricRollRemoteDataSourceImpl): FabricRollRemoteDataSource = impl
 }

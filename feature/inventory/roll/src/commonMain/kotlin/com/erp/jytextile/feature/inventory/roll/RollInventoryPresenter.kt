@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository
@@ -20,6 +21,7 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
@@ -49,22 +51,24 @@ class RollInventoryPresenter(
 
     @Composable
     override fun present(): RollInventoryUiState {
-        val rollCount by rollInventoryRepository.getFabricRollsCount(zoneId)
-            .collectAsRetainedState(0)
-
         var currentPage by rememberRetained { mutableStateOf(0) }
-        val totalPage by rollInventoryRepository.getFabricRollsPage(zoneId)
-            .collectAsRetainedState(0)
 
-        val rollTable by rememberRetained(currentPage) {
-            rollInventoryRepository.getFabricRolls(zoneId, currentPage, false).map { rolls ->
+        val rollTable: RollTable? by snapshotFlow { currentPage }
+            .flatMapLatest {
+                rollInventoryRepository.getFabricRolls(
+                    zoneId = zoneId,
+                    page = it,
+                    pageSize = PAGE_SIZE,
+                )
+            }
+            .map { rolls ->
                 RollTable(
                     items = rolls.map(FabricRoll::toTableItem),
                     currentPage = currentPage,
-                    totalPage = totalPage,
+                    totalPage = -1,
                 )
             }
-        }.collectAsRetainedState(null)
+            .collectAsRetainedState(null)
 
         val eventSink: CoroutineScope.(RollInventoryEvent) -> Unit = { event ->
             when (event) {
@@ -75,7 +79,9 @@ class RollInventoryPresenter(
                 }
 
                 RollInventoryEvent.NextPage -> {
-                    currentPage = (currentPage + 1).coerceAtMost(totalPage - 1)
+                    if (rollTable!!.items.size == PAGE_SIZE) {
+                        currentPage += 1
+                    }
                 }
 
                 RollInventoryEvent.PreviousPage -> {
@@ -94,6 +100,8 @@ class RollInventoryPresenter(
         }
     }
 }
+
+private const val PAGE_SIZE = 20
 
 sealed interface RollInventoryUiState : CircuitUiState {
     val eventSink: (RollInventoryEvent) -> Unit

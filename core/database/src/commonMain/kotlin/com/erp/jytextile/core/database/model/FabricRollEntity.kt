@@ -23,7 +23,7 @@ import com.erp.jytextile.core.domain.model.Zone
     ]
 )
 data class FabricRollEntity(
-    @PrimaryKey val id: Long = 0,
+    @PrimaryKey override val id: Long = 0,
     @ColumnInfo("zone_id") val zoneId: Long,
     val itemNo: String,
     val orderNo: String,
@@ -33,7 +33,7 @@ data class FabricRollEntity(
     @ColumnInfo("remaining_length") val remainingLength: Double,
     @ColumnInfo("original_length") val originalLength: Double,
     val remark: String?,
-)
+): LocalEntity
 
 fun FabricRollEntity.toDomain() = FabricRoll(
     id = id,

@@ -10,14 +10,10 @@ interface RollInventoryRepository {
     fun getFabricRolls(
         zoneId: Long,
         page: Int,
-        filterHasRemaining: Boolean
+        pageSize: Int,
     ): Flow<List<FabricRoll>>
 
     fun getRoll(rollId: Long): Flow<FabricRoll>
-
-    fun getFabricRollsCount(zoneId: Long): Flow<Int>
-
-    fun getFabricRollsPage(zoneId: Long): Flow<Int>
 
     suspend fun upsertFabricRoll(
         zoneId: Long,
