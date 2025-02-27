@@ -36,7 +36,7 @@ class FabricRollLocalDataSourceImpl(
                 zoneId = zoneId,
                 offset = page * pageSize,
                 limit = pageSize,
-                filterHasRemaining = true
+                filterHasRemaining = false
             )
             .map { rolls -> rolls.map(FabricRollEntity::toDomain) }
     }

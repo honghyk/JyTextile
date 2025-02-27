@@ -7,6 +7,7 @@ import com.erp.jytextile.core.network.model.ReleaseHistoryResponse
 import com.erp.jytextile.core.network.model.toDomain
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Order
 import me.tatarka.inject.annotations.Inject
 
 @Inject
@@ -19,6 +20,7 @@ class ReleaseHistoryRemoteDataSourceImpl(
             .from(Tables.RELEASE_HISTORIES)
             .select {
                 filter { eq("roll_id", rollId) }
+                order(column = "release_at", order = Order.DESCENDING)
             }
             .decodeList<ReleaseHistoryResponse>()
             .map(ReleaseHistoryResponse::toDomain)
