@@ -5,6 +5,7 @@ import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.network.Tables
 import com.erp.jytextile.core.network.model.FabricRollResponse
 import com.erp.jytextile.core.network.model.toDomain
+import com.erp.jytextile.core.network.model.toRequest
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
@@ -21,24 +22,9 @@ class FabricRollRemoteDataSourceImpl(
         page: Int,
         pageSize: Int
     ): List<FabricRoll> {
-        val columns = Columns.raw(
-            """
-                    id,
-                    ${Tables.ZONES}(id, name),
-                    item_no,
-                    order_no,
-                    color,
-                    factory,
-                    finish,
-                    remaining_quantity,
-                    original_quantity,
-                    remark
-                """.trimIndent()
-        )
-
         return client
             .from(Tables.FABRIC_ROLLS)
-            .select(columns) {
+            .select(Columns.raw(fabricRollQuery)) {
                 filter { eq("zone_id", zoneId) }
                 order(column = "id", order = Order.ASCENDING)
                 range(
@@ -50,14 +36,30 @@ class FabricRollRemoteDataSourceImpl(
             .map { it.toDomain() }
     }
 
-    override suspend fun upsert(fabricRolls: List<FabricRoll>): FabricRoll {
+    override suspend fun getFabricRoll(rollId: Long): FabricRoll {
         return client
             .from(Tables.FABRIC_ROLLS)
-            .upsert(fabricRolls) {
-                select()
+            .select(Columns.raw(fabricRollQuery)) {
+                filter { eq("id", rollId) }
             }
             .decodeSingle<FabricRollResponse>()
             .toDomain()
+    }
+
+    override suspend fun upsert(fabricRoll: FabricRoll): FabricRoll {
+        return client
+            .from(Tables.FABRIC_ROLLS)
+            .upsert(fabricRoll.toRequest()) {
+                select(Columns.raw(fabricRollQuery))
+            }
+            .decodeSingle<FabricRollResponse>()
+            .toDomain()
+    }
+
+    override suspend fun upsert(fabricRolls: List<FabricRoll>) {
+        client
+            .from(Tables.FABRIC_ROLLS)
+            .insert(fabricRolls)
     }
 
     override suspend fun delete(rollId: Long) {
@@ -75,4 +77,17 @@ class FabricRollRemoteDataSourceImpl(
                 filter { eq("zone_id", zoneId) }
             }
     }
+
+    private val fabricRollQuery = """
+                    id,
+                    ${Tables.ZONES}(id, name),
+                    item_no,
+                    order_no,
+                    color,
+                    factory,
+                    finish,
+                    remaining_quantity,
+                    original_quantity,
+                    remark
+                """.trimIndent()
 }

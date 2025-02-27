@@ -10,7 +10,11 @@ interface FabricRollRemoteDataSource {
         pageSize: Int,
     ): List<FabricRoll>
 
-    suspend fun upsert(fabricRolls: List<FabricRoll>): FabricRoll
+    suspend fun getFabricRoll(rollId: Long): FabricRoll
+
+    suspend fun upsert(fabricRoll: FabricRoll): FabricRoll
+
+    suspend fun upsert(fabricRolls: List<FabricRoll>)
 
     suspend fun delete(rollId: Long)
 

@@ -1,7 +1,6 @@
 package com.erp.jytextile.core.domain.repository
 
 import com.erp.jytextile.core.domain.model.FabricRoll
-import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
 import kotlinx.coroutines.flow.Flow
 
@@ -15,15 +14,7 @@ interface RollInventoryRepository {
 
     fun getRoll(rollId: Long): Flow<FabricRoll>
 
-    suspend fun upsertFabricRoll(
-        zoneId: Long,
-        rollInsertion: FabricRollInsertion,
-    )
-
-    suspend fun upsertFabricRoll(
-        zoneName: String,
-        rollInsertion: FabricRollInsertion,
-    )
+    suspend fun upsertFabricRoll(fabricRoll: FabricRoll)
 
     suspend fun removeFabricRoll(rollId: Long)
 

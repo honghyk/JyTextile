@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
-import com.erp.jytextile.core.domain.model.FabricRollInsertion
+import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository
@@ -94,9 +94,9 @@ class RollFormPresenter(
                     launch {
                         try {
                             rollInventoryRepository.upsertFabricRoll(
-                                zoneId = selectedZone!!.id,
-                                rollInsertion = FabricRollInsertion(
+                                FabricRoll(
                                     id = id.toLong(),
+                                    zoneId = selectedZone!!.id,
                                     itemNo = itemNo,
                                     orderNo = orderNo,
                                     color = color,
@@ -105,7 +105,7 @@ class RollFormPresenter(
                                     quantity = quantity.toDouble(),
                                     remark = remark,
                                     lengthUnit = lengthUnit,
-                                ),
+                                )
                             )
                             navigator.pop()
                         } catch (e: Exception) {

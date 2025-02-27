@@ -21,6 +21,7 @@ import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import me.tatarka.inject.annotations.Assisted
@@ -53,22 +54,24 @@ class RollInventoryPresenter(
     override fun present(): RollInventoryUiState {
         var currentPage by rememberRetained { mutableStateOf(0) }
 
-        val rollTable: RollTable? by snapshotFlow { currentPage }
-            .flatMapLatest {
-                rollInventoryRepository.getFabricRolls(
-                    zoneId = zoneId,
-                    page = it,
-                    pageSize = PAGE_SIZE,
-                )
-            }
-            .map { rolls ->
-                RollTable(
-                    items = rolls.map(FabricRoll::toTableItem),
-                    currentPage = currentPage,
-                    totalPage = -1,
-                )
-            }
-            .collectAsRetainedState(null)
+        val rollTable: RollTable? by rememberRetained {
+            snapshotFlow { currentPage }
+                .distinctUntilChanged()
+                .flatMapLatest {
+                    rollInventoryRepository.getFabricRolls(
+                        zoneId = zoneId,
+                        page = it,
+                        pageSize = PAGE_SIZE,
+                    )
+                }
+                .map { rolls ->
+                    RollTable(
+                        items = rolls.map(FabricRoll::toTableItem),
+                        currentPage = currentPage,
+                        totalPage = -1,
+                    )
+                }
+        }.collectAsRetainedState(null)
 
         val eventSink: CoroutineScope.(RollInventoryEvent) -> Unit = { event ->
             when (event) {

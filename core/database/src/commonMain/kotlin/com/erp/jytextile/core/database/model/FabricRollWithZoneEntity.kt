@@ -23,5 +23,5 @@ fun FabricRollWithZoneEntity.toDomain() = FabricRoll(
     remainingQuantity = fabricRoll.remainingLength,
     originalQuantity = fabricRoll.originalLength,
     finish = fabricRoll.finish,
-    remark = fabricRoll.remark,
+    remark = fabricRoll.remark.orEmpty(),
 )

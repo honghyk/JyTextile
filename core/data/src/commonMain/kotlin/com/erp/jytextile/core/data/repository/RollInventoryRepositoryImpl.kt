@@ -1,21 +1,18 @@
 package com.erp.jytextile.core.data.repository
 
+import com.erp.jytextile.core.data.datasource.remote.FabricRollRemoteDataSource
 import com.erp.jytextile.core.data.store.FabricRollsStore
 import com.erp.jytextile.core.data.store.PagingKey
 import com.erp.jytextile.core.database.dao.InventoryDao
-import com.erp.jytextile.core.database.model.FabricRollEntity
-import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
+import com.erp.jytextile.core.database.datasource.FabricRollLocalDataSource
 import com.erp.jytextile.core.database.model.ReleaseHistoryEntity
-import com.erp.jytextile.core.database.model.ZoneEntity
-import com.erp.jytextile.core.database.model.toDomain
 import com.erp.jytextile.core.domain.model.FabricRoll
-import com.erp.jytextile.core.domain.model.FabricRollInsertion
 import com.erp.jytextile.core.domain.model.LengthUnit
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository
 import com.erp.jytextile.kotlin.utils.yardToMeter
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.LocalDate
@@ -28,6 +25,8 @@ import org.mobilenativefoundation.store.store5.StoreReadResponse
 @Inject
 class RollInventoryRepositoryImpl(
     private val inventoryDao: InventoryDao,
+    private val fabricRollLocalDataSource: FabricRollLocalDataSource,
+    private val fabricRollRemoteDataSource: FabricRollRemoteDataSource,
     private val fabricRollsStore: FabricRollsStore,
 ) : RollInventoryRepository {
 
@@ -45,6 +44,7 @@ class RollInventoryRepositoryImpl(
             )
             .filter { it is StoreReadResponse.Data }
             .map { it.requireData() }
+            .distinctUntilChanged()
     }
 
     override fun getRoll(rollId: Long): Flow<FabricRoll> {
@@ -53,40 +53,14 @@ class RollInventoryRepositoryImpl(
             .map(FabricRollWithZoneEntity::toDomain)
     }
 
-    override suspend fun upsertFabricRoll(
-        zoneId: Long,
-        rollInsertion: FabricRollInsertion,
-    ) {
-        val roll = FabricRollEntity(
-            zoneId = zoneId,
-            id = rollInsertion.id,
-            itemNo = rollInsertion.itemNo,
-            orderNo = rollInsertion.orderNo,
-            color = rollInsertion.color,
-            factory = rollInsertion.factory,
-            finish = rollInsertion.finish,
-            remainingLength = rollInsertion.quantity,
-            originalLength = rollInsertion.quantity,
-            remark = rollInsertion.remark,
-        )
-        inventoryDao.upsertFabricRoll(roll)
-    }
-
-    override suspend fun upsertFabricRoll(
-        zoneName: String,
-        rollInsertion: FabricRollInsertion,
-    ) {
-        val zone = inventoryDao.findZoneByName(zoneName)
-        val zoneId = zone?.id ?: inventoryDao.insertZone(ZoneEntity(name = zoneName))
-
-        upsertFabricRoll(
-            zoneId = zoneId,
-            rollInsertion = rollInsertion,
-        )
+    override suspend fun upsertFabricRoll(fabricRoll: FabricRoll) {
+        fabricRollRemoteDataSource.upsert(fabricRoll)
+        fabricRollLocalDataSource.upsert(fabricRoll)
     }
 
     override suspend fun removeFabricRoll(rollId: Long) {
-        inventoryDao.deleteFabricRoll(rollId)
+        fabricRollRemoteDataSource.delete(rollId)
+        fabricRollLocalDataSource.delete(rollId)
     }
 
     override suspend fun releaseFabricRoll(

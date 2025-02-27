@@ -1,10 +1,8 @@
 package com.erp.jytextile.core.data.repository
 
-import com.erp.jytextile.core.data.datasource.remote.ZoneRemoteDataSource
 import com.erp.jytextile.core.data.store.ZonesStore
 import com.erp.jytextile.core.data.testdouble.TestZoneLocalDataSource
 import com.erp.jytextile.core.data.testdouble.TestZoneRemoteDataSource
-import com.erp.jytextile.core.database.datasource.ZoneLocalDataSource
 import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -14,8 +12,8 @@ import kotlin.test.assertEquals
 
 class ZoneInventoryRepositoryTest {
 
-    private lateinit var testZoneLocalDataSource: ZoneLocalDataSource
-    private lateinit var testZoneRemoteDataSource: ZoneRemoteDataSource
+    private lateinit var testZoneLocalDataSource: TestZoneLocalDataSource
+    private lateinit var testZoneRemoteDataSource: TestZoneRemoteDataSource
     private lateinit var testInventoryRepository: ZoneInventoryRepository
 
     @BeforeTest
@@ -44,6 +42,16 @@ class ZoneInventoryRepositoryTest {
         val result = testInventoryRepository.getZones(1, 10).first()
 
         assertEquals(10, result.size)
+    }
+
+    @Test
+    fun add_zone_to_local_when_add_to_remote_success() = runTest {
+        testZoneRemoteDataSource.forceError = true
+        runCatching { testInventoryRepository.addZone("Zone 1") }
+
+        val result = testInventoryRepository.getZones(0, 10).first()
+
+        assertEquals(0, result.size)
     }
 
     private suspend fun inertZones(count: Int) {

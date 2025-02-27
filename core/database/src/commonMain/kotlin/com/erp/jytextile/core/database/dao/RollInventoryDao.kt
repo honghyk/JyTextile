@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import com.erp.jytextile.core.database.model.FabricRollEntity
+import com.erp.jytextile.core.database.model.FabricRollWithZoneEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -27,6 +28,17 @@ interface RollInventoryDao : EntityDao<FabricRollEntity> {
         offset: Int,
         filterHasRemaining: Boolean,
     ): Flow<List<FabricRollEntity>>
+
+    @Query(
+        """
+        SELECT fabric_rolls.*, zones.name AS zone_name
+        FROM fabric_rolls
+        INNER JOIN zones ON fabric_rolls.zone_id = zones.id
+        WHERE fabric_rolls.id = :rollId
+        LIMIT 1
+        """
+    )
+    fun getFabricRoll(rollId: Long): Flow<FabricRollWithZoneEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     override suspend fun insert(entity: FabricRollEntity): Long
@@ -51,4 +63,7 @@ interface RollInventoryDao : EntityDao<FabricRollEntity> {
 
     @Query("DELETE FROM fabric_rolls")
     override suspend fun deleteAll()
+
+    @Query("SELECT * FROM fabric_rolls")
+    fun selectAll(): Flow<List<FabricRollEntity>>
 }

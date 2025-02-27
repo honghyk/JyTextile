@@ -28,7 +28,7 @@ fun FabricRollResponse.toDomain() = FabricRoll(
     finish = finish.orEmpty(),
     remainingQuantity = remainingQuantity ?: originalQuantity,
     originalQuantity = originalQuantity,
-    remark = remark
+    remark = remark.orEmpty()
 )
 
 fun FabricRoll.toResponse() = FabricRollResponse(

@@ -15,7 +15,6 @@ import com.erp.jytextile.core.domain.model.Zone
             entity = ZoneEntity::class,
             parentColumns = ["id"],
             childColumns = ["zone_id"],
-            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [
@@ -45,7 +44,7 @@ fun FabricRollEntity.toDomain() = FabricRoll(
     finish = finish,
     remainingQuantity = remainingLength,
     originalQuantity = originalLength,
-    remark = remark,
+    remark = remark.orEmpty(),
 )
 
 fun FabricRoll.toEntity() = FabricRollEntity(
