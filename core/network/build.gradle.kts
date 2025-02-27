@@ -29,6 +29,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.domain)
+            implementation(projects.core.data)
             implementation(projects.core.base)
 
             implementation(libs.kotlinx.datetime)

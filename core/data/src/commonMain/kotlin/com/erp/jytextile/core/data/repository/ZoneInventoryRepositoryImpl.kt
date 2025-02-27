@@ -1,5 +1,6 @@
 package com.erp.jytextile.core.data.repository
 
+import com.erp.jytextile.core.data.datasource.remote.ZoneRemoteDataSource
 import com.erp.jytextile.core.data.store.PagingKey
 import com.erp.jytextile.core.data.store.ZonesStore
 import com.erp.jytextile.core.database.dao.InventoryZoneDao
@@ -7,9 +8,6 @@ import com.erp.jytextile.core.database.model.toDomain
 import com.erp.jytextile.core.database.model.toEntity
 import com.erp.jytextile.core.domain.model.Zone
 import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
-import com.erp.jytextile.core.network.ZoneRemoteDataSource
-import com.erp.jytextile.core.network.model.ZoneInsertRequest
-import com.erp.jytextile.core.network.model.toDomain
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
@@ -25,8 +23,8 @@ class ZoneInventoryRepositoryImpl(
 ) : ZoneInventoryRepository {
 
     override suspend fun addZone(name: String) {
-        zoneRemoteDataSource.upsert(ZoneInsertRequest(name)).also {
-            inventoryDao.insert(it.toDomain().toEntity())
+        zoneRemoteDataSource.upsert(name).also {
+            inventoryDao.insert(it.toEntity())
         }
     }
 

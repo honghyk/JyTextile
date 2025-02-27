@@ -1,10 +1,7 @@
 package com.erp.jytextile.core.data.testdouble
 
-import com.erp.jytextile.core.network.ZoneRemoteDataSource
-import com.erp.jytextile.core.network.model.FabricRollCountResponse
-import com.erp.jytextile.core.network.model.ZoneInsertRequest
-import com.erp.jytextile.core.network.model.ZoneResponse
-import com.erp.jytextile.core.network.model.ZoneWithRollCountResponse
+import com.erp.jytextile.core.data.datasource.remote.ZoneRemoteDataSource
+import com.erp.jytextile.core.domain.model.Zone
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -12,11 +9,10 @@ import kotlinx.coroutines.flow.update
 
 class TestZoneRemoteDataSource : ZoneRemoteDataSource {
 
-    private val zoneResponsesStateFlow =
-        MutableStateFlow<List<ZoneWithRollCountResponse>>(emptyList())
+    private val zonesStateFlow = MutableStateFlow<List<Zone>>(emptyList())
 
-    override suspend fun getZones(page: Int, pageSize: Int): List<ZoneWithRollCountResponse> {
-        return zoneResponsesStateFlow
+    override suspend fun getZones(page: Int, pageSize: Int): List<Zone> {
+        return zonesStateFlow
             .map { zones ->
                 zones.subList(
                     fromIndex = page,
@@ -26,47 +22,43 @@ class TestZoneRemoteDataSource : ZoneRemoteDataSource {
             .firstOrNull() ?: emptyList()
     }
 
-    override suspend fun upsert(request: ZoneInsertRequest): ZoneResponse {
-        val new = ZoneWithRollCountResponse(
-            id = (zoneResponsesStateFlow.value.lastOrNull()?.id ?: 0) + 1,
-            name = request.name,
-            rollCount = listOf(FabricRollCountResponse(0)),
+    override suspend fun upsert(name: String): Zone {
+        val new = Zone(
+            id = (zonesStateFlow.value.lastOrNull()?.id ?: 0) + 1,
+            name = name,
+            rollCount = 0,
         )
-        zoneResponsesStateFlow.update { oldValues ->
+        zonesStateFlow.update { oldValues ->
             (oldValues + listOf(new))
                 .distinctBy { it.id }
         }
-        return ZoneResponse(new.id, new.name)
+        return new
     }
 
-    override suspend fun upsert(requests: List<ZoneInsertRequest>) {
-        val lastId = zoneResponsesStateFlow.value.lastOrNull()?.id ?: 0
-        val new = requests.mapIndexed { index, request ->
-            ZoneWithRollCountResponse(
+    override suspend fun upsert(names: List<String>) {
+        val lastId = zonesStateFlow.value.lastOrNull()?.id ?: 0
+        val new = names.mapIndexed { index, name ->
+            Zone(
                 id = lastId + index + 1,
-                name = request.name,
-                rollCount = listOf(FabricRollCountResponse(0)),
+                name = name,
+                rollCount = 0,
             )
         }
-        zoneResponsesStateFlow.update { oldValues ->
+        zonesStateFlow.update { oldValues ->
             (oldValues + new)
                 .distinctBy { it.id }
         }
     }
 
     override suspend fun delete(zoneId: Long) {
-        zoneResponsesStateFlow.update { oldValues ->
+        zonesStateFlow.update { oldValues ->
             oldValues.filterNot { it.id == zoneId }
         }
     }
 
     override suspend fun delete(zoneIds: List<Long>) {
-        zoneResponsesStateFlow.update { oldValues ->
+        zonesStateFlow.update { oldValues ->
             oldValues.filterNot { it.id in zoneIds }
         }
-    }
-
-    override suspend fun getZoneCount(): Int {
-        return zoneResponsesStateFlow.value.size
     }
 }

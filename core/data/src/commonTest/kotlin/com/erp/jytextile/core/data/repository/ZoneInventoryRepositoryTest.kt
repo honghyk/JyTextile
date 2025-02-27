@@ -1,12 +1,11 @@
 package com.erp.jytextile.core.data.repository
 
+import com.erp.jytextile.core.data.datasource.remote.ZoneRemoteDataSource
 import com.erp.jytextile.core.data.store.ZonesStore
 import com.erp.jytextile.core.data.testdouble.TestInventoryZoneDao
 import com.erp.jytextile.core.data.testdouble.TestZoneRemoteDataSource
 import com.erp.jytextile.core.database.dao.InventoryZoneDao
 import com.erp.jytextile.core.domain.repository.ZoneInventoryRepository
-import com.erp.jytextile.core.network.ZoneRemoteDataSource
-import com.erp.jytextile.core.network.model.ZoneInsertRequest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
@@ -49,7 +48,7 @@ class ZoneInventoryRepositoryTest {
 
     private suspend fun inertZones(count: Int) {
         repeat(count) {
-            testZoneRemoteDataSource.upsert(ZoneInsertRequest(name = "Zone $it"))
+            testZoneRemoteDataSource.upsert(name = "Zone $it")
         }
     }
 }

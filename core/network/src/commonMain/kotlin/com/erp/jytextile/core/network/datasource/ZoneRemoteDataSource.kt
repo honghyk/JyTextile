@@ -1,32 +1,17 @@
-package com.erp.jytextile.core.network
+package com.erp.jytextile.core.network.datasource
 
+import com.erp.jytextile.core.data.datasource.remote.ZoneRemoteDataSource
+import com.erp.jytextile.core.domain.model.Zone
+import com.erp.jytextile.core.network.Tables
 import com.erp.jytextile.core.network.model.ZoneInsertRequest
 import com.erp.jytextile.core.network.model.ZoneResponse
 import com.erp.jytextile.core.network.model.ZoneWithRollCountResponse
+import com.erp.jytextile.core.network.model.toDomain
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
-import io.github.jan.supabase.postgrest.query.Count
 import io.github.jan.supabase.postgrest.query.Order
 import me.tatarka.inject.annotations.Inject
-
-interface ZoneRemoteDataSource {
-
-    suspend fun getZones(
-        page: Int,
-        pageSize: Int,
-    ): List<ZoneWithRollCountResponse>
-
-    suspend fun upsert(request: ZoneInsertRequest): ZoneResponse
-
-    suspend fun upsert(requests: List<ZoneInsertRequest>)
-
-    suspend fun delete(zoneId: Long)
-
-    suspend fun delete(zoneIds: List<Long>)
-
-    suspend fun getZoneCount(): Int
-}
 
 @Inject
 class ZoneRemoteDataSourceImpl(
@@ -36,7 +21,7 @@ class ZoneRemoteDataSourceImpl(
     override suspend fun getZones(
         page: Int,
         pageSize: Int,
-    ): List<ZoneWithRollCountResponse> {
+    ): List<Zone> {
         return client
             .from(Tables.ZONES)
             .select(Columns.raw("id, name, fabric_rolls(count)")) {
@@ -47,21 +32,23 @@ class ZoneRemoteDataSourceImpl(
                 )
             }
             .decodeList<ZoneWithRollCountResponse>()
+            .map { it.toDomain() }
     }
 
-    override suspend fun upsert(request: ZoneInsertRequest): ZoneResponse {
+    override suspend fun upsert(name: String): Zone {
         return client
             .from(Tables.ZONES)
-            .upsert(request) {
+            .upsert(ZoneInsertRequest(name)) {
                 select()
             }
             .decodeSingle<ZoneResponse>()
+            .toDomain()
     }
 
-    override suspend fun upsert(requests: List<ZoneInsertRequest>) {
+    override suspend fun upsert(names: List<String>) {
         client
             .from(Tables.ZONES)
-            .insert(requests)
+            .insert(names.map { ZoneInsertRequest(it) })
     }
 
     override suspend fun delete(zoneId: Long) {
@@ -80,15 +67,5 @@ class ZoneRemoteDataSourceImpl(
                     isIn("id", zoneIds)
                 }
             }
-    }
-
-    override suspend fun getZoneCount(): Int {
-        return client
-            .from(Tables.ZONES)
-            .select {
-                count(Count.EXACT)
-            }
-            .countOrNull()!!
-            .toInt()
     }
 }
