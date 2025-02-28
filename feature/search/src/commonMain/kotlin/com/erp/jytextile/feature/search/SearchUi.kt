@@ -11,9 +11,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.erp.jytextile.core.designsystem.component.EmptyContent
 import com.erp.jytextile.core.designsystem.component.OutlinedTextField
 import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.component.TopAppBar
+import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.SearchScreen
 import com.erp.jytextile.core.ui.TablePanel
@@ -24,6 +26,7 @@ import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
 import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
+import org.jetbrains.compose.resources.vectorResource
 
 @Inject
 class SearchUiFactory : Ui.Factory {
@@ -74,25 +77,29 @@ private fun SearchUi(
                 .padding(Dimension.backgroundPadding)
         ) {
             when {
-                searchResults != null -> {
+                isLoading || searchResults == null -> {
+                    PanelSurface(
+                        content = { }
+                    )
+                }
+
+                searchResults.items.isEmpty() -> {
+                    PanelSurface {
+                        EmptyContent(
+                            modifier = Modifier.fillMaxSize(),
+                            image = vectorResource(JyIcons.SearchEmpty),
+                            text = "\"검색 결과가 없습니다.\"",
+                        )
+                    }
+                }
+
+                else -> {
                     TablePanel(
                         modifier = Modifier.fillMaxSize(),
                         table = searchResults,
                         onItemClick = onRollSelected,
                         onPreviousClick = onPreviousPageClick,
                         onNextClick = onNextPageClick,
-                    )
-                }
-
-                isLoading -> {
-                    PanelSurface(
-                        content = { }
-                    )
-                }
-
-                else -> {
-                    PanelSurface(
-                        content = { }
                     )
                 }
             }

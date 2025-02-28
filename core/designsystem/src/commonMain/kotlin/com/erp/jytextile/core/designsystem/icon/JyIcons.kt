@@ -7,9 +7,11 @@ import org.jetbrains.compose.resources.DrawableResource
 import textileerp.core.designsystem.generated.resources.Res
 import textileerp.core.designsystem.generated.resources.basket_alt_3_light
 import textileerp.core.designsystem.generated.resources.home_light
+import textileerp.core.designsystem.generated.resources.search_empty
 
 object JyIcons {
     val Inventory: DrawableResource = Res.drawable.home_light
     val Release: DrawableResource = Res.drawable.basket_alt_3_light
     val ArrowBack: ImageVector = Icons.AutoMirrored.Rounded.ArrowBack
+    val SearchEmpty: DrawableResource = Res.drawable.search_empty
 }
