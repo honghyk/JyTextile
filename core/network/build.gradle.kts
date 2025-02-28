@@ -15,9 +15,6 @@ buildConfig {
     packageName("com.erp.jytextile.core.network")
 
     val apiKey = gradleLocalProperties(rootDir, providers).getProperty("supabase_api_key")
-    require(apiKey.isNotEmpty()) {
-        "Please set the `supabase_api_key` property in local.properties"
-    }
 
     buildConfigField<String>(
         "SUPABASE_API_KEY",
