@@ -56,25 +56,17 @@ class SearchPresenter(
         var isLoading by rememberRetained { mutableStateOf(false) }
         var searchQuery by rememberRetained { mutableStateOf("") }
 
-        var currentPage by rememberRetained { mutableStateOf(0) }
-
         val searchResult: RollTable by rememberRetained {
             snapshotFlow { searchQuery }
                 .distinctUntilChanged()
                 .debounce(300L)
                 .onEach { isLoading = true }
-                .flatMapLatest { query ->
-                    searchRepository.searchRoll(query, PAGE_SIZE, 0)
-                }
+                .flatMapLatest { query -> searchRepository.searchRoll(query) }
                 .map { results ->
-                    RollTable(
-                        items = results.map(FabricRoll::toTableItem),
-                        currentPage = -1,
-                        totalPage = -1,
-                    )
+                    RollTable(items = results.map(FabricRoll::toTableItem))
                 }
                 .onEach { isLoading = false }
-        }.collectAsRetainedState(RollTable(currentPage = -1, totalPage = -1))
+        }.collectAsRetainedState(RollTable())
 
         return SearchUiState(
             isLoading = isLoading,
@@ -83,25 +75,13 @@ class SearchPresenter(
         ) { event ->
             when (event) {
                 is SearchEvent.UpdateSearchQuery -> searchQuery = event.query
-                is SearchEvent.RollSelected -> {
+                is SearchEvent.ShowRollDetail -> {
                     navigator.goTo(ReleaseHistoryScreen(event.item.id))
-                }
-
-                SearchEvent.NextPage -> {
-                    searchResult?.let {
-                        currentPage = (currentPage + 1).coerceAtMost(it.totalPage - 1)
-                    }
-                }
-
-                SearchEvent.PreviousPage -> {
-                    currentPage = (currentPage - 1).coerceAtLeast(0)
                 }
             }
         }
     }
 }
-
-private const val PAGE_SIZE = 20
 
 data class SearchUiState(
     val isLoading: Boolean,
@@ -112,7 +92,5 @@ data class SearchUiState(
 
 sealed interface SearchEvent : CircuitUiEvent {
     data class UpdateSearchQuery(val query: String) : SearchEvent
-    data class RollSelected(val item: TableItem) : SearchEvent
-    data object PreviousPage : SearchEvent
-    data object NextPage : SearchEvent
+    data class ShowRollDetail(val item: TableItem) : SearchEvent
 }

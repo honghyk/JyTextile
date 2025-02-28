@@ -10,8 +10,6 @@ data class ZoneTable(
         "Quantity",
     ),
     override val items: List<ZoneTableItem> = emptyList(),
-    override val currentPage: Int,
-    override val totalPage: Int,
 ) : Table
 
 @Stable

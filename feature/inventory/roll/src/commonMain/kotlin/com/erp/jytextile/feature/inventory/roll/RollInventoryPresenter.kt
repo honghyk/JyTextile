@@ -64,30 +64,24 @@ class RollInventoryPresenter(
                         pageSize = PAGE_SIZE,
                     )
                 }
-                .map { rolls ->
-                    RollTable(
-                        items = rolls.map(FabricRoll::toTableItem),
-                        currentPage = currentPage,
-                        totalPage = -1,
-                    )
-                }
+                .map { rolls -> RollTable(items = rolls.map(FabricRoll::toTableItem)) }
         }.collectAsRetainedState(null)
 
         val eventSink: CoroutineScope.(RollInventoryEvent) -> Unit = { event ->
             when (event) {
-                RollInventoryEvent.Back -> navigator.pop()
+                RollInventoryEvent.NavigateUp -> navigator.pop()
 
-                is RollInventoryEvent.RollSelected -> {
+                is RollInventoryEvent.ShowRollDetail -> {
                     navigator.goTo(ReleaseHistoryScreen(rollId = event.rollId))
                 }
 
-                RollInventoryEvent.NextPage -> {
+                RollInventoryEvent.ShowNextPage -> {
                     if (rollTable!!.items.size == PAGE_SIZE) {
                         currentPage += 1
                     }
                 }
 
-                RollInventoryEvent.PreviousPage -> {
+                RollInventoryEvent.ShowPreviousPage -> {
                     currentPage = (currentPage - 1).coerceAtLeast(0)
                 }
             }
@@ -120,8 +114,8 @@ sealed interface RollInventoryUiState : CircuitUiState {
 }
 
 sealed interface RollInventoryEvent : CircuitUiEvent {
-    data object Back : RollInventoryEvent
-    data class RollSelected(val rollId: Long) : RollInventoryEvent
-    data object PreviousPage : RollInventoryEvent
-    data object NextPage : RollInventoryEvent
+    data object NavigateUp : RollInventoryEvent
+    data class ShowRollDetail(val rollId: Long) : RollInventoryEvent
+    data object ShowPreviousPage : RollInventoryEvent
+    data object ShowNextPage : RollInventoryEvent
 }

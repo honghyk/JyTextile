@@ -5,16 +5,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
+import com.erp.jytextile.core.designsystem.component.ColumnWidth
+import com.erp.jytextile.core.designsystem.component.LoadingContent
+import com.erp.jytextile.core.designsystem.component.PanelSurface
+import com.erp.jytextile.core.designsystem.component.ScrollableTable
 import com.erp.jytextile.core.designsystem.component.TopAppBar
 import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
 import com.erp.jytextile.core.navigation.RollDetailScreen
-import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.ReleaseHistoryTable
 import com.erp.jytextile.core.ui.model.TableItem
 import com.slack.circuit.foundation.CircuitContent
@@ -24,6 +28,7 @@ import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
 import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
+import org.jetbrains.compose.resources.vectorResource
 
 @Inject
 class ReleaseHistoryUiFactory : Ui.Factory {
@@ -49,7 +54,7 @@ private fun ReleaseHistoryUi(
     ) {
         TopAppBar(
             navigationIcon = JyIcons.ArrowBack,
-            onNavigationClick = { state.eventSink(ReleaseHistoryEvent.Back) },
+            onNavigationClick = { state.eventSink(ReleaseHistoryEvent.NavigateUp) },
         )
         Column(
             modifier = modifier
@@ -57,7 +62,10 @@ private fun ReleaseHistoryUi(
                 .padding(Dimension.backgroundPadding),
         ) {
             when (state) {
-                is ReleaseHistoryUiState.Loading -> { /* TODO */
+                is ReleaseHistoryUiState.Loading -> {
+                    PanelSurface {
+                        LoadingContent(modifier = Modifier.fillMaxSize())
+                    }
                 }
 
                 is ReleaseHistoryUiState.ReleaseHistories -> {
@@ -65,7 +73,7 @@ private fun ReleaseHistoryUi(
                         screen = RollDetailScreen(rollId = state.rollId),
                         onNavEvent = { event ->
                             when (event) {
-                                is NavEvent.Pop -> state.eventSink(ReleaseHistoryEvent.Back)
+                                is NavEvent.Pop -> state.eventSink(ReleaseHistoryEvent.NavigateUp)
                                 else -> Unit
                             }
                         }
@@ -74,9 +82,7 @@ private fun ReleaseHistoryUi(
                     ReleaseHistories(
                         modifier = Modifier.weight(1f),
                         table = state.releaseHistoryTable,
-                        selectedRows = state.selectedRows,
-                        onItemClick = { state.eventSink(ReleaseHistoryEvent.SelectRow(it)) },
-                        onRemoveClick = { state.eventSink(ReleaseHistoryEvent.Remove) },
+                        onDeleteClick = { state.eventSink(ReleaseHistoryEvent.DeleteHistory(it)) },
                     )
                 }
             }
@@ -87,26 +93,46 @@ private fun ReleaseHistoryUi(
 @Composable
 private fun ReleaseHistories(
     table: ReleaseHistoryTable,
-    selectedRows: List<TableItem>,
-    onItemClick: (TableItem) -> Unit,
-    onRemoveClick: () -> Unit,
+    onDeleteClick: (TableItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TablePanel(
+    val columnCount by remember(table.headers.size) { mutableStateOf(table.headers.size + 1) }
+
+    ScrollableTable(
         modifier = modifier,
         title = "출고 이력",
-        table = table,
-        selectedRows = selectedRows,
-        onItemSelected = { _, item -> onItemClick(item) },
-        onItemClick = onItemClick,
-        onPreviousClick = {},
-        onNextClick = {},
-        titleActionButtons = {
-            JyOutlinedButton(
-                enabled = selectedRows.isNotEmpty(),
-                onClick = onRemoveClick,
-                content = { Text(maxLines = 1, text = "삭제") }
-            )
-        }
+        columnWidths = List(columnCount) { column -> ColumnWidth.MaxIntrinsicWidth },
+        rows = table.items,
+        headerRowContent = { column ->
+            if (column == columnCount - 1) { // delete action row
+                HeaderCell(
+                    modifier = Modifier,
+                    header = ""
+                )
+            } else {
+                HeaderCell(
+                    modifier = Modifier,
+                    header = table.headers[column]
+                )
+            }
+        },
+        rowContent = { item, column ->
+            when (column) {
+                columnCount - 1 -> { // delete action
+                    IconButtonCell(
+                        modifier = Modifier,
+                        icon = vectorResource(JyIcons.Delete),
+                        onClick = { onDeleteClick(item) }
+                    )
+                }
+
+                else -> {
+                    TextCell(
+                        modifier = Modifier,
+                        text = item.tableRow[column]
+                    )
+                }
+            }
+        },
     )
 }

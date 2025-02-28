@@ -5,9 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
 
-    fun searchRoll(
-        searchQuery: String,
-        limit: Int,
-        offset: Int
-    ): Flow<List<FabricRoll>>
+    fun searchRoll(searchQuery: String): Flow<List<FabricRoll>>
 }

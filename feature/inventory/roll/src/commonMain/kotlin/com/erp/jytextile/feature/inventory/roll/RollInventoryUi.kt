@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.erp.jytextile.core.designsystem.component.ColumnWidth
+import com.erp.jytextile.core.designsystem.component.LoadingContent
+import com.erp.jytextile.core.designsystem.component.PaginatedScrollableTable
+import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.component.TopAppBar
 import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.RollInventoryScreen
-import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.RollTable
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
@@ -42,7 +45,7 @@ fun RollInventoryUi(
     ) {
         TopAppBar(
             navigationIcon = JyIcons.ArrowBack,
-            onNavigationClick = { state.eventSink(RollInventoryEvent.Back) },
+            onNavigationClick = { state.eventSink(RollInventoryEvent.NavigateUp) },
         )
         Box(
             modifier = modifier
@@ -50,16 +53,19 @@ fun RollInventoryUi(
                 .padding(Dimension.backgroundPadding),
         ) {
             when (state) {
-                is RollInventoryUiState.Loading -> { /* TODO */
+                is RollInventoryUiState.Loading -> {
+                    PanelSurface {
+                        LoadingContent(modifier = Modifier.fillMaxSize())
+                    }
                 }
 
                 is RollInventoryUiState.Rolls -> {
                     RollInventoryPanel(
                         modifier = Modifier.fillMaxSize(),
                         table = state.rollTable,
-                        onItemClick = { state.eventSink(RollInventoryEvent.RollSelected(it)) },
-                        onPreviousClick = { state.eventSink(RollInventoryEvent.PreviousPage) },
-                        onNextClick = { state.eventSink(RollInventoryEvent.NextPage) },
+                        onItemClick = { state.eventSink(RollInventoryEvent.ShowRollDetail(it)) },
+                        onPreviousClick = { state.eventSink(RollInventoryEvent.ShowPreviousPage) },
+                        onNextClick = { state.eventSink(RollInventoryEvent.ShowNextPage) },
                     )
                 }
             }
@@ -75,12 +81,32 @@ private fun RollInventoryPanel(
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TablePanel(
+    PaginatedScrollableTable(
         modifier = modifier,
         title = "Rolls",
-        table = table,
-        onItemClick = { onItemClick(it.id) },
-        onPreviousClick = onPreviousClick,
-        onNextClick = onNextClick,
+        columnWidths = List(table.headers.size) { ColumnWidth.MaxIntrinsicWidth },
+        rows = table.items,
+        onRowClick = { onItemClick(it.id) },
+        onNext = onNextClick,
+        onPrevious = onPreviousClick,
+        headerRowContent = { column ->
+            HeaderCell(
+                modifier = Modifier,
+                header = table.headers[column]
+            )
+        },
+        rowContent = { item, column ->
+            if (column == 0) {
+                PrimaryTextCell(
+                    modifier = Modifier,
+                    text = item.tableRow[column]
+                )
+            } else {
+                TextCell(
+                    modifier = Modifier,
+                    text = item.tableRow[column]
+                )
+            }
+        },
     )
 }

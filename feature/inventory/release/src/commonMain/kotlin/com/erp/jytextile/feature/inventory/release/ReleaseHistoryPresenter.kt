@@ -2,8 +2,6 @@ package com.erp.jytextile.feature.inventory.release
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.domain.model.ReleaseHistory
 import com.erp.jytextile.core.domain.repository.ReleaseHistoryRepository
@@ -57,29 +55,18 @@ class ReleaseHistoryPresenter(
                 )
             }
         }.collectAsRetainedState(null)
-        var selectedRows by rememberRetained { mutableStateOf(emptySet<TableItem>()) }
 
         val eventSink: CoroutineScope.(ReleaseHistoryEvent) -> Unit = { event ->
             when (event) {
-                ReleaseHistoryEvent.Back -> navigator.pop()
+                ReleaseHistoryEvent.NavigateUp -> navigator.pop()
 
-                ReleaseHistoryEvent.Remove -> {
+                is ReleaseHistoryEvent.DeleteHistory -> {
                     launch {
                         try {
-                            releaseHistoryRepository.removeReleaseHistories(
-                                selectedRows.map { it.id }.toList()
-                            )
+                            releaseHistoryRepository.removeReleaseHistories(listOf(event.item.id))
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
-                    }
-                }
-
-                is ReleaseHistoryEvent.SelectRow -> {
-                    if (selectedRows.contains(event.row)) {
-                        selectedRows = selectedRows - event.row
-                    } else {
-                        selectedRows = selectedRows + event.row
                     }
                 }
             }
@@ -92,7 +79,6 @@ class ReleaseHistoryPresenter(
 
             else -> ReleaseHistoryUiState.ReleaseHistories(
                 rollId = rollId,
-                selectedRows = selectedRows.toList(),
                 releaseHistoryTable = releaseHistoryTable!!,
                 eventSink = wrapEventSink(eventSink),
             )
@@ -110,15 +96,11 @@ sealed interface ReleaseHistoryUiState : CircuitUiState {
     data class ReleaseHistories(
         val rollId: Long,
         val releaseHistoryTable: ReleaseHistoryTable,
-        val selectedRows: List<TableItem>,
         override val eventSink: (ReleaseHistoryEvent) -> Unit = {},
     ) : ReleaseHistoryUiState
 }
 
 sealed interface ReleaseHistoryEvent : CircuitUiEvent {
-    data object Back : ReleaseHistoryEvent
-    data object Remove : ReleaseHistoryEvent
-    data class SelectRow(
-        val row: TableItem
-    ) : ReleaseHistoryEvent
+    data object NavigateUp : ReleaseHistoryEvent
+    data class DeleteHistory(val item: TableItem) : ReleaseHistoryEvent
 }

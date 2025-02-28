@@ -19,17 +19,13 @@ class SearchRepositoryImpl(
 
     private val cache = mutableMapOf<String, Instant>()
 
-    override fun searchRoll(
-        searchQuery: String,
-        limit: Int,
-        offset: Int
-    ): Flow<List<FabricRoll>> {
+    override fun searchRoll(searchQuery: String): Flow<List<FabricRoll>> {
         if (searchQuery.isBlank()) return flowOf(emptyList())
 
         return fabricRollLocalDataSource.search(searchQuery)
             .onStart {
                 val lastUpdated = cache[searchQuery]
-                if (lastUpdated == null || (Clock.System.now() - lastUpdated).inWholeMinutes > 30) {
+                if (lastUpdated == null || isCacheExpired(lastUpdated)) {
                     runCatching {
                         fabricRollRemoteDataSource.search(searchQuery).also {
                             fabricRollLocalDataSource.upsert(it)
@@ -38,5 +34,10 @@ class SearchRepositoryImpl(
                     }
                 }
             }
+    }
+
+    private fun isCacheExpired(lastUpdated: Instant): Boolean {
+        val currentTime = Clock.System.now()
+        return (currentTime - lastUpdated).inWholeMinutes > 30
     }
 }

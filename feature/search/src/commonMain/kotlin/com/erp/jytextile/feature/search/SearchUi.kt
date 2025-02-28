@@ -11,15 +11,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.erp.jytextile.core.designsystem.component.ColumnWidth
 import com.erp.jytextile.core.designsystem.component.EmptyContent
 import com.erp.jytextile.core.designsystem.component.LoadingContent
 import com.erp.jytextile.core.designsystem.component.OutlinedTextField
 import com.erp.jytextile.core.designsystem.component.PanelSurface
+import com.erp.jytextile.core.designsystem.component.ScrollableTable
 import com.erp.jytextile.core.designsystem.component.TopAppBar
 import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.SearchScreen
-import com.erp.jytextile.core.ui.TablePanel
 import com.erp.jytextile.core.ui.model.RollTable
 import com.erp.jytextile.core.ui.model.TableItem
 import com.slack.circuit.runtime.CircuitContext
@@ -44,32 +45,24 @@ private fun SearchUi(
 ) {
     SearchUi(
         modifier = modifier,
-        isLoading = state.isLoading,
-        searchQuery = state.searchQuery,
-        searchResults = state.searchResults,
+        state = state,
         onSearchQueryChanged = { state.eventSink(SearchEvent.UpdateSearchQuery(it)) },
-        onRollSelected = { state.eventSink(SearchEvent.RollSelected(it)) },
-        onNextPageClick = { state.eventSink(SearchEvent.NextPage) },
-        onPreviousPageClick = { state.eventSink(SearchEvent.PreviousPage) },
+        onRollClick = { state.eventSink(SearchEvent.ShowRollDetail(it)) },
     )
 }
 
 @Composable
 private fun SearchUi(
-    isLoading: Boolean,
-    searchQuery: String,
-    searchResults: RollTable,
+    state: SearchUiState,
     onSearchQueryChanged: (String) -> Unit,
-    onRollSelected: (TableItem) -> Unit,
-    onNextPageClick: () -> Unit,
-    onPreviousPageClick: () -> Unit,
+    onRollClick: (TableItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
         SearchTopAppBar(
-            searchQuery = searchQuery,
+            searchQuery = state.searchQuery,
             onSearchQueryChanged = onSearchQueryChanged,
         )
         Box(
@@ -78,7 +71,7 @@ private fun SearchUi(
                 .padding(Dimension.backgroundPadding)
         ) {
             when {
-                isLoading -> {
+                state.isLoading -> {
                     PanelSurface {
                         LoadingContent(
                             modifier = Modifier.fillMaxSize(),
@@ -87,7 +80,7 @@ private fun SearchUi(
                     }
                 }
 
-                searchResults.items.isEmpty() -> {
+                state.searchResults.items.isEmpty() -> {
                     PanelSurface {
                         EmptyContent(
                             modifier = Modifier.fillMaxSize(),
@@ -98,12 +91,10 @@ private fun SearchUi(
                 }
 
                 else -> {
-                    TablePanel(
+                    SearchResultTable(
                         modifier = Modifier.fillMaxSize(),
-                        table = searchResults,
-                        onItemClick = onRollSelected,
-                        onPreviousClick = onPreviousPageClick,
-                        onNextClick = onNextPageClick,
+                        searchResults = state.searchResults,
+                        onRollClick = onRollClick,
                     )
                 }
             }
@@ -147,5 +138,39 @@ private fun SearchTextField(
                 contentDescription = null
             )
         }
+    )
+}
+
+@Composable
+private fun SearchResultTable(
+    searchResults: RollTable,
+    onRollClick: (TableItem) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    ScrollableTable(
+        modifier = modifier,
+        title = "검색 결과",
+        columnWidths = List(searchResults.headers.size) { ColumnWidth.MaxIntrinsicWidth },
+        rows = searchResults.items,
+        onRowClick = { onRollClick(it) },
+        headerRowContent = { column ->
+            HeaderCell(
+                modifier = Modifier,
+                header = searchResults.headers[column]
+            )
+        },
+        rowContent = { item, column ->
+            if (column == 0) {
+                PrimaryTextCell(
+                    modifier = Modifier,
+                    text = item.tableRow[column]
+                )
+            } else {
+                TextCell(
+                    modifier = Modifier,
+                    text = item.tableRow[column]
+                )
+            }
+        },
     )
 }

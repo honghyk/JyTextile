@@ -17,8 +17,6 @@ data class RollTable(
         "REMARK",
     ),
     override val items: List<RollTableItem> = emptyList(),
-    override val currentPage: Int,
-    override val totalPage: Int,
 ) : Table
 
 data class RollTableItem(

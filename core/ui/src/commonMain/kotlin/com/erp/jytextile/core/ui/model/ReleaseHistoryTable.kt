@@ -12,7 +12,6 @@ import kotlinx.datetime.toLocalDateTime
 
 data class ReleaseHistoryTable(
     override val headers: List<String> = listOf(
-        "NO",
         "BUYER",
         "QTY(M)",
         "QTY(Y)",
@@ -20,8 +19,6 @@ data class ReleaseHistoryTable(
         "REMARK",
     ),
     override val items: List<ReleaseHistoryTableItem> = emptyList(),
-    override val currentPage: Int = -1,
-    override val totalPage: Int = -1,
 ) : Table
 
 data class ReleaseHistoryTableItem(
@@ -32,7 +29,6 @@ data class ReleaseHistoryTableItem(
     val releaseDate: String,
     val remark: String,
     override val tableRow: List<String> = listOf(
-        id.toString(),
         buyer,
         qtyInMeter,
         qtyInYard,
