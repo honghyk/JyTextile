@@ -95,6 +95,8 @@ private fun SearchUi(
                         modifier = Modifier.fillMaxSize(),
                         searchResults = state.searchResults,
                         onRollClick = onRollClick,
+                        onEditClick = { state.eventSink(SearchEvent.EditRoll(it.id)) },
+                        onDeleteClick = { state.eventSink(SearchEvent.DeleteRoll(it.id)) },
                     )
                 }
             }
@@ -145,6 +147,8 @@ private fun SearchTextField(
 private fun SearchResultTable(
     searchResults: RollTable,
     onRollClick: (TableItem) -> Unit,
+    onEditClick: (TableItem) -> Unit = {},
+    onDeleteClick: (TableItem) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     ScrollableTable(
@@ -160,16 +164,35 @@ private fun SearchResultTable(
             )
         },
         rowContent = { item, column ->
-            if (column == 0) {
-                PrimaryTextCell(
-                    modifier = Modifier,
-                    text = item.tableRow[column]
-                )
-            } else {
-                TextCell(
-                    modifier = Modifier,
-                    text = item.tableRow[column]
-                )
+            when (column) {
+                0 -> {
+                    PrimaryTextCell(
+                        modifier = Modifier,
+                        text = item.tableRow[column]
+                    )
+                }
+
+                searchResults.headers.size - 1 -> {
+                    IconButtonsCell(modifier = Modifier) {
+                        this@ScrollableTable.IconButton(
+                            modifier = Modifier,
+                            icon = vectorResource(JyIcons.Edit),
+                            onClick = { onEditClick(item) }
+                        )
+                        this@ScrollableTable.IconButton(
+                            modifier = Modifier,
+                            icon = vectorResource(JyIcons.Delete),
+                            onClick = { onDeleteClick(item) }
+                        )
+                    }
+                }
+
+                else -> {
+                    TextCell(
+                        modifier = Modifier,
+                        text = item.tableRow[column]
+                    )
+                }
             }
         },
     )

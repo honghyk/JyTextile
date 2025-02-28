@@ -22,8 +22,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -304,7 +306,13 @@ interface TableRowScope : TableScope, RowScope {
     )
 
     @Composable
-    fun IconButtonCell(
+    fun IconButtonsCell(
+        modifier: Modifier,
+        content: @Composable RowScope.() -> Unit,
+    )
+
+    @Composable
+    fun IconButton(
         modifier: Modifier,
         icon: ImageVector,
         onClick: () -> Unit,
@@ -361,6 +369,7 @@ private class TableRowScopeImpl(
                 .padding(CellContentPadding),
             style = JyTheme.typography.textMedium,
             color = JyTheme.color.tablePrimaryColumn,
+            fontWeight = FontWeight.Medium,
             maxLines = 1,
             text = text,
         )
@@ -382,19 +391,32 @@ private class TableRowScopeImpl(
     }
 
     @Composable
-    override fun IconButtonCell(
+    override fun IconButtonsCell(
+        modifier: Modifier,
+        content: @Composable RowScope.() -> Unit,
+    ) {
+        Row(
+            modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            CompositionLocalProvider(LocalContentColor provides JyTheme.color.body) {
+                content()
+            }
+        }
+    }
+
+    @Composable
+    override fun IconButton(
         modifier: Modifier,
         icon: ImageVector,
         onClick: () -> Unit,
     ) {
         Icon(
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
                 .size(40.dp)
                 .clickable(onClick = onClick)
                 .padding(10.dp),
             imageVector = icon,
-            tint = JyTheme.color.body,
             contentDescription = null,
         )
     }

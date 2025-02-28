@@ -10,6 +10,7 @@ import textileerp.core.designsystem.generated.resources.home_light
 import textileerp.core.designsystem.generated.resources.ic_arrow_left
 import textileerp.core.designsystem.generated.resources.ic_arrow_right
 import textileerp.core.designsystem.generated.resources.ic_delete
+import textileerp.core.designsystem.generated.resources.ic_edit
 import textileerp.core.designsystem.generated.resources.search_empty
 
 object JyIcons {
@@ -20,4 +21,5 @@ object JyIcons {
     val ArrowLeft: DrawableResource = Res.drawable.ic_arrow_left
     val ArrowRight: DrawableResource = Res.drawable.ic_arrow_right
     val Delete: DrawableResource = Res.drawable.ic_delete
+    val Edit: DrawableResource = Res.drawable.ic_edit
 }

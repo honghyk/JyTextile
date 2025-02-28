@@ -8,7 +8,6 @@ import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository
 import com.erp.jytextile.core.navigation.ReleaseFormScreen
 import com.erp.jytextile.core.navigation.RollDetailScreen
-import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.ui.model.FabricRollUiModel
 import com.erp.jytextile.core.ui.model.toUiModel
 import com.slack.circuit.overlay.LocalOverlayHost
@@ -61,27 +60,6 @@ class RollDetailPresenter(
 
         val eventSink: CoroutineScope.(RollDetailEvent) -> Unit = { event ->
             when (event) {
-                is RollDetailEvent.Remove -> {
-                    launch {
-                        try {
-                            rollInventoryRepository.removeFabricRoll(rollId)
-                            navigator.pop()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-                }
-
-                is RollDetailEvent.Modify -> {
-                    launch {
-                        roll?.let { roll ->
-                            overlayHost.showInDialog(
-                                RollFormScreen(roll.id),
-                                navigator::goTo
-                            )
-                        }
-                    }
-                }
 
                 is RollDetailEvent.Release -> {
                     roll?.let { roll ->
@@ -117,7 +95,5 @@ sealed interface RollDetailUiState : CircuitUiState {
 }
 
 sealed interface RollDetailEvent : CircuitUiEvent {
-    data object Remove : RollDetailEvent
-    data object Modify : RollDetailEvent
     data object Release : RollDetailEvent
 }

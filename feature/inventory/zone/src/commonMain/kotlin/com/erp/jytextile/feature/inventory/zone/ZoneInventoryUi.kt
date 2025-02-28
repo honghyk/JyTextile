@@ -114,11 +114,13 @@ private fun ZoneInventoryPanel(
                     text = item.tableRow[column]
                 )
 
-                2 -> IconButtonCell(
-                    modifier = Modifier,
-                    icon = vectorResource(JyIcons.Delete),
-                    onClick = { onRemoveZoneClick(item.id) }
-                )
+                2 -> IconButtonsCell(modifier = Modifier) {
+                    this@PaginatedFixedTable.IconButton(
+                        modifier = Modifier,
+                        icon = vectorResource(JyIcons.Delete),
+                        onClick = { onRemoveZoneClick(item.id) }
+                    )
+                }
             }
         }
     )

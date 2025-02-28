@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
-import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.theme.JyTheme
 import com.erp.jytextile.core.designsystem.theme.Palette
@@ -73,12 +72,6 @@ private fun RollDetailUi(
                             maxLines = 1,
                             text = "Roll",
                         )
-                        JyOutlinedButton(onClick = { state.eventSink(RollDetailEvent.Remove) }) {
-                            Text(maxLines = 1, text = "삭제")
-                        }
-                        JyOutlinedButton(onClick = { state.eventSink(RollDetailEvent.Modify) }) {
-                            Text(maxLines = 1, text = "수정")
-                        }
                         JyButton(onClick = { state.eventSink(RollDetailEvent.Release) }) {
                             Text(maxLines = 1, text = "Roll 출고")
                         }

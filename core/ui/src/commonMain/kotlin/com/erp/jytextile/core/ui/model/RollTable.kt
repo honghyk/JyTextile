@@ -15,6 +15,7 @@ data class RollTable(
         "QTY(Y)",
         "FINISH",
         "REMARK",
+        "",
     ),
     override val items: List<RollTableItem> = emptyList(),
 ) : Table

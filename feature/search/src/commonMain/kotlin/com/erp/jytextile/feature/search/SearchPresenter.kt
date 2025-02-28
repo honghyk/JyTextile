@@ -5,13 +5,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import com.erp.jytextile.core.base.circuit.showInDialog
+import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.SearchRepository
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
+import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.navigation.SearchScreen
 import com.erp.jytextile.core.ui.model.RollTable
 import com.erp.jytextile.core.ui.model.TableItem
 import com.erp.jytextile.core.ui.model.toTableItem
+import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext
@@ -20,11 +24,13 @@ import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
 import com.slack.circuit.runtime.screen.Screen
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
@@ -53,6 +59,8 @@ class SearchPresenter(
 
     @Composable
     override fun present(): SearchUiState {
+        val overlayHost = LocalOverlayHost.current
+
         var isLoading by rememberRetained { mutableStateOf(false) }
         var searchQuery by rememberRetained { mutableStateOf("") }
 
@@ -68,18 +76,34 @@ class SearchPresenter(
                 .onEach { isLoading = false }
         }.collectAsRetainedState(RollTable())
 
-        return SearchUiState(
-            isLoading = isLoading,
-            searchQuery = searchQuery,
-            searchResults = searchResult
-        ) { event ->
+        val eventSink: CoroutineScope.(SearchEvent) -> Unit = { event ->
             when (event) {
                 is SearchEvent.UpdateSearchQuery -> searchQuery = event.query
                 is SearchEvent.ShowRollDetail -> {
                     navigator.goTo(ReleaseHistoryScreen(event.item.id))
                 }
+
+                is SearchEvent.EditRoll -> {
+                    launch {
+                        overlayHost.showInDialog(
+                            RollFormScreen(event.id),
+                            navigator::goTo
+                        )
+                    }
+                }
+
+                is SearchEvent.DeleteRoll -> {
+                    navigator.goTo(ReleaseHistoryScreen(event.id))
+                }
             }
         }
+
+        return SearchUiState(
+            isLoading = isLoading,
+            searchQuery = searchQuery,
+            searchResults = searchResult,
+            eventSink = wrapEventSink(eventSink),
+        )
     }
 }
 
@@ -93,4 +117,6 @@ data class SearchUiState(
 sealed interface SearchEvent : CircuitUiEvent {
     data class UpdateSearchQuery(val query: String) : SearchEvent
     data class ShowRollDetail(val item: TableItem) : SearchEvent
+    data class EditRoll(val id: Long) : SearchEvent
+    data class DeleteRoll(val id: Long) : SearchEvent
 }

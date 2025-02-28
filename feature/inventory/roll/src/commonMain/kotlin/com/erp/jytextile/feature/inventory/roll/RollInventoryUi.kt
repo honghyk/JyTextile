@@ -15,11 +15,13 @@ import com.erp.jytextile.core.designsystem.icon.JyIcons
 import com.erp.jytextile.core.designsystem.theme.Dimension
 import com.erp.jytextile.core.navigation.RollInventoryScreen
 import com.erp.jytextile.core.ui.model.RollTable
+import com.erp.jytextile.core.ui.model.TableItem
 import com.slack.circuit.runtime.CircuitContext
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.runtime.ui.Ui
 import com.slack.circuit.runtime.ui.ui
 import me.tatarka.inject.annotations.Inject
+import org.jetbrains.compose.resources.vectorResource
 
 @Inject
 class RollInventoryUiFactory : Ui.Factory {
@@ -63,7 +65,9 @@ fun RollInventoryUi(
                     RollInventoryPanel(
                         modifier = Modifier.fillMaxSize(),
                         table = state.rollTable,
-                        onItemClick = { state.eventSink(RollInventoryEvent.ShowRollDetail(it)) },
+                        onItemClick = { state.eventSink(RollInventoryEvent.ShowRollDetail(it.id)) },
+                        onEditClick = { state.eventSink(RollInventoryEvent.EditRoll(it.id)) },
+                        onDeleteClick = { state.eventSink(RollInventoryEvent.DeleteRoll(it.id)) },
                         onPreviousClick = { state.eventSink(RollInventoryEvent.ShowPreviousPage) },
                         onNextClick = { state.eventSink(RollInventoryEvent.ShowNextPage) },
                     )
@@ -76,7 +80,9 @@ fun RollInventoryUi(
 @Composable
 private fun RollInventoryPanel(
     table: RollTable,
-    onItemClick: (Long) -> Unit,
+    onItemClick: (TableItem) -> Unit,
+    onEditClick: (TableItem) -> Unit,
+    onDeleteClick: (TableItem) -> Unit,
     onPreviousClick: () -> Unit,
     onNextClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -86,7 +92,7 @@ private fun RollInventoryPanel(
         title = "Rolls",
         columnWidths = List(table.headers.size) { ColumnWidth.MaxIntrinsicWidth },
         rows = table.items,
-        onRowClick = { onItemClick(it.id) },
+        onRowClick = { onItemClick(it) },
         onNext = onNextClick,
         onPrevious = onPreviousClick,
         headerRowContent = { column ->
@@ -96,16 +102,35 @@ private fun RollInventoryPanel(
             )
         },
         rowContent = { item, column ->
-            if (column == 0) {
-                PrimaryTextCell(
-                    modifier = Modifier,
-                    text = item.tableRow[column]
-                )
-            } else {
-                TextCell(
-                    modifier = Modifier,
-                    text = item.tableRow[column]
-                )
+            when (column) {
+                0 -> {
+                    PrimaryTextCell(
+                        modifier = Modifier,
+                        text = item.tableRow[column]
+                    )
+                }
+
+                table.headers.size - 1 -> {
+                    IconButtonsCell(modifier = Modifier) {
+                        this@PaginatedScrollableTable.IconButton(
+                            modifier = Modifier,
+                            icon = vectorResource(JyIcons.Edit),
+                            onClick = { onEditClick(item) }
+                        )
+                        this@PaginatedScrollableTable.IconButton(
+                            modifier = Modifier,
+                            icon = vectorResource(JyIcons.Delete),
+                            onClick = { onDeleteClick(item) }
+                        )
+                    }
+                }
+
+                else -> {
+                    TextCell(
+                        modifier = Modifier,
+                        text = item.tableRow[column]
+                    )
+                }
             }
         },
     )

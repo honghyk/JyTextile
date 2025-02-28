@@ -5,13 +5,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import com.erp.jytextile.core.base.circuit.showInDialog
 import com.erp.jytextile.core.base.circuit.wrapEventSink
 import com.erp.jytextile.core.domain.model.FabricRoll
 import com.erp.jytextile.core.domain.repository.RollInventoryRepository
 import com.erp.jytextile.core.navigation.ReleaseHistoryScreen
+import com.erp.jytextile.core.navigation.RollFormScreen
 import com.erp.jytextile.core.navigation.RollInventoryScreen
 import com.erp.jytextile.core.ui.model.RollTable
 import com.erp.jytextile.core.ui.model.toTableItem
+import com.slack.circuit.overlay.LocalOverlayHost
 import com.slack.circuit.retained.collectAsRetainedState
 import com.slack.circuit.retained.rememberRetained
 import com.slack.circuit.runtime.CircuitContext
@@ -24,6 +27,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import me.tatarka.inject.annotations.Assisted
 import me.tatarka.inject.annotations.Inject
 
@@ -52,6 +56,7 @@ class RollInventoryPresenter(
 
     @Composable
     override fun present(): RollInventoryUiState {
+        val overlayHost = LocalOverlayHost.current
         var currentPage by rememberRetained { mutableStateOf(0) }
 
         val rollTable: RollTable? by rememberRetained {
@@ -73,6 +78,25 @@ class RollInventoryPresenter(
 
                 is RollInventoryEvent.ShowRollDetail -> {
                     navigator.goTo(ReleaseHistoryScreen(rollId = event.rollId))
+                }
+
+                is RollInventoryEvent.EditRoll -> {
+                    launch {
+                        overlayHost.showInDialog(
+                            RollFormScreen(event.rollId),
+                            navigator::goTo
+                        )
+                    }
+                }
+
+                is RollInventoryEvent.DeleteRoll -> {
+                    launch {
+                        try {
+                            rollInventoryRepository.removeFabricRoll(event.rollId)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
                 }
 
                 RollInventoryEvent.ShowNextPage -> {
@@ -116,6 +140,8 @@ sealed interface RollInventoryUiState : CircuitUiState {
 sealed interface RollInventoryEvent : CircuitUiEvent {
     data object NavigateUp : RollInventoryEvent
     data class ShowRollDetail(val rollId: Long) : RollInventoryEvent
+    data class EditRoll(val rollId: Long) : RollInventoryEvent
+    data class DeleteRoll(val rollId: Long) : RollInventoryEvent
     data object ShowPreviousPage : RollInventoryEvent
     data object ShowNextPage : RollInventoryEvent
 }

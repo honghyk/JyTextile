@@ -119,11 +119,13 @@ private fun ReleaseHistories(
         rowContent = { item, column ->
             when (column) {
                 columnCount - 1 -> { // delete action
-                    IconButtonCell(
-                        modifier = Modifier,
-                        icon = vectorResource(JyIcons.Delete),
-                        onClick = { onDeleteClick(item) }
-                    )
+                    IconButtonsCell(modifier = Modifier) {
+                        this@ScrollableTable.IconButton(
+                            modifier = Modifier,
+                            icon = vectorResource(JyIcons.Delete),
+                            onClick = { onDeleteClick(item) }
+                        )
+                    }
                 }
 
                 else -> {
