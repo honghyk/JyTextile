@@ -36,10 +36,10 @@ private fun AddZoneUi(
         primaryButtonEnabled = state.submittable,
         onCancelButtonClick = { state.eventSink(ZoneFormEvent.Discard) },
         onPrimaryButtonClick = { state.eventSink(ZoneFormEvent.Submit) },
-        primaryButtonContent = { Text(text = "Zone 추가") },
+        primaryButtonContent = { Text(text = "추가") },
     ) {
         FormTextField(
-            label = "Zone 이름",
+            label = "이름",
             value = state.name,
             hint = "Ex) A-1",
             onValueChange = { state.eventSink(ZoneFormEvent.UpdateName(it)) },
