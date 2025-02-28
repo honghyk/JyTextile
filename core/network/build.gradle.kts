@@ -14,7 +14,7 @@ android {
 buildConfig {
     packageName("com.erp.jytextile.core.network")
 
-    val apiKey = gradleLocalProperties(rootDir, providers).getProperty("supabase_api_key")
+    val apiKey = gradleLocalProperties(rootDir, providers).getProperty("supabase_api_key") ?: ""
 
     buildConfigField<String>(
         "SUPABASE_API_KEY",
