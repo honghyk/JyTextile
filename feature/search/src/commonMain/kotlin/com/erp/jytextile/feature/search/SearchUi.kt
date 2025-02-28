@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.EmptyContent
+import com.erp.jytextile.core.designsystem.component.LoadingContent
 import com.erp.jytextile.core.designsystem.component.OutlinedTextField
 import com.erp.jytextile.core.designsystem.component.PanelSurface
 import com.erp.jytextile.core.designsystem.component.TopAppBar
@@ -57,7 +58,7 @@ private fun SearchUi(
 private fun SearchUi(
     isLoading: Boolean,
     searchQuery: String,
-    searchResults: RollTable?,
+    searchResults: RollTable,
     onSearchQueryChanged: (String) -> Unit,
     onRollSelected: (TableItem) -> Unit,
     onNextPageClick: () -> Unit,
@@ -77,10 +78,13 @@ private fun SearchUi(
                 .padding(Dimension.backgroundPadding)
         ) {
             when {
-                isLoading || searchResults == null -> {
-                    PanelSurface(
-                        content = { }
-                    )
+                isLoading -> {
+                    PanelSurface {
+                        LoadingContent(
+                            modifier = Modifier.fillMaxSize(),
+                            text = "Loading..."
+                        )
+                    }
                 }
 
                 searchResults.items.isEmpty() -> {

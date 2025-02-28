@@ -58,7 +58,7 @@ class SearchPresenter(
 
         var currentPage by rememberRetained { mutableStateOf(0) }
 
-        val searchResult: RollTable? by rememberRetained {
+        val searchResult: RollTable by rememberRetained {
             snapshotFlow { searchQuery }
                 .distinctUntilChanged()
                 .debounce(300L)
@@ -74,7 +74,7 @@ class SearchPresenter(
                     )
                 }
                 .onEach { isLoading = false }
-        }.collectAsRetainedState(null)
+        }.collectAsRetainedState(RollTable(currentPage = -1, totalPage = -1))
 
         return SearchUiState(
             isLoading = isLoading,
@@ -106,7 +106,7 @@ private const val PAGE_SIZE = 20
 data class SearchUiState(
     val isLoading: Boolean,
     val searchQuery: String,
-    val searchResults: RollTable?,
+    val searchResults: RollTable,
     val eventSink: (SearchEvent) -> Unit = {},
 ) : CircuitUiState
 
