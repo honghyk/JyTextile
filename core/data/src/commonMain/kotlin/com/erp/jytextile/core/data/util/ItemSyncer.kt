@@ -21,7 +21,7 @@ class ItemSyncer<T : Entity>(
         val updated = ArrayList<T>()
 
         for (networkEntity in networkValues) {
-            logger.v { "Syncing item from network: $networkEntity" }
+//            logger.v { "Syncing item from network: $networkEntity" }
 
             val remoteId = networkEntity.id
             val localEntityForId = currentLocalEntities.find { it.id == remoteId }
@@ -29,7 +29,7 @@ class ItemSyncer<T : Entity>(
             if (localEntityForId != null) {
                 if (localEntityForId != networkEntity) {
                     upsertEntity(networkEntity)
-                    logger.v { "Updated entity: ${networkEntity.id}" }
+//                    logger.v { "Updated entity: ${networkEntity.id}" }
                 }
                 currentLocalEntities.remove(localEntityForId)
                 updated += networkEntity
@@ -40,13 +40,13 @@ class ItemSyncer<T : Entity>(
 
         currentLocalEntities.forEach {
             deleteEntity(it.id)
-            logger.v { "Deleted entity: ${it.id}" }
+//            logger.v { "Deleted entity: ${it.id}" }
             removed += it
         }
 
         added.forEach {
             upsertEntity(it)
-            logger.v { "Added entity: ${it.id}" }
+//            logger.v { "Added entity: ${it.id}" }
         }
 
         return ItemSyncerResult(added, removed, updated)
