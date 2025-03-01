@@ -42,7 +42,7 @@ private fun ReleaseFormUi(
         onCancelButtonClick = { state.eventSink(ReleaseFormEvent.Discard) },
         onPrimaryButtonClick = { state.eventSink(ReleaseFormEvent.Submit) },
         primaryButtonContent = {
-            Text(maxLines = 1, text = "ROLL 출고")
+            Text(maxLines = 1, text = "출고")
         }
     ) {
         FormTextField(
