@@ -27,7 +27,7 @@ jobs:
           echo "supabase_api_key=${{ secrets.SUPABASE_API_KEY }}" >> local.properties
 
       - name: Build Desktop App
-        run: ./gradlew packageDistributionForCurrentOS
+        run: ./gradlew packageReleaseDistributionForCurrentOS
 
       - name: Upload build outputs
         uses: actions/upload-artifact@v4

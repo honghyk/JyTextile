@@ -38,6 +38,9 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
             packageName = "JyTextileERP"
             packageVersion = "1.0.0"
+            windows {
+                includeAllModules = true
+            }
 
             windows {
                 shortcut = true
