@@ -22,6 +22,10 @@ jobs:
         with:
           cache-disabled: true
 
+      - name: Set API Key into `local.properties`
+        run: |
+          echo "supabase_api_key=${{ secrets.SUPABASE_API_KEY }}" >> local.properties
+
       - name: Build Desktop App
         run: ./gradlew packageDistributionForCurrentOS
 
