@@ -36,11 +36,10 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
-            packageName = "TrillionERP"
+            packageName = "JyTextileERP"
             packageVersion = "1.0.0"
 
             windows {
-                includeAllModules = true
                 shortcut = true
             }
         }
