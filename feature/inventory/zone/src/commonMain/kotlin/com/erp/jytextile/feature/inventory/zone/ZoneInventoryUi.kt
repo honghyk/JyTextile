@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.erp.jytextile.core.designsystem.component.ColumnWidth
 import com.erp.jytextile.core.designsystem.component.JyButton
+import com.erp.jytextile.core.designsystem.component.JyOutlinedButton
 import com.erp.jytextile.core.designsystem.component.LoadingContent
 import com.erp.jytextile.core.designsystem.component.PaginatedFixedTable
 import com.erp.jytextile.core.designsystem.component.PanelSurface
@@ -91,9 +92,13 @@ private fun ZoneInventoryPanel(
         onPrevious = onPreviousClick,
         onRowClick = { onZoneClick(it.id) },
         headerActions = {
-            JyButton(
+            JyOutlinedButton(
                 onClick = onAddZoneClick,
                 content = { Text("Zone 추가") }
+            )
+            JyButton(
+                onClick = onAddRollClick,
+                content = { Text("Roll 추가") }
             )
         },
         headerRowContent = { column ->
