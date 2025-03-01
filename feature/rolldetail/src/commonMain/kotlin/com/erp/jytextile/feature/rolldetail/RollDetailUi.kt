@@ -3,18 +3,22 @@ package com.erp.jytextile.feature.rolldetail
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.erp.jytextile.core.designsystem.component.JyButton
 import com.erp.jytextile.core.designsystem.component.PanelSurface
@@ -54,23 +58,21 @@ private fun RollDetailUi(
 
             is RollDetailUiState.RollDetail -> {
                 Column(
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 12.dp,
-                        bottom = 20.dp
-                    )
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp, vertical = 20.dp)
                 ) {
                     Row(
                         modifier = Modifier.align(Alignment.End),
+                        verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         Text(
                             modifier = Modifier.weight(1f),
-                            style = JyTheme.typography.textXLarge,
+                            style = JyTheme.typography.textLarge,
+                            fontWeight = FontWeight.SemiBold,
                             color = JyTheme.color.heading,
                             maxLines = 1,
-                            text = "Roll",
+                            text = "Roll #${state.roll.id}",
                         )
                         JyButton(onClick = { state.eventSink(RollDetailEvent.Release) }) {
                             Text(maxLines = 1, text = "Roll 출고")
@@ -93,27 +95,50 @@ private fun RollDetailGrid(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(80.dp),
+        modifier = modifier
+            .horizontalScroll(rememberScrollState())
+            .height(IntrinsicSize.Min),
+        horizontalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides JyTheme.typography.textMedium.copy(color = Palette.grey700)
         ) {
             Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                modifier = Modifier.width(IntrinsicSize.Max),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Text(text = "No: ${roll.id}")
-                Text(text = "Zone: ${roll.zone.name}")
-                Text(text = "Order No: ${roll.orderNo}")
-                Text(text = "Item No: ${roll.itemNo}")
+                Text(text = "Zone")
+                Text(text = "Order No")
+                Text(text = "Item No")
             }
+            Spacer(modifier = Modifier.width(32.dp))
             Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                modifier = Modifier.width(IntrinsicSize.Max),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Text(text = "Factory: ${roll.factory}")
+                Text(text = roll.zone.name)
+                Text(text = roll.orderNo)
+                Text(text = roll.itemNo)
+            }
+            VerticalDivider(color = JyTheme.color.divider)
+            Column(
+                modifier = Modifier.width(IntrinsicSize.Max),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                Text(text = "Factory")
+                Text(text = "Qty(M)")
+                Text(text = "Qty(Y)")
+            }
+            Spacer(modifier = Modifier.width(32.dp))
+            Column(
+                modifier = Modifier.width(IntrinsicSize.Max),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                Text(text = roll.factory)
                 Text(
                     text = buildString {
-                        append("Qty(M): ")
                         append(roll.remainingQuantity.formatDecimal(decimalPlaces = 1))
                         append("/")
                         append(roll.originalQuantity.formatDecimal(decimalPlaces = 1))
@@ -121,18 +146,26 @@ private fun RollDetailGrid(
                 )
                 Text(
                     text = buildString {
-                        append("Qty(Y): ")
                         append(roll.remainingQuantityInYard.formatDecimal(decimalPlaces = 1))
                         append("/")
                         append(roll.originalQuantityInYard.formatDecimal(decimalPlaces = 1))
                     }
                 )
             }
+            VerticalDivider(color = JyTheme.color.divider)
             Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                modifier = Modifier.width(IntrinsicSize.Max),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Text(text = "Finish: ${roll.finish}")
-                Text(text = "Remark: ${roll.remark}")
+                Text(text = "Finish")
+                Text(text = "Remark")
+            }
+            Spacer(modifier = Modifier.width(32.dp))
+            Column(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                Text(text = roll.finish)
+                Text(text = roll.remark.orEmpty())
             }
         }
     }
