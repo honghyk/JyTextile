@@ -1,14 +1,25 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Desktop.
+# Fabric Roll Stock Management System
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+A cross-platform inventory management system built with Kotlin Multiplatform (KMM), designed to manage fabric roll inventory in a small business environment.
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Overview
+This app was developed to support stock management for my family’s textile company. It allows staff to easily record fabric roll entries, track stock, and search rolls.  
+Currently, the project is in early stage of development and contains minimum features:
+- In/Out Management: Record incoming and outgoing fabric rolls with essential details
+- Search: Look up rolls by id, item number or order number
 
+## Tech Stack
+- Kotlin Multiplatform (KMM) - Shared business logic across Android, iOS and Desktop
+- Compose Multiplatform - UI framework for building cross-platform apps
+- Room – Local database for offline storage
+- Ktor - HTTP client for networking and potential backend communication
+- [kotlin-inject](https://github.com/evant/kotlin-inject) – Dependency injection
+• [circuit](https://github.com/slackhq/circuit) - UI architecture framework for Compose, handling navigation and presentation logic
+- [Store5](https://github.com/MobileNativeFoundation/Store) - Data loading and caching layer, simplifying offline and network data access
+- [kermit](https://github.com/touchlab/Kermit) - Cross-platform logging library
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## 🚧In Progress
+- Export inventory data as CSV
+- Authentication and user management
+- Add support for Android and iOS apps (currently only supports Desktop)
+- Set up proper distribution for each platform
