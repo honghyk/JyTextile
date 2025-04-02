@@ -18,7 +18,7 @@ Currently, the project is in early stage of development and contains minimum fea
 - [Store5](https://github.com/MobileNativeFoundation/Store) - Data loading and caching layer, simplifying offline and network data access
 - [kermit](https://github.com/touchlab/Kermit) - Cross-platform logging library
 
-## 🚧In Progress
+## 🚧 In Progress
 - Export inventory data as CSV
 - Authentication and user management
 - Add support for Android and iOS apps (currently only supports Desktop)
