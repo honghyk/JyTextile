@@ -1,4 +1,4 @@
-rootProject.name = "TextileERP"
+rootProject.name = "Trillion"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

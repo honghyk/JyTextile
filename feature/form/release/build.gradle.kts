@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform.feature)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform.feature)
 }
 
 android {

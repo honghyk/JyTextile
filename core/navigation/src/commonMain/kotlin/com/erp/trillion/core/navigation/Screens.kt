@@ -1,0 +1,39 @@
+package com.erp.trillion.core.navigation
+
+import com.erp.trillion.core.base.parcel.Parcelize
+import com.slack.circuit.runtime.screen.Screen
+
+@Parcelize
+data object ZoneFormScreen : Screen
+
+@Parcelize
+data object ZoneInventoryScreen : Screen
+
+@Parcelize
+data class RollFormScreen(
+    val rollId: Long?,
+) : Screen
+
+@Parcelize
+data class RollInventoryScreen(
+    val zoneId: Long,
+) : Screen
+
+@Parcelize
+data class ReleaseFormScreen(
+    val rollId: Long,
+    val rollItemNo: String
+) : Screen
+
+@Parcelize
+data class ReleaseHistoryScreen(
+    val rollId: Long,
+) : Screen
+
+@Parcelize
+data class RollDetailScreen(
+    val rollId: Long
+) : Screen
+
+@Parcelize
+data object SearchScreen : Screen

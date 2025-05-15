@@ -1,0 +1,95 @@
+package com.erp.trillion.core.data.repository
+
+import com.erp.trillion.core.data.datasource.local.FabricRollLocalDataSource
+import com.erp.trillion.core.data.datasource.local.ReleaseHistoryLocalDataSource
+import com.erp.trillion.core.data.datasource.remote.FabricRollRemoteDataSource
+import com.erp.trillion.core.data.store.FabricRollStore
+import com.erp.trillion.core.data.store.FabricRollsStore
+import com.erp.trillion.core.data.util.PagingKey
+import com.erp.trillion.core.domain.model.FabricRoll
+import com.erp.trillion.core.domain.model.LengthUnit
+import com.erp.trillion.core.domain.repository.RollInventoryRepository
+import com.erp.trillion.kotlin.utils.yardToMeter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import me.tatarka.inject.annotations.Inject
+import org.mobilenativefoundation.store.store5.StoreReadRequest
+import org.mobilenativefoundation.store.store5.StoreReadResponse
+import org.mobilenativefoundation.store.store5.impl.extensions.get
+
+@Inject
+class RollInventoryRepositoryImpl(
+    private val fabricRollLocalDataSource: FabricRollLocalDataSource,
+    private val fabricRollRemoteDataSource: FabricRollRemoteDataSource,
+    private val releaseHistoryLocalDataSource: ReleaseHistoryLocalDataSource,
+    private val fabricRollStore: FabricRollStore,
+    private val fabricRollsStore: FabricRollsStore,
+) : RollInventoryRepository {
+
+    override fun getFabricRolls(
+        zoneId: Long,
+        page: Int,
+        pageSize: Int,
+    ): Flow<List<FabricRoll>> {
+        return fabricRollsStore
+            .stream(
+                StoreReadRequest.cached(
+                    key = Pair(zoneId, PagingKey(page, pageSize)),
+                    refresh = true
+                )
+            )
+            .filter { it is StoreReadResponse.Data }
+            .map { it.requireData() }
+            .distinctUntilChanged()
+    }
+
+    override fun getRoll(rollId: Long): Flow<FabricRoll> {
+        return fabricRollStore
+            .stream(StoreReadRequest.cached(rollId, true))
+            .filter { it is StoreReadResponse.Data }
+            .map { it.requireData() }
+            .distinctUntilChanged()
+    }
+
+    override suspend fun upsertFabricRoll(fabricRoll: FabricRoll) {
+        fabricRollRemoteDataSource.upsert(fabricRoll)
+        fabricRollLocalDataSource.upsert(fabricRoll)
+    }
+
+    override suspend fun removeFabricRoll(rollId: Long) {
+        fabricRollRemoteDataSource.delete(rollId)
+        fabricRollLocalDataSource.delete(rollId)
+    }
+
+    override suspend fun releaseFabricRoll(
+        rollId: Long,
+        quantity: Double,
+        lengthUnit: LengthUnit,
+        buyer: String,
+        releaseDate: String,
+        remark: String,
+    ) {
+        val roll = fabricRollStore.get(rollId)
+        val length = if (lengthUnit == LengthUnit.METER) quantity else quantity.yardToMeter()
+        if (length > roll.remainingQuantity) {
+            throw IllegalStateException("release more than remaining")
+        }
+        val date = LocalDate
+            .parse(releaseDate, LocalDate.Formats.ISO_BASIC)
+            .atStartOfDayIn(TimeZone.UTC)
+
+        val result = fabricRollRemoteDataSource.releaseFabricRoll(
+            rollId = rollId,
+            quantity = length,
+            buyer = buyer,
+            releaseAt = date,
+            remark = remark,
+        )
+        releaseHistoryLocalDataSource.insertReleaseHistory(result)
+    }
+}

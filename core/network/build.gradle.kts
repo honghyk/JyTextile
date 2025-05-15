@@ -1,18 +1,18 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    alias(libs.plugins.jytextile.erp.android.library)
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform)
+    alias(libs.plugins.trillion.erp.android.library)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.buildConfig)
 }
 
 android {
-    namespace = "com.erp.jytextile.core.network"
+    namespace = "com.erp.trillion.core.network"
 }
 
 buildConfig {
-    packageName("com.erp.jytextile.core.network")
+    packageName("com.erp.trillion.core.network")
 
     val apiKey = gradleLocalProperties(rootDir, providers).getProperty("supabase_api_key") ?: ""
 

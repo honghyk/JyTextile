@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-    alias(libs.plugins.jytextile.erp.android.library)
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform)
+    alias(libs.plugins.trillion.erp.android.library)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform)
     alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.erp.jytextile.shared"
+    namespace = "com.erp.trillion.shared"
 }
 
 kotlin {
@@ -36,7 +36,7 @@ kotlin {
     targets.withType<KotlinNativeTarget>().configureEach {
         binaries.framework {
             isStatic = true
-            baseName = "JyTextileERP"
+            baseName = "Trillion"
 
             export(projects.feature.root)
         }

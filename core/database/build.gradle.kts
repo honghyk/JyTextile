@@ -1,12 +1,12 @@
 plugins {
-    alias(libs.plugins.jytextile.erp.android.library)
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform)
+    alias(libs.plugins.trillion.erp.android.library)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
 }
 
 android {
-    namespace = "com.erp.jytextile.core.database"
+    namespace = "com.erp.trillion.core.database"
 }
 
 kotlin {

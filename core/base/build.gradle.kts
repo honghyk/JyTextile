@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform)
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform.compose)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform.compose)
 }
 
 kotlin {

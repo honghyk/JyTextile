@@ -1,7 +1,7 @@
-import com.erp.jytextile.convention.compose
-import com.erp.jytextile.convention.kotlin
-import com.erp.jytextile.convention.library
-import com.erp.jytextile.convention.libs
+import com.erp.trillion.convention.compose
+import com.erp.trillion.convention.kotlin
+import com.erp.trillion.convention.library
+import com.erp.trillion.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
@@ -11,9 +11,9 @@ class KmpFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("app.jytextile.erp.android.library")
-                apply("app.jytextile.erp.kotlin.multiplatform")
-                apply("app.jytextile.erp.kotlin.multiplatform.compose")
+                apply("app.trillion.erp.android.library")
+                apply("app.trillion.erp.kotlin.multiplatform")
+                apply("app.trillion.erp.kotlin.multiplatform.compose")
                 apply("org.jetbrains.kotlin.plugin.parcelize")
             }
 
@@ -44,7 +44,7 @@ class KmpFeatureConventionPlugin : Plugin<Project> {
                                 compilerOptions {
                                     freeCompilerArgs.addAll(
                                         "-P",
-                                        "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.erp.jytextile.core.base.parcel.Parcelize"
+                                        "plugin:org.jetbrains.kotlin.parcelize:additionalAnnotation=com.erp.trillion.core.base.parcel.Parcelize"
                                     )
                                 }
                             }

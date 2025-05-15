@@ -1,13 +1,13 @@
-import com.erp.jytextile.convention.android
+import com.erp.trillion.convention.android
 
 plugins {
-    alias(libs.plugins.jytextile.erp.android.library)
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform)
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform.compose)
+    alias(libs.plugins.trillion.erp.android.library)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform.compose)
 }
 
 android {
-    namespace = "com.erp.jytextile.core.designsystem"
+    namespace = "com.erp.trillion.core.designsystem"
 }
 
 kotlin {

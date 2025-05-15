@@ -1,11 +1,11 @@
 plugins {
-    alias(libs.plugins.jytextile.erp.android.application)
-    alias(libs.plugins.jytextile.erp.kotlin.android)
-    alias(libs.plugins.jytextile.erp.android.compose)
+    alias(libs.plugins.trillion.erp.android.application)
+    alias(libs.plugins.trillion.erp.kotlin.android)
+    alias(libs.plugins.trillion.erp.android.compose)
 }
 
 android {
-    namespace = "com.erp.jytextile.app.android"
+    namespace = "com.erp.trillion.app.android"
 
     defaultConfig {
         versionCode = 1

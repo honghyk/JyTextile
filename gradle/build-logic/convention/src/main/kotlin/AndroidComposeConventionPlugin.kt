@@ -1,8 +1,8 @@
-import com.erp.jytextile.convention.android
-import com.erp.jytextile.convention.debugImplementation
-import com.erp.jytextile.convention.implementation
-import com.erp.jytextile.convention.libs
-import com.erp.jytextile.convention.testImplementation
+import com.erp.trillion.convention.android
+import com.erp.trillion.convention.debugImplementation
+import com.erp.trillion.convention.implementation
+import com.erp.trillion.convention.libs
+import com.erp.trillion.convention.testImplementation
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies

@@ -18,37 +18,37 @@ dependencies {
 gradlePlugin {
     plugins {
         register("kotlinMultiplatform") {
-            id = "app.jytextile.erp.kotlin.multiplatform"
+            id = "app.trillion.erp.kotlin.multiplatform"
             implementationClass = "KotlinMultiplatformConventionPlugin"
         }
 
         register("kotlinAndroid") {
-            id = "app.jytextile.erp.kotlin.android"
+            id = "app.trillion.erp.kotlin.android"
             implementationClass = "KotlinAndroidConventionPlugin"
         }
 
         register("androidApplication") {
-            id = "app.jytextile.erp.android.application"
+            id = "app.trillion.erp.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
 
         register("androidLibrary") {
-            id = "app.jytextile.erp.android.library"
+            id = "app.trillion.erp.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
 
         register("androidCompose") {
-            id = "app.jytextile.erp.android.compose"
+            id = "app.trillion.erp.android.compose"
             implementationClass = "AndroidComposeConventionPlugin"
         }
 
         register("kmpCompose") {
-            id = "app.jytextile.erp.kotlin.multiplatform.compose"
+            id = "app.trillion.erp.kotlin.multiplatform.compose"
             implementationClass = "KmpComposeConventionPlugin"
         }
 
         register("kmpFeature") {
-            id = "app.jytextile.erp.kotlin.multiplatform.feature"
+            id = "app.trillion.erp.kotlin.multiplatform.feature"
             implementationClass = "KmpFeatureConventionPlugin"
         }
     }

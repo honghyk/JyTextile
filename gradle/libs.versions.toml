@@ -105,10 +105,10 @@ kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
 
-jytextile-erp-kotlin-multiplatform = { id = "app.jytextile.erp.kotlin.multiplatform" }
-jytextile-erp-kotlin-multiplatform-compose = { id = "app.jytextile.erp.kotlin.multiplatform.compose" }
-jytextile-erp-kotlin-multiplatform-feature = { id = "app.jytextile.erp.kotlin.multiplatform.feature" }
-jytextile-erp-kotlin-android = { id = "app.jytextile.erp.kotlin.android" }
-jytextile-erp-android-application = { id = "app.jytextile.erp.android.application" }
-jytextile-erp-android-library = { id = "app.jytextile.erp.android.library" }
-jytextile-erp-android-compose = { id = "app.jytextile.erp.android.compose" }
+trillion-erp-kotlin-multiplatform = { id = "app.trillion.erp.kotlin.multiplatform" }
+trillion-erp-kotlin-multiplatform-compose = { id = "app.trillion.erp.kotlin.multiplatform.compose" }
+trillion-erp-kotlin-multiplatform-feature = { id = "app.trillion.erp.kotlin.multiplatform.feature" }
+trillion-erp-kotlin-android = { id = "app.trillion.erp.kotlin.android" }
+trillion-erp-android-application = { id = "app.trillion.erp.android.application" }
+trillion-erp-android-library = { id = "app.trillion.erp.android.library" }
+trillion-erp-android-compose = { id = "app.trillion.erp.android.compose" }

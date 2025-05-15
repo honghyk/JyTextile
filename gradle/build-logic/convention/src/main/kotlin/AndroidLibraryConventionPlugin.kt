@@ -1,4 +1,4 @@
-import com.erp.jytextile.convention.configureAndroid
+import com.erp.trillion.convention.configureAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

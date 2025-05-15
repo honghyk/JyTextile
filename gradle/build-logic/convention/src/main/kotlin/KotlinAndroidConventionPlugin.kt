@@ -1,4 +1,4 @@
-import com.erp.jytextile.convention.configureKotlin
+import com.erp.trillion.convention.configureKotlin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

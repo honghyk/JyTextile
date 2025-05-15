@@ -1,9 +1,9 @@
 plugins {
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform.feature)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform.feature)
 }
 
 android {
-    namespace = "com.erp.jytextile.feature.root"
+    namespace = "com.erp.trillion.feature.root"
 }
 
 kotlin {

@@ -1,8 +1,8 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform)
-    alias(libs.plugins.jytextile.erp.kotlin.multiplatform.compose)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform)
+    alias(libs.plugins.trillion.erp.kotlin.multiplatform.compose)
 }
 
 kotlin {
@@ -28,7 +28,7 @@ kotlin {
 
 compose.desktop {
     application {
-        mainClass = "com.erp.jytextile.MainKt"
+        mainClass = "com.erp.trillion.MainKt"
 
         buildTypes.release.proguard {
             version.set("7.5.0")
@@ -36,7 +36,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
-            packageName = "JyTextileERP"
+            packageName = "Trillion"
             packageVersion = "1.0.0"
 
             windows {
