@@ -1,33 +1,33 @@
 [versions]
-adaptive = "1.0.0"
-agp = "8.8.0"
-androidx-activityCompose = "1.10.0"
+adaptive = "1.1.0"
+agp = "8.10.0"
+androidx-activityCompose = "1.10.1"
 androidx-appcompat = "1.7.0"
-androidx-constraintlayout = "2.2.0"
-androidx-core-ktx = "1.15.0"
+androidx-constraintlayout = "2.2.1"
+androidx-core-ktx = "1.16.0"
 androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
 androidx-test-core = "1.6.1"
 androidx-test-junit = "1.2.1"
 buildConfig = "5.5.1"
-compose = "2025.01.01"
-compose-multiplatform = "1.7.0"
-circuit = "0.26.0"
+compose = "2025.05.00"
+compose-material = "1.7.3"
+compose-multiplatform = "1.8.0"
+circuit = "0.28.0"
 kermit = "2.0.5"
-kotlin = "2.1.0"
-kotlin-inject = "0.7.2"
-kotlinx-coroutines = "1.10.1"
-kotlinStdlib = "2.1.0"
+kotlin = "2.1.21"
+kotlin-inject = "0.8.0"
+kotlinx-coroutines = "1.10.2"
 kotlinxDatetime = "0.6.2"
 kotlinx-serialization-json = "1.8.0"
-ksp = "2.1.0-1.0.29"
-androidx-room = "2.7.0-alpha13"
+ksp = "2.1.21-2.0.1"
+androidx-room = "2.7.1"
 androidx-test-runner = "1.6.2"
 jetbrainsKotlinJvm = "2.1.0"
 ktor = "3.0.1"
 postgrestKt = "3.1.1"
-sqlite-bundled = "2.5.0-alpha13"
+sqlite-bundled = "2.5.1"
 store = "5.0.0"
 
 [libraries]
@@ -48,7 +48,7 @@ kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
-kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
 # Dependency inject
@@ -64,6 +64,7 @@ compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "compose-material" }
 material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
 
 # Circuit

@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -135,7 +133,7 @@ private fun SearchTextField(
         onValueChange = onSearchQueryChanged,
         leadingIcon = {
             Icon(
-                imageVector = Icons.Default.Search,
+                imageVector = TrillionIcons.Search,
                 contentDescription = null
             )
         }

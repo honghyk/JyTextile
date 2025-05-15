@@ -20,8 +20,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,11 +33,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.erp.trillion.core.designsystem.component.JyButton
-import com.erp.trillion.core.designsystem.component.JyDropDownMenu
-import com.erp.trillion.core.designsystem.component.JyOutlinedButton
 import com.erp.trillion.core.designsystem.component.OutlinedTextField
 import com.erp.trillion.core.designsystem.component.PanelSurface
+import com.erp.trillion.core.designsystem.component.TrillionButton
+import com.erp.trillion.core.designsystem.component.TrillionDropDownMenu
+import com.erp.trillion.core.designsystem.component.TrillionOutlinedButton
+import com.erp.trillion.core.designsystem.icon.TrillionIcons
 import com.erp.trillion.core.designsystem.theme.TrillionTheme
 import com.erp.trillion.core.domain.model.LengthUnit
 
@@ -169,7 +168,7 @@ fun <T> DropDownFormField(
                 )
                 Image(
                     modifier = Modifier.size(24.dp),
-                    imageVector = Icons.Default.ArrowDropDown,
+                    imageVector = TrillionIcons.ArrowDropDown,
                     contentDescription = null,
                 )
             }
